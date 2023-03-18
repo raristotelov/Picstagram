@@ -1,4 +1,4 @@
-import { HTTP } from '../constants';
+import { HTTP } from '../constants/crudOperations';
 
 const request = (method, url, data, idToken) => {
     let options = {

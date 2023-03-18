@@ -1,11 +1,15 @@
-import MainHeader from '../MainHeader';
-import FollowerPost from '../FollowerPost';
-import './Main.scss';
+import Header from '../Header/Header';
+import FollowerPost from '../FollowerPost/FollowerPost';
+
+import './FeedPage.css';
 
 const Main = () => {
+	console.log("main");
+	
     return (
         <div>
-            <MainHeader />
+            <Header />
+
             <div className="posts-wrapper">
                 <FollowerPost />
                 <FollowerPost />

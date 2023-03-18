@@ -1,4 +1,4 @@
-import './FollowerPost.scss';
+import './FollowerPost.css';
 
 const FollowerPost = () => {
     return (
@@ -7,7 +7,7 @@ const FollowerPost = () => {
                 <h4>NAME</h4>
             </div>
             <div>
-                <img src="http://webmeup.com/upload/blog/lead-image-105.png" />
+                <img src="" alt="post-img" />
             </div>
             <div className="actions-wrapper">
                 <div>Heart</div>
