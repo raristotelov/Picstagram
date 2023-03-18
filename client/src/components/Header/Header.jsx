@@ -1,15 +1,32 @@
+import { Link } from "react-router-dom";
+
 import './Header.css';
 
 const MainHeader = () => {
     return (
-        <header className="header-wrapper">
+        <div className="header-wrapper">
+			<header className="header">
+
                 <span className="logo">Pictsgram</span>
 
-				<nav className="visual-wrapper">
+				<nav className="navbar">
+					<ul>
+						<li>
+							<Link to="" >Search</Link>
+						</li>
 
-					Hello from header
+						<li>
+							<Link to="" >What's popular?</Link>
+
+						</li>
+
+						<li>
+							<Link to="" >Profile</Link>
+						</li>
+					</ul>
 				</nav>
-        </header>
+			</header>
+        </div>
     );
 };
 

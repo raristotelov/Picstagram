@@ -1,3 +1,18 @@
+@font-face {
+    font-family: 'Pacifico';
+    src: url('../public/Fonts/Pacifico/Pacifico-Regular.ttf') format('truetype'); 
+}
+
+@font-face {
+    font-family: 'Vollkorn';
+    src: url('../public/Fonts/Vollkorn/Vollkorn-VariableFont_wght.ttf') format('truetype'); 
+}
+
+@font-face {
+    font-family: 'Mada';
+    src: url('../public/Fonts/Mada/Mada-Regular.ttf') format('truetype'); 
+}
+
 .App {
   text-align: center;
 }

@@ -1,14 +1,20 @@
 import { Routes, Route } from 'react-router-dom';
+import { Fragment } from 'react';
 
-import Main from './components/FeedPage/FeedPage';
+import Header from './components/Header/Header';
+import FeedView from './components/FeedView/FeedView';
 
 import './App.css';
 
 function App() {
     return (
-		<Routes>
-			<Route path="/main" element={<Main />} />
-		</Routes>
+		<Fragment>
+			<Header />
+
+			<Routes>
+				<Route path="/main" element={<FeedView />} />
+			</Routes>
+		</Fragment>
     );
 }
 
