@@ -1,0 +1,107 @@
+.post-wrapper {
+    border: 2px solid #B5B5B5;
+
+	margin-bottom: 60px;
+}
+
+.account-details {
+	height: 70px;
+	display: flex;
+	align-items: center;
+}
+
+.account-details img {
+	width: 40px;
+	height: 40px;
+	margin: 15px;
+	border: 0.5px solid #B5B5B5;
+	border-radius: 50%;
+}
+
+.account-details h4 {
+	font-family: "Mada";
+	color: #4B4B4B;
+	font-size: 20px;
+}
+
+.post-image-wrapper img {
+	width: 550px;
+	height: 800px;
+}
+
+.actions-wrapper {
+	height: 70px;
+	display: flex;
+	align-items: center;
+}
+
+.like-action-wrapper {
+	height: 70px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	border-bottom: 1px solid #B5B5B5;
+}
+
+.like-action-wrapper span {
+	margin-left: 20px;
+
+	color: #4B4B4B;
+	font-size: 24px;
+	font-family: "Mada";
+	font-weight: bold;
+
+}
+
+.like-action-wrapper svg {
+	margin-right: 20px;
+	width: 30px;
+	height: 30px;
+}
+
+.comments-section-toggle-wrapper {
+	height: 70px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.toggle-comments-btn {
+	border: none;
+	background-color: inherit;
+}
+
+.toggle-comments-btn:hover {
+	cursor: pointer;
+}
+
+.toggle-comments-btn svg {
+	width: 30px;
+	height: 30px;
+	margin-right: 15px;
+}
+
+.comments-count-section {
+	display: flex;
+	align-items: center;
+}
+
+.comments-count-section svg {
+	width: 30px;
+	height: 30px;
+	margin-left: 20px;
+}
+
+.comments-count-section span {
+	margin-left: 10px;
+
+	color: #4B4B4B;
+	font-size: 16px;
+	font-family: "Mada";
+	font-weight: bold;
+}
+
+.comments-wrapper {
+
+}

@@ -7,7 +7,7 @@ const MainHeader = () => {
         <div className="header-wrapper">
 			<header className="header">
 
-                <span className="logo">Pictsgram</span>
+                <span className="logo">Picstagram</span>
 
 				<nav className="navbar">
 					<ul>

@@ -9,6 +9,8 @@ const Main = () => {
     return (
 		<div className="posts-wrapper">
 			<UserPost />
+			<UserPost />
+
 			{/* <FollowerPost />
 			<FollowerPost /> */}
 
