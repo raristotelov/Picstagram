@@ -1,4 +1,4 @@
-import JWT from "jsonwebtoken";
+const JWT = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
     if (req.header('Authorization')) {

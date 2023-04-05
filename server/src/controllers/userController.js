@@ -2,21 +2,19 @@ const { Router } = require('express');
 const router = Router();
 
 const { userService } = require('../services');
-const verifyIdToken = require('../middlewares/verifyIdToken');
+const verifyIdToken = require('../middlewares/verifyJwtToken');
 
-router.post('/signup', async (req, res) => {
-    const userRecord = await userService.signUp(req.body);
+router.post('/sign-up', async (req, res) => {
+    const userData = await userService.signUp(req.body);
 	
-    return res.json(userRecord);
+    return res.json(userData);
 });
 
-router.post('/createdbuser', verifyIdToken, async (req, res) => {
-    try {
-        const status = await userService.createDbUser(req.body, res.uid);
-        return res.json(status);
-    } catch (error) {
-        return res.status(400).json({ error });
-    }
+router.post('/login', async (req, res) => {
+    const userData = await userService.login(req.body);
+	
+    return res.json(userData);
 });
+
 
 module.exports = router;

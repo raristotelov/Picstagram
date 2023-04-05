@@ -3,15 +3,17 @@ import { Link } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 
 import Logo from "../Logo/Logo";
+import Button from "../Button/Button";
 
 import './SignUpForm.css';
 
-const SignUpForm = ({ onRegisterSubmit }) => {
+const SignUpForm = ({ signUpHandler }) => {
 	const { values, changeHandler, onSubmit } = useForm({
         email: '',
+		username: '',
         password: '',
-        confirmPassword: '',
-    }, onRegisterSubmit);
+        repeatPassword: '',
+    }, signUpHandler);
 
     return (
 		<section
@@ -54,7 +56,7 @@ const SignUpForm = ({ onRegisterSubmit }) => {
 						id="password"
 						name="password"
 						placeholder="Password"
-						value={values.username}
+						value={values.password}
 						onChange={changeHandler}
 					/>
 				</div>
@@ -65,10 +67,14 @@ const SignUpForm = ({ onRegisterSubmit }) => {
 						id="repeatPassword"
 						name="repeatPassword"
 						placeholder="Repeat password"
-						value={values.username}
+						value={values.repeatPassword}
 						onChange={changeHandler}
 					/>
 				</div>
+
+				<Button
+					label="Submit"
+				/>
 			</form>
 
 			<span className="login-link">Already have an account? <Link to="/login">Login</Link></span>

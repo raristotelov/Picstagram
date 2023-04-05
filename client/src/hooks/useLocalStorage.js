@@ -16,7 +16,9 @@ const useLocalStorage = (key, initialValue) => {
 	const setLocalStorageState = (value) => {
 		setState(value);
 
-		localStorage.setItem(key, JSON.stringify(value));
+		if (value) {
+			localStorage.setItem(key, JSON.stringify(value));
+		}
 	};
 
 	return [

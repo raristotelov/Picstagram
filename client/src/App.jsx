@@ -1,6 +1,8 @@
-import { useState, Fragment } from 'react';
+import { useState, useEffect } from 'react';
+import jwt from 'jsonwebtoken'
 
 import useLocalStorage from './hooks/useLocalStorage'; 
+import LoggedInUserContext from './contexts/loggedInUserContext';
 
 import Header from './components/Header/Header';
 import Router from './Router';
@@ -11,12 +13,41 @@ function App() {
 	const [jwtToken, setJwtToken] = useLocalStorage("jwt-token", null);
 	const [loggedInUser, setLoggedInUser] = useState(null);
 	
+	useEffect(() => {
+		if (jwtToken && !loggedInUser) {
+			// const userData = jwt.decode(jwtToken);
+
+			setLoggedInUser(jwtToken);
+		} else if (!jwtToken) {
+			setLoggedInUser(null);
+		}
+	}, [jwtToken, loggedInUser]);
+
+	const logoutHandler = (e) => {
+		e.preventDefault();
+
+		localStorage.removeItem("dcbyte-jwt");
+		setJwtToken(null);
+	};
+	
+	const loggedInUserContextValues = {
+        jwtToken,
+        setJwtToken,
+        loggedInUser,
+        setLoggedInUser
+    };
+
+	console.log(loggedInUser);
+
     return (
-		<Fragment>
-			<Header />
+		<LoggedInUserContext.Provider value={loggedInUserContextValues}>
+			<Header
+				logoutHandler={logoutHandler}
+				loggedInUser={loggedInUser}
+			/>
 
 			<Router />
-		</Fragment>
+		</LoggedInUserContext.Provider>
     );
 }
 

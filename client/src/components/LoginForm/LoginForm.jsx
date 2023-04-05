@@ -3,15 +3,15 @@ import { Link } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 
 import Logo from "../Logo/Logo";
+import Button from "../Button/Button";
 
 import './LoginForm.css';
 
-const LoginForm = ({ onRegisterSubmit }) => {
+const LoginForm = ({ loginHandler }) => {
 	const { values, changeHandler, onSubmit } = useForm({
         email: '',
-        password: '',
-        confirmPassword: '',
-    }, onRegisterSubmit);
+        password: ''
+    }, loginHandler);
 
     return (
 		<section
@@ -47,6 +47,10 @@ const LoginForm = ({ onRegisterSubmit }) => {
 						onChange={changeHandler}
 					/>
 				</div>
+
+				<Button
+					label="Submit"
+				/>
 			</form>
 
 			<span className="sign-up-link">Don't have an account? <Link to="/sign-up">Sign up</Link></span>

@@ -1,14 +1,22 @@
 
-import signUp from "../../services/userService";
+import { signUp } from "../../services/userService";
 
 import SignUpForm from "../SignUpForm/SignUpForm";
 
 import "./SignUpView.css";
 
 const SignUpView = () => {
+	const signUpHandler = async (newUserData) => {
+		const registeredUser = await signUp(newUserData);
+
+		console.log(registeredUser);
+	};
+
 	return (
 		<section className="sign-up-wrapper">
-			<SignUpForm />
+			<SignUpForm 
+				signUpHandler={signUpHandler}
+			/>
 		</section>
 	);
 };
