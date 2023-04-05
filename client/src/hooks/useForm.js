@@ -8,21 +8,23 @@ export const useForm = (initialValues, onSubmitHandler) => {
     };
 
     const onSubmit = (e) => {
+		console.log("in");
         e.preventDefault();
 
         onSubmitHandler(values);
     };
 
-    const changeValues = (newValues) => {
-        // TODO: Validate newValues shape (like initialValues)
+	// TODO remove if not needed
+    // const changeValues = (newValues) => {
+    //     // TODO: Validate newValues shape (like initialValues)
         
-        setValues(newValues);
-    };
+    //     setValues(newValues);
+    // };
 
     return {
         values,
         changeHandler,
         onSubmit,
-        changeValues,
+        // changeValues,
     };
 };

@@ -15,9 +15,9 @@ function App() {
 	
 	useEffect(() => {
 		if (jwtToken && !loggedInUser) {
-			// const userData = jwt.decode(jwtToken);
+			const userData = jwt.decode(jwtToken);
 
-			setLoggedInUser(jwtToken);
+			setLoggedInUser(userData);
 		} else if (!jwtToken) {
 			setLoggedInUser(null);
 		}
