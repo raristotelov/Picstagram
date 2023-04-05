@@ -1,10 +1,7 @@
-import request from './requester';
-import firebase from '../firebase';
+import requestFactory from './requester';
 
-export const signUp = (data) => {
-    return request.post(`${SERVER_ADDRESS}/user/signup`, data);
-}
-
-export const createDbUser = (data, idToken) => {
-    return request.post(`${SERVER_ADDRESS}/user/createdbuser`, data, idToken);
+export const signUp = (data, jwtToken) => {
+	// const request = requestFactory(jwtToken);
+	
+    // return request.post(`http://localhost:5000/users/sign-up`, data);
 }

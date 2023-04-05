@@ -13,6 +13,7 @@ const FollowerPost = () => {
 	const [toggledCommentsSection, setToggledCommentsSection] = useState(false);
 
 	const toggleCommentsSection = () => {
+		console.log("in");
 		setToggledCommentsSection((state) => !state);
 	}
 
@@ -41,7 +42,10 @@ const FollowerPost = () => {
 					<span>5 comments</span>
 				</div>
 				
-				<button className="toggle-comments-btn" onClick={toggleCommentsSection}>
+				<button
+					className="toggle-comments-btn"
+					onClick={toggleCommentsSection}
+				>
 					{toggledCommentsSection ? <ArrowUpIcon /> : <ArrowDownIcon />}
 				</button>
             </div>

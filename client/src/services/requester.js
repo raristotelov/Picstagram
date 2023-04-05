@@ -1,30 +1,46 @@
-import { HTTP } from '../constants/crudOperations';
+const request = async (method, token, url, data) => {
+    const options = {};
 
-const request = (method, url, data, idToken) => {
-    let options = {
-        method,
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + idToken,
-        },
-    };
+    if (method !== 'GET') {
+        options.method = method;
 
-    if (data) {
-        options = {
-            ...options,
-            body: JSON.stringify(data),
+        if (data) {
+            options.headers = {
+                'content-type': 'application/json',
+            };
+
+            options.body = JSON.stringify(data);
+        }
+    }
+
+    if (token) {
+        options.headers = {
+            ...options.headers,
+            'X-Authorization': token,
         };
     }
 
-    return fetch(url, options);
+    const response = await fetch(url, options);
+
+    if (response.status === 204) {
+        return {};
+    }
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw result;
+    }
+
+    return result;
 };
 
-const requester = {
-    get: request.bind(null, HTTP.GET),
-    post: request.bind(null, HTTP.POST),
-    put: request.bind(null, HTTP.PUT),
-    delete: request.bind(null, HTTP.DELETE),
-    patch: request.bind(null, HTTP.PATCH),
+export const requestFactory = (token) => {
+    return {
+        get: request.bind(null, 'GET', token),
+        post: request.bind(null, 'POST', token),
+        put: request.bind(null, 'PUT', token),
+        patch: request.bind(null, 'PATCH', token),
+        delete: request.bind(null, 'DELETE', token),
+    }
 };
-
-export default requester;

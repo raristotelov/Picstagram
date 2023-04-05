@@ -6,7 +6,7 @@ const Comment = ({ text }) => {
 			</span>
 
 			<div className="comment-replies-wrapper">
-				<Comment />
+				{/* <Comment /> */}
 
 			</div>
 		</div>

@@ -1,19 +1,21 @@
-import { Routes, Route } from 'react-router-dom';
-import { Fragment } from 'react';
+import { useState, Fragment } from 'react';
+
+import useLocalStorage from './hooks/useLocalStorage'; 
 
 import Header from './components/Header/Header';
-import FeedView from './components/FeedView/FeedView';
+import Router from './Router';
 
 import './App.css';
 
 function App() {
+	const [jwtToken, setJwtToken] = useLocalStorage("jwt-token", null);
+	const [loggedInUser, setLoggedInUser] = useState(null);
+	
     return (
 		<Fragment>
 			<Header />
 
-			<Routes>
-				<Route path="/main" element={<FeedView />} />
-			</Routes>
+			<Router />
 		</Fragment>
     );
 }

@@ -1,0 +1,10 @@
+.logo {
+	width: 250px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	font-family: "Pacifico";
+	font-size: 26px;
+	color: #EEEEEE;
+}

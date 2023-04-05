@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import Logo from "../Logo/Logo";
+
 import './Header.css';
 
 const MainHeader = () => {
@@ -7,7 +9,7 @@ const MainHeader = () => {
         <div className="header-wrapper">
 			<header className="header">
 
-                <span className="logo">Picstagram</span>
+               <Logo />
 
 				<nav className="navbar">
 					<ul>
