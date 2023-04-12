@@ -18,6 +18,8 @@ const useLocalStorage = (key, initialValue) => {
 
 		if (value) {
 			localStorage.setItem(key, JSON.stringify(value));
+		} else {
+			localStorage.removeItem(key)
 		}
 	};
 

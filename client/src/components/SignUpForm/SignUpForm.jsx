@@ -13,6 +13,7 @@ const SignUpForm = ({ signUpHandler }) => {
 		username: '',
         password: '',
         repeatPassword: '',
+		img: '',
     }, signUpHandler);
 
     return (
@@ -67,6 +68,17 @@ const SignUpForm = ({ signUpHandler }) => {
 						id="repeatPassword"
 						name="repeatPassword"
 						placeholder="Repeat password"
+						value={values.repeatPassword}
+						onChange={changeHandler}
+					/>
+				</div>
+
+				<div className="input-wrapper">
+					<input
+						type="file"
+						id="img"
+						name="img"
+						// placeholder="Repeat password"
 						value={values.repeatPassword}
 						onChange={changeHandler}
 					/>

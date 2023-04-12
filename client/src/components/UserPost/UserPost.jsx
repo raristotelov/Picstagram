@@ -13,7 +13,6 @@ const FollowerPost = () => {
 	const [toggledCommentsSection, setToggledCommentsSection] = useState(false);
 
 	const toggleCommentsSection = () => {
-		console.log("in");
 		setToggledCommentsSection((state) => !state);
 	}
 

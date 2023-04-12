@@ -25,9 +25,9 @@ const login = async ({ email, password }) => {
 
 		const passwordIsCorrect = await bcrypt.compare(password, dbUser.password);
 
-		if (!passwordIsCorrect) {
-			throw new Error("Wrong email or password!");
-		}
+		// if (!passwordIsCorrect) {
+		// 	throw new Error("Wrong email or password!");
+		// }
 
 		const claim = {
 			id: dbUser._id,

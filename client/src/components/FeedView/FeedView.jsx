@@ -7,7 +7,7 @@ const Main = () => {
 	console.log("main");
 	
     return (
-		<div className="posts-wrapper">
+		<div className="feed-posts-wrapper">
 			<UserPost />
 			<UserPost />
 
