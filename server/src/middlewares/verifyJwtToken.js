@@ -1,10 +1,14 @@
 const JWT = require('jsonwebtoken');
 
-module.exports = (req, res, next) => {
-    if (req.header('Authorization')) {
-        const idToken = req.header('Authorization').split(' ')[1] || req.header('Authorization');
+const constants = require('../config/constants');
 
-        user = JWT.verify(jwt, jwtSecret);
+module.exports = (req, res, next) => {
+	const jwtToken = req.header('X-Authorization');
+
+    if (jwtToken) {
+        user = JWT.verify(jwtToken, constants.JWT_SECRET);
+
+		res._id = user._id;
 
 		next();
     } else {

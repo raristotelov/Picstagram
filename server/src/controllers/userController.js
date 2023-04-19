@@ -2,7 +2,6 @@ const { Router } = require('express');
 const router = Router();
 
 const { userService } = require('../services');
-const verifyIdToken = require('../middlewares/verifyJwtToken');
 
 router.post('/sign-up', async (req, res) => {
     const userData = await userService.signUp(req.body);
@@ -15,6 +14,5 @@ router.post('/login', async (req, res) => {
 	
     return res.json(userData);
 });
-
 
 module.exports = router;

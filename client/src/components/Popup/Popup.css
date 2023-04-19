@@ -1,0 +1,41 @@
+.popup-container {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.popup-body {
+	position: absolute;
+	background: #FFFFFF;
+	border: 3px solid #B5B5B5;
+	padding: 10px;
+}
+
+.close-btn-wrapper {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.close-btn-wrapper button {
+	border: none;
+	background-color: #FFFFFF;
+}
+
+.close-btn-wrapper button:hover {
+	cursor: pointer;
+	opacity: 0.5;
+}
+
+.close-btn-wrapper button svg {
+	width: 40px;
+	height: 40px;
+}

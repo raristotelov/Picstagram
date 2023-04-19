@@ -1,10 +1,10 @@
 import './Button.css';
 
-const Button = ({ label }) => {
+const Button = ({ label, ...props }) => {
 	return (
 		<button
-			className="submit-btn"
-			type="submit"
+			className="button-classname"
+			{...props}
 		>
 			{label}
 		</button>

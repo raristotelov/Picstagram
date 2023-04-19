@@ -37,8 +37,6 @@ function App() {
         setLoggedInUser
     };
 
-	console.log(loggedInUser);
-
     return (
 		<LoggedInUserContext.Provider value={loggedInUserContextValues}>
 			<Header

@@ -17,7 +17,7 @@ const signUp = async ({ email, username, password }) => {
 	} catch(error) {
 		throw new Error("Something went wrong while trying to sign up!");
 	}
-}
+};
 
 const login = async ({ email, password }) => {
 	try {
@@ -30,7 +30,7 @@ const login = async ({ email, password }) => {
 		// }
 
 		const claim = {
-			id: dbUser._id,
+			_id: dbUser._id,
 			email: dbUser.email,
 			username: dbUser.username
 		};
@@ -50,7 +50,7 @@ const login = async ({ email, password }) => {
 	} catch (error) {
 		throw new Error("Something went wrong while trying to login!");
 	}
-}
+};
 
 module.exports = {
 	signUp,
