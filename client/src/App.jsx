@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import jwt from 'jsonwebtoken'
 
 import useLocalStorage from './hooks/useLocalStorage'; 
-import LoggedInUserContext from './contexts/loggedInUserContext';
+import LoggedInUserContext from './contexts/LoggedInUserContext';
 
 import Header from './components/Header/Header';
 import Router from './Router';
@@ -29,7 +29,7 @@ function App() {
 		localStorage.removeItem("dcbyte-jwt");
 		setJwtToken(null);
 	};
-	
+
 	const loggedInUserContextValues = {
         jwtToken,
         setJwtToken,

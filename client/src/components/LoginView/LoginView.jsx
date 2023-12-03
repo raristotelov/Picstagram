@@ -1,26 +1,30 @@
 
 
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import LoggedInUserContext from '../../contexts/loggedInUserContext';
-import { login } from "../../services/userService";
+import LoggedInUserContext from '../../contexts/LoggedInUserContext';
+import { login } from '../../services/userService';
 
-import LoginForm from "../LoginForm/LoginForm";
+import LoginForm from '../LoginForm/LoginForm';
 
-import "./LoginView.css";
+import './LoginView.css';
 
 const LoginView = () => {
 	const { setJwtToken, setLoggedInUser } = useContext(LoggedInUserContext);
+	const navigate = useNavigate();
 
 	const loginHandler = async (loginCredentials) => {
 		const loggedUserData = await login(loginCredentials);
 
 		setJwtToken(loggedUserData.jwt);
-		setLoggedInUser(loggedUserData.user)
+		setLoggedInUser(loggedUserData.user);
+
+		navigate('/feed');
 	};
 
 	return (
-		<section className="login-wrapper">
+		<section className='login-wrapper'>
 			<LoginForm
 				loginHandler={loginHandler}
 			/>

@@ -1,17 +1,23 @@
 
-import { signUp } from "../../services/userService";
+import { useNavigate } from 'react-router-dom';
 
-import SignUpForm from "../SignUpForm/SignUpForm";
+import { signUp } from '../../services/userService';
 
-import "./SignUpView.css";
+import SignUpForm from '../SignUpForm/SignUpForm';
+
+import './SignUpView.css';
 
 const SignUpView = () => {
+	const navigate = useNavigate();
+
 	const signUpHandler = async (newUserData) => {
-		const registeredUser = await signUp(newUserData);
+		await signUp(newUserData);
+
+		navigate('/login');
 	};
 
 	return (
-		<section className="sign-up-wrapper">
+		<section className='sign-up-wrapper'>
 			<SignUpForm 
 				signUpHandler={signUpHandler}
 			/>

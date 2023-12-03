@@ -1,36 +1,27 @@
 import { Link } from "react-router-dom";
 
 import Logo from "../Logo/Logo";
+import SearchInput from "../SearchInput/SearchInput";
+
 
 import './Header.css';
 
 const MainHeader = ({ loggedInUser, logoutHandler }) => {
-	
-
 	const loggedUserLinks = (
 		<ul>
-			<li>
-				<Link to="" >Search</Link>
-			</li>
-
 			<li>
 				<Link to="" >What's popular?</Link>
 
 			</li>
 
-			<li>
-				<Link to="" >Profile</Link>
-			</li>
-
-
-			<li>
+			{/* <li>
 				<Link
 					to=""
 					onClick={logoutHandler}
 				>
 					Log out
 				</Link>
-			</li>
+			</li> */}
 		</ul>
 	);
 
@@ -50,12 +41,27 @@ const MainHeader = ({ loggedInUser, logoutHandler }) => {
     return (
         <div className="header-wrapper">
 			<header className="header">
+				<div className='header-logo-wrapper'>
+					<Link to='/'>
+						<Logo />
+					</Link>
+				</div>
+				
+				<div className="search-component-wrapper">
+					<SearchInput className={'search-component-header-class'} />
+				</div>
 
-               <Logo />
+				<div className="navbar-logged-user-container">
+					<nav className="navbar">
+						{loggedInUser ? loggedUserLinks : guestUserLinks}
+					</nav>
 
-				<nav className="navbar">
-					{loggedInUser ? loggedUserLinks : guestUserLinks}
-				</nav>
+					<div className="logged-user-avatar">
+						<img src="https://i.pinimg.com/736x/30/df/1c/30df1cb8981338d42ed2722ab74cb51e.jpg" alt="post-img" />
+
+						<h4>harold.memara</h4>
+					</div>
+				</div>
 			</header>
         </div>
     );

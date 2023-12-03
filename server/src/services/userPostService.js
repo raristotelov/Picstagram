@@ -1,5 +1,15 @@
 const UserPostModel = require('../models/userPostModel');
 
+const getAllUserPosts = async (userId) => {
+	try {
+		const userPosts = await UserPostModel.find({ userId });
+
+		return userPosts;
+	} catch (error) {
+		throw new Error("Something went wrong while trying get all posts of the user!");
+	}
+};
+
 const addUserPost = async (postData, userId) => {
 	try {
 		const userPost = new UserPostModel({ imageIdentifier: postData.imageIdentifier, imageUrl: postData.imageUrl, userId });
@@ -13,5 +23,6 @@ const addUserPost = async (postData, userId) => {
 };
 
 module.exports = {
+	getAllUserPosts,
 	addUserPost
 };

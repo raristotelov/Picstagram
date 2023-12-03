@@ -1,10 +1,10 @@
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 } from 'uuid';
 
 import { storage } from '../../firebase';
-import LoggedInUserContext from '../../contexts/loggedInUserContext';
-import { addUserPost } from "../../services/userPostService";
+import LoggedInUserContext from '../../contexts/LoggedInUserContext';
+import { getAllUserPosts, addUserPost } from "../../services/userPostService";
 
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import UserProfilePost from '../UserProfilePost/UserProfilePost';
@@ -18,7 +18,18 @@ const ProfileView = () => {
 	const [isAddPicturePopupOpen, setIsAddPicturePopupOpen] = useState(false);
 	const [userPosts, setUserPosts] = useState([]);
 
-	const { loggedInUser, jwtToken } = useContext(LoggedInUserContext);
+	const { jwtToken } = useContext(LoggedInUserContext);
+
+	useEffect(() => {
+		getAllUserPosts(jwtToken)
+			.then((allUserPosts) => {
+				setUserPosts(allUserPosts);
+			})
+			.catch((error) => {
+				// TODO add some error handling
+				console.log("something went wrong while trying to fetch");
+			})
+	}, [jwtToken]);
 
 	const openAddPictureForm = () => {
 		setIsAddPicturePopupOpen(true);
