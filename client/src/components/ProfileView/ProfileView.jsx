@@ -1,10 +1,12 @@
 import { useState, useEffect, useContext } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 } from 'uuid';
+import { useParams } from 'react-router-dom';
 
 import { storage } from '../../firebase';
 import LoggedInUserContext from '../../contexts/LoggedInUserContext';
 import { getAllUserPosts, addUserPost } from "../../services/userPostService";
+import { getUserAccountData } from '../../services/userService';
 
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import UserProfilePost from '../UserProfilePost/UserProfilePost';
@@ -14,22 +16,33 @@ import PlusIcon from '../icons/Plus';
 
 import './ProfileView.css';
 
-const ProfileView = () => {
-	const [isAddPicturePopupOpen, setIsAddPicturePopupOpen] = useState(false);
+const ProfileView = (props) => {
 	const [userPosts, setUserPosts] = useState([]);
+	const [userData, setUserData] = useState(null);
+	const [isAddPicturePopupOpen, setIsAddPicturePopupOpen] = useState(false);
 
 	const { jwtToken } = useContext(LoggedInUserContext);
 
+	let { userId } = useParams();
+
+
 	useEffect(() => {
-		getAllUserPosts(jwtToken)
-			.then((allUserPosts) => {
-				setUserPosts(allUserPosts);
+		getUserAccountData(userId, jwtToken)
+			.then((result) => {
+				console.log(result);
+				setUserData(result[0]);
+			}).catch(() => {
+				console.log("something went wrong while trying to fetch user data");
 			})
-			.catch((error) => {
-				// TODO add some error handling
-				console.log("something went wrong while trying to fetch");
-			})
-	}, [jwtToken]);
+		// getAllUserPosts(jwtToken)
+		// 	.then((allUserPosts) => {
+		// 		setUserPosts(allUserPosts);
+		// 	})
+		// 	.catch((error) => {
+		// 		// TODO add some error handling
+		// 		console.log("something went wrong while trying to fetch");
+		// 	})
+	}, [userId, jwtToken]);
 
 	const openAddPictureForm = () => {
 		setIsAddPicturePopupOpen(true);
@@ -51,21 +64,34 @@ const ProfileView = () => {
 			const imageUrl = await getDownloadURL(imageRef);
 
 			const createdImage = { imageIdentifier, imageUrl };
-
+			
 			const savedUserPost = await addUserPost(createdImage, jwtToken);
 
 			setUserPosts((state) => [...state, savedUserPost]);
 
 			closeAddPictureForm();
-		} catch {
+		} catch(error) {
+			console.log(error);
 			// TODO add some error handling
 			console.log("Something went wrong while trying to uploade image");
 		}
 	};
+
+	if (!userData) {
+		return null;
+	}
+
+	console.log(userData);
 	
 	return (
 		<div className="profile-view-wrapper">
-			<ProfileHeader />
+			<ProfileHeader
+				username={userData.username}
+				totalPostsCount={userData?.posts?.length ? userData.posts.length : 0}
+				followersCount={userData?.followers?.length ? userData.followers.length : 0}
+				followingCount={userData?.following?.length ? userData.following.length : 0}
+				bio={"lorem ipsum for now"}
+			/>
 
 			<section className="profile-posts-wrapper">
 				<button className="add-post-button" onClick={openAddPictureForm}>
@@ -74,7 +100,7 @@ const ProfileView = () => {
 					<span>Upload Picture</span>
 				</button>
 
-				{userPosts.map((post) => (
+				{userData?.posts?.map((post) => (
 					<UserProfilePost key={post.imageIdentifier} post={post} />
 				))}
 			</section>

@@ -12,3 +12,9 @@ export const login = (data) => {
 
     return request.post(`${serverUrl}/users/login`, data);
 };
+
+export const getUserAccountData = (userId, jwtToken) => {
+	const request = requestFactory(jwtToken);
+
+	return request.get(`${serverUrl}/users?userId=${userId}`);
+}

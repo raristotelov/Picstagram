@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
 	},
 	posts: [{
         type: 'ObjectId',
-        ref: 'Img'
+        ref: 'UserPost'
     }],
 	following: [{
 		type: 'ObjectId',

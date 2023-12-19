@@ -7,6 +7,8 @@ import SignUpView from './components/SignUpView/SignUpView';
 import LoginView from './components/LoginView/LoginView';
 import ProfileView from './components/ProfileView/ProfileView';
 import FeedView from './components/FeedView/FeedView';
+import PopularPostsView from './components/PopularPostsView/PopularPostsView';
+
 
 import './index.css';
 
@@ -25,6 +27,10 @@ const Router = () => {
 				<Route path='/my-profile' element={<ProfileView />} />
 
 				<Route path='/feed' element={<FeedView />} />
+
+				<Route path='/popular-posts' element={<PopularPostsView />} />
+
+				<Route path='/user/:userId' element={<ProfileView />} />
 			</Routes>
 		</div>
 	)

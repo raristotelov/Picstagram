@@ -15,4 +15,12 @@ router.post('/login', async (req, res) => {
     return res.json(userData);
 });
 
+router.get('/', async (req, res) => {
+	const userId  = req.query.userId;
+
+    const userAccountData = await userService.getUserAccoutData(userId);
+	
+    return res.json(userAccountData);
+});
+
 module.exports = router;

@@ -1,4 +1,5 @@
 const UserPostModel = require('../models/userPostModel');
+const UserModel = require("../models/userModel");
 
 const getAllUserPosts = async (userId) => {
 	try {
@@ -15,6 +16,13 @@ const addUserPost = async (postData, userId) => {
 		const userPost = new UserPostModel({ imageIdentifier: postData.imageIdentifier, imageUrl: postData.imageUrl, userId });
 
 		await userPost.save();
+
+
+        await UserModel.findByIdAndUpdate(userId, {
+            $addToSet: {
+                posts: userPost._id
+            }
+        });
 
 		return userPost;
 	} catch (error) {

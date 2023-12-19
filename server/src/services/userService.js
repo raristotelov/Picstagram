@@ -52,7 +52,18 @@ const login = async ({ email, password }) => {
 	}
 };
 
+const getUserAccoutData = async (userId) => {
+	try {
+		const user = await UserModel.find({ _id: userId }).select({ "_id": 1, username: 1, email: 1, posts: 1 }).populate({ path: "posts" });
+
+		return user;
+	} catch (error) {
+		throw new Error("Something went wrong while trying get user accound data!");
+	}
+}
+
 module.exports = {
 	signUp,
-	login
+	login,
+	getUserAccoutData
 };

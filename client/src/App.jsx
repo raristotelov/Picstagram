@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import jwt from 'jsonwebtoken'
+import { useNavigate } from 'react-router-dom';
 
 import useLocalStorage from './hooks/useLocalStorage'; 
 import LoggedInUserContext from './contexts/LoggedInUserContext';
@@ -12,7 +13,9 @@ import './App.css';
 function App() {
 	const [jwtToken, setJwtToken] = useLocalStorage("jwt-token", null);
 	const [loggedInUser, setLoggedInUser] = useState(null);
-	
+
+	const navigate = useNavigate();
+
 	useEffect(() => {
 		if (jwtToken && !loggedInUser) {
 			const userData = jwt.decode(jwtToken);
@@ -28,6 +31,7 @@ function App() {
 
 		localStorage.removeItem("dcbyte-jwt");
 		setJwtToken(null);
+		navigate('/login');
 	};
 
 	const loggedInUserContextValues = {
