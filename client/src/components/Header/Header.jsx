@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 
 import Logo from "../Logo/Logo";
 import SearchInput from "../SearchInput/SearchInput";
+import PopularPosts from "../icons/PopularPosts";
+import LogOut from "../icons/LogOut";
 
 import './Header.css';
 
@@ -9,11 +11,9 @@ const MainHeader = ({ loggedInUser, logoutHandler }) => {
 	const loggedUserLinks = (
 		<ul>
 			<li>
-				<Link to="" >What's popular?</Link>
-			</li>
-
-			<li onClick={logoutHandler}>
-				Log out
+				<Link to="/popular-posts" >
+					<PopularPosts iconColorProp={"#EEEEEE"} />
+				</Link>
 			</li>
 		</ul>
 	);
@@ -26,7 +26,6 @@ const MainHeader = ({ loggedInUser, logoutHandler }) => {
 
 			<li>
 				<Link to="/sign-up" >Sign up</Link>
-
 			</li>
 		</ul>
 	);
@@ -39,6 +38,7 @@ const MainHeader = ({ loggedInUser, logoutHandler }) => {
 						<Logo />
 					</Link>
 				</div>
+
 				
 				<div className="search-component-wrapper">
 					<SearchInput className={'search-component-header-class'} />
@@ -58,6 +58,12 @@ const MainHeader = ({ loggedInUser, logoutHandler }) => {
 							</Link>
 						) : null
 					}
+
+					<div className="logged-user-options">
+						<button onClick={logoutHandler}>
+							<LogOut />
+						</button>
+					</div>
 				</div>
 			</header>
         </div>
