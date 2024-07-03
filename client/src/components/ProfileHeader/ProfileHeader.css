@@ -6,34 +6,43 @@
 }
 
 .profile-picture-wrapper img {
-	width: 140px;
-	height: 140px;
+	width: 190px;
+	height: 190px;
 	border: 0.5px solid #B5B5B5;
 	border-radius: 50%;
-	margin-left: 80px;
+	margin-left: 60px;
 }
 
 .user-data-wrapper {
+	width: 100%;
 	margin-left: 60px;
+}
+
+.user-data-wrapper .username-section {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-bottom: 25px;
 }
 
 .user-data-wrapper .username-section .username {
 	color: #B5B5B5;
 	display: inline-block;
-	margin-bottom: 25px;
 	font-size: 22px;
 }
 
 .followers-data-wrapper {
-	display: flex;
-	justify-content: space-between;
-
 	color: #B5B5B5;
 	font-size: 20px;
-	margin-bottom: 20px;
+	padding-bottom: 30px;
+}
+
+.followers-data-wrapper span {
+	margin-right: 30px;
 }
 
 .user-data-wrapper .bio {
 	color: #B5B5B5;
 	font-size: 20px;
+	margin: 0;
 }

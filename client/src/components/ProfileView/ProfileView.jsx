@@ -108,11 +108,11 @@ const ProfileView = (props) => {
 				: null
 			}
 
-			{/* <Popup
+			<Popup
 				onClosePopupClick={closeAddPictureForm}
 			>
 				<EditProfileForm />
-			</Popup> */}
+			</Popup>
 		</div>
 	)
 }
