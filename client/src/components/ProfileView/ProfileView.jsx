@@ -12,6 +12,7 @@ import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import UserProfilePost from '../UserProfilePost/UserProfilePost';
 import Popup from '../Popup/Popup';
 import AddImagePostForm from '../AddImagePostForm/AddImagePostForm';
+import EditProfileForm from "../EditProfileForm/EditProfileForm";
 import PlusIcon from '../icons/Plus';
 
 import './ProfileView.css';
@@ -29,19 +30,11 @@ const ProfileView = (props) => {
 	useEffect(() => {
 		getUserAccountData(userId, jwtToken)
 			.then((result) => {
-				console.log(result);
 				setUserData(result[0]);
+				setUserPosts(result[0].posts);
 			}).catch(() => {
 				console.log("something went wrong while trying to fetch user data");
 			})
-		// getAllUserPosts(jwtToken)
-		// 	.then((allUserPosts) => {
-		// 		setUserPosts(allUserPosts);
-		// 	})
-		// 	.catch((error) => {
-		// 		// TODO add some error handling
-		// 		console.log("something went wrong while trying to fetch");
-		// 	})
 	}, [userId, jwtToken]);
 
 	const openAddPictureForm = () => {
@@ -71,7 +64,6 @@ const ProfileView = (props) => {
 
 			closeAddPictureForm();
 		} catch(error) {
-			console.log(error);
 			// TODO add some error handling
 			console.log("Something went wrong while trying to uploade image");
 		}
@@ -81,8 +73,6 @@ const ProfileView = (props) => {
 		return null;
 	}
 
-	console.log(userData);
-	
 	return (
 		<div className="profile-view-wrapper">
 			<ProfileHeader
@@ -100,23 +90,29 @@ const ProfileView = (props) => {
 					<span>Upload Picture</span>
 				</button>
 
-				{userData?.posts?.map((post) => (
+				{userPosts.map((post) => (
 					<UserProfilePost key={post.imageIdentifier} post={post} />
 				))}
 			</section>
 
 			{isAddPicturePopupOpen
-					? (
-						<Popup
-							onClosePopupClick={closeAddPictureForm}
-						>
-							<AddImagePostForm
-								addImagePostHandler={addImagePostHandler}
-							/>
-						</ Popup>
-					)
-					: null
-				}
+				? (
+					<Popup
+						onClosePopupClick={closeAddPictureForm}
+					>
+						<AddImagePostForm
+							addImagePostHandler={addImagePostHandler}
+						/>
+					</ Popup>
+				)
+				: null
+			}
+
+			{/* <Popup
+				onClosePopupClick={closeAddPictureForm}
+			>
+				<EditProfileForm />
+			</Popup> */}
 		</div>
 	)
 }

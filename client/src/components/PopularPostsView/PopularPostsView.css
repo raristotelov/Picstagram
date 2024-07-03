@@ -1,0 +1,11 @@
+.popular-posts-wrapper {
+	border: 1px solid green;
+	max-width: 1920px;
+	flex-wrap: wrap;
+
+	width: 100%;
+	padding-top: 100px;
+	display: flex;
+	justify-content: flex-start;
+	padding: 50px;
+}
