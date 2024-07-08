@@ -25,9 +25,9 @@ const login = async ({ email, password }) => {
 
 		const passwordIsCorrect = await bcrypt.compare(password, dbUser.password);
 
-		// if (!passwordIsCorrect) {
-		// 	throw new Error("Wrong email or password!");
-		// }
+		if (!passwordIsCorrect) {
+			throw new Error("Wrong email or password!");
+		}
 
 		const claim = {
 			_id: dbUser._id,
@@ -54,16 +54,32 @@ const login = async ({ email, password }) => {
 
 const getUserAccoutData = async (userId) => {
 	try {
-		const user = await UserModel.find({ _id: userId }).select({ "_id": 1, username: 1, email: 1, posts: 1 }).populate({ path: "posts" });
+		const user = await UserModel.find({ _id: userId }).select({ "_id": 1, username: 1, email: 1, posts: 1, bio: 1 }).populate({ path: "posts" });
 
 		return user;
 	} catch (error) {
-		throw new Error("Something went wrong while trying get user accound data!");
+		throw new Error("Something went wrong while trying to get user accound data!");
+	}
+}
+
+const updateUserProfileData = async (userId, updatedProfileData) => {
+	try {
+		const user = await UserModel
+			.findOneAndUpdate(
+				{ _id: userId },
+				updatedProfileData,
+				{ new: true }
+			);
+
+		return user;
+	} catch (error) {
+		throw new Error("Something went wrong while trying to update user accound data!");
 	}
 }
 
 module.exports = {
 	signUp,
 	login,
-	getUserAccoutData
+	getUserAccoutData,
+	updateUserProfileData
 };

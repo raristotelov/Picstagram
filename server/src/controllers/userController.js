@@ -23,4 +23,12 @@ router.get('/', async (req, res) => {
     return res.json(userAccountData);
 });
 
+router.post('/update', async (req, res) => {
+	const userId  = req.query.userId;
+
+    const userAccountData = await userService.updateUserProfileData(userId, req.body);
+	
+    return res.json(userAccountData);
+});
+
 module.exports = router;

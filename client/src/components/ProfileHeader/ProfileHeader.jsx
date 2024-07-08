@@ -4,12 +4,15 @@ import "./ProfileHeader.css";
 
 const ProfileHeader = (props) => {
 	const {
-		username,
-		totalPostsCount,
-		followersCount,
-		followingCount,
-		bio
+		userData,
+		onEditProfileClick,
+		isLoggedInUserProfile
 	} = props;
+
+	const totalPostsCount = userData?.posts?.length ? userData.posts.length : 0;
+	const followersCount = userData?.followers?.length ? userData.followers.length : 0;
+	const followingCount = userData?.following?.length ? userData.following.length : 0;
+	const bio = userData.bio ? userData.bio : "No bio";
 
 	return (
 		<header className="profile-header">
@@ -19,11 +22,16 @@ const ProfileHeader = (props) => {
 
 			<div className="user-data-wrapper">
 				<div className="username-section">
-					<span className="username">{username}</span>
+					<span className="username">{userData.username}</span>
 					
-					<Button
-						label="Edit Profile"
-					/>
+					{isLoggedInUserProfile
+						? (
+							<Button
+								onClick={onEditProfileClick}
+								label="Edit Profile"
+							/>
+						) : null
+					}
 				</div>
 
 				<div className="followers-data-wrapper">

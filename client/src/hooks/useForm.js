@@ -8,10 +8,19 @@ export const useForm = (initialValues, onSubmitHandler) => {
     };
 
     const onSubmit = (e) => {
-		console.log("in");
         e.preventDefault();
 
-        onSubmitHandler(values);
+		const updatedValues = {};
+
+		for (let i = 0; i < Object.keys(initialValues).length; i++) {
+			const key = Object.keys(initialValues)[i];
+
+			if (values[key] !== initialValues[key]) {
+				updatedValues[key] = values[key];
+			}
+		}
+
+        onSubmitHandler(updatedValues);
     };
 
 	// TODO remove if not needed

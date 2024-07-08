@@ -1,19 +1,24 @@
 import { useState, useEffect, useRef } from "react";
 
-import Button from "../Button/Button";
-import PictureFrameIcon from "../icons/PictureFrame";
+import { useForm } from "../../hooks/useForm";
 
-const EditProfileForm = ({ submitProfileChanges }) => {
+import Button from "../Button/Button";
+import PictureFrameIcon from "../icons/PictureFrameIcon";
+import ImageInput from "../ImageInput/ImageInput";
+import AddProfilePictureIcon from "../icons/AddProfilePictureIcon";
+
+const EditProfileForm = ({ userData, editProfileData }) => {
+	const { values, changeHandler, onSubmit } = useForm({
+        email: userData.email,
+		username: userData.username,
+		bio: userData.bio ? userData.bio : "",
+        password: '',
+    }, editProfileData);
+
 	const [uploadedImage, setUploadedImage] = useState(null);
 	const [imagePreview, setImagePreview] = useState(null);
 
 	const inputRef = useRef(null);
-
-	const onSubmit = (e) => {
-		e.preventDefault();
-
-		submitProfileChanges();
-	}
 
 	const onChangeHandler = (e) => {
 		
@@ -25,32 +30,67 @@ const EditProfileForm = ({ submitProfileChanges }) => {
 
 	return (
 		<form
-			id="add-image-post-form"
+			id="edit-user-profile-form"
 			onSubmit={onSubmit}
-			className="add-image-post-form"
+			className="edit-user-profile-form"
 		>
-			{/* <h1>Upload Picture</h1> */}
+			<h1>Edit Profile</h1>
 
-			<div className={`image-input-wrapper ${uploadedImage ? "hidden" : ""}`}>
-				<label htmlFor="picture">
-					<PictureFrameIcon iconColorProp="#B5B5B5" />
+			<ImageInput
+				onChange={setUploadedImage}
+				PlaceHolderImageProp={AddProfilePictureIcon}
+				isRoundImage={true}
+				imageWidthProp={120}
+				imageHeightProp={120}
+				iconWidthProp={60}
+				iconHeightProp={60}
+				fontSizeProp={13}
+			/>
 
-					<span>Choose a Picture</span>
-				</label>
-
+			<div className="input-wrapper">
 				<input
-					type="file"
-					id="picture"
-					name="picture"
-					onChange={onChangeHandler}
-					ref={inputRef}
+					type="email"
+					id="email"
+					name="email"
+					placeholder="Email"
+					value={values.email}
+					onChange={changeHandler}
 				/>
 			</div>
-		
-			<div className={`preview-wrapper ${!uploadedImage ? "hidden" : ""}`} >
-				<img src={imagePreview} alt="preview" />
+
+			<div className="input-wrapper">
+				<input
+					type="username"
+					id="username"
+					name="username"
+					placeholder="Username"
+					value={values.username}
+					onChange={changeHandler}
+				/>
 			</div>
-				
+
+			<div className="input-wrapper">
+				<input
+					type="password"
+					id="password"
+					name="password"
+					placeholder="password"
+					value={values.password}
+					onChange={changeHandler}
+				/>
+			</div>
+
+			<div className="input-wrapper">
+				<input
+					type="bio"
+					id="bio"
+					name="bio"
+					placeholder="bio"
+					value={values.bio}
+					onChange={changeHandler}
+				/>
+			</div>
+
 			<div className="button-row">
 				<Button
 					type="submit"

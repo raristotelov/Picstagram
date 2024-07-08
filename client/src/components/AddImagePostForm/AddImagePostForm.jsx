@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 import Button from "../Button/Button";
 import ImageInput from "../ImageInput/ImageInput";
-import PictureFrameIcon from "../icons/PictureFrame";
+import PictureFrameIcon from "../icons/PictureFrameIcon";
 
 import "./AddImagePostForm.css"
 
@@ -31,6 +31,10 @@ const AddImagePostForm = ({ addImagePostHandler }) => {
 
 			<ImageInput
 				onChange={setUploadedImage}
+				PlaceHolderImageProp={PictureFrameIcon}
+				placeholderText="Choose a Picture"
+				imageWidth={290}
+				imageHeigth={320}
 			/>
 
 			<div className="button-row">

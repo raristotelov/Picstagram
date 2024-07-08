@@ -1,13 +1,15 @@
-const PictureFrame = ({ iconColorProp }) => {
+const PictureFrame = ({ iconColorProp, iconWidthProp, iconHeightProp }) => {
 	const iconColor = iconColorProp || "#4B4B4B";
+	const width = iconWidthProp || 24;
+	const height = iconHeightProp || 24;
 
 	return (
 		<svg
 			version="1.1"
 			id="PICTURE"
 			xmlns="http://www.w3.org/2000/svg"
-			width="800px"
-			height="800px"
+			width={`${width}px`}
+			height={`${height}px`}
 			viewBox="0 0 1800 1800"
 			enableBackground="new 0 0 1800 1800"
 		>

@@ -1,12 +1,39 @@
 import { useState, useEffect, useRef, Fragment } from "react";
 
-import PictureFrameIcon from "../icons/PictureFrame";
+import PictureFrameIcon from "../icons/PictureFrameIcon";
 
-const ImageInput = ({ onChange }) => {
+import "./ImageInput.css"
+
+const defaultImageWidth = 290;
+const defaultImageHeight = 320;
+const defaultIconWidth = 90;
+const defaultIconHeight = 90;
+const defaultFontSize = 22;
+
+const ImageInput = (props) => {
 	const [uploadedImage, setUploadedImage] = useState(null);
 	const [imagePreview, setImagePreview] = useState(null);
 
 	const inputRef = useRef(null);
+
+	const {
+		onChange,
+		placeholderText,
+		isRoundImage,
+		PlaceHolderImageProp,
+		imageWidthProp,
+		imageHeightProp,
+		iconWidthProp,
+		iconHeightProp,
+		fontSizeProp
+	} = props;
+
+	const PlaceHolderImage = PlaceHolderImageProp || PictureFrameIcon;
+	const imageWidth = imageWidthProp || defaultImageWidth;
+	const imageHeigth = imageHeightProp || defaultImageHeight;
+	const iconWidth = iconWidthProp || defaultIconWidth;
+	const iconHeight = iconHeightProp || defaultIconHeight;
+	const fontSize = fontSizeProp || defaultFontSize;
 
 	useEffect(() => {
         if (!uploadedImage) {
@@ -33,13 +60,49 @@ const ImageInput = ({ onChange }) => {
 		setImagePreview(null);
 	}
 
+	const getImageInputWrapperClasses = () => {
+		let imageInputWrapperClasses = "image-input-wrapper";
+
+		if (isRoundImage) {
+			imageInputWrapperClasses = imageInputWrapperClasses.concat(" round-image");
+		}
+	
+		if (uploadedImage) {
+			imageInputWrapperClasses = imageInputWrapperClasses.concat(" hidden");
+		}
+
+		return imageInputWrapperClasses;
+	}
+
+	const getPreviewWrapperClasses = () => {
+		let previewWrapperClasses = "preview-wrapper";
+
+		if (isRoundImage) {
+			previewWrapperClasses = previewWrapperClasses.concat(" round-image");
+		}
+	
+		if (!uploadedImage) {
+			previewWrapperClasses = previewWrapperClasses.concat(" hidden");
+		}
+
+		return previewWrapperClasses;
+	}
+
 	return (
 		<Fragment>
-			<div className={`image-input-wrapper ${uploadedImage ? "hidden" : ""}`}>
+			<div className={getImageInputWrapperClasses()} style={{width: `${imageWidth}px`, height: `${imageHeigth}px`}}>
 				<label htmlFor="picture">
-					<PictureFrameIcon iconColorProp="#B5B5B5" />
+					<PlaceHolderImage
+						iconColorProp="#B5B5B5"
+						iconWidthProp={iconWidth}
+						iconHeightProp={iconHeight}
+					/>
 
-					<span>Choose a Picture</span>
+					{placeholderText 
+						? (
+							<span style={{fontSize: `${fontSize}px`}}>{placeholderText}</span>
+						) : null
+					}
 				</label>
 
 				<input
@@ -51,8 +114,8 @@ const ImageInput = ({ onChange }) => {
 				/>
 			</div>
 
-			<div className={`preview-wrapper ${!uploadedImage ? "hidden" : ""}`} >
-				<img src={imagePreview} alt="preview" />
+			<div className={getPreviewWrapperClasses()} style={{width: `${imageWidth}px`, height: `${imageHeigth}px`}}>
+				<img src={imagePreview} alt="preview" width={imageWidth} height={imageHeigth} style={{}} />
 			</div>
 		</Fragment>
 	);

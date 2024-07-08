@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import { storage } from '../../firebase';
 import LoggedInUserContext from '../../contexts/LoggedInUserContext';
 import { getAllUserPosts, addUserPost } from "../../services/userPostService";
+import { updateUserProfileData } from "../../services/userService";
+
 import { getUserAccountData } from '../../services/userService';
 
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
@@ -21,11 +23,13 @@ const ProfileView = (props) => {
 	const [userPosts, setUserPosts] = useState([]);
 	const [userData, setUserData] = useState(null);
 	const [isAddPicturePopupOpen, setIsAddPicturePopupOpen] = useState(false);
+	const [isEditProfileFormOpen, setIsEditProfileFormOpen] = useState(false);
 
-	const { jwtToken } = useContext(LoggedInUserContext);
+	const { jwtToken, loggedInUser } = useContext(LoggedInUserContext);
 
 	let { userId } = useParams();
 
+	const isLoggedInUserProfile = userId === loggedInUser?._id;
 
 	useEffect(() => {
 		getUserAccountData(userId, jwtToken)
@@ -69,6 +73,21 @@ const ProfileView = (props) => {
 		}
 	};
 
+	const openEditProfileForm = () => {
+		setIsEditProfileFormOpen(true);
+	}
+
+	const closeEditProfileForm = () => {
+		setIsEditProfileFormOpen(false);
+	}
+
+	const editProfileDataHandler = async (userUpdatedData) => {
+		const updatedUser = await updateUserProfileData(userId, jwtToken, userUpdatedData);
+
+		setUserData(updatedUser);
+		closeEditProfileForm();
+	}
+
 	if (!userData) {
 		return null;
 	}
@@ -76,11 +95,9 @@ const ProfileView = (props) => {
 	return (
 		<div className="profile-view-wrapper">
 			<ProfileHeader
-				username={userData.username}
-				totalPostsCount={userData?.posts?.length ? userData.posts.length : 0}
-				followersCount={userData?.followers?.length ? userData.followers.length : 0}
-				followingCount={userData?.following?.length ? userData.following.length : 0}
-				bio={"lorem ipsum for now"}
+				userData={userData}
+				isLoggedInUserProfile={isLoggedInUserProfile}
+				onEditProfileClick={openEditProfileForm}
 			/>
 
 			<section className="profile-posts-wrapper">
@@ -102,19 +119,28 @@ const ProfileView = (props) => {
 					>
 						<AddImagePostForm
 							addImagePostHandler={addImagePostHandler}
+							onCancelClick={closeAddPictureForm}
 						/>
 					</ Popup>
 				)
 				: null
 			}
 
-			<Popup
-				onClosePopupClick={closeAddPictureForm}
-			>
-				<EditProfileForm />
-			</Popup>
+			{isEditProfileFormOpen
+				? (
+					<Popup
+						onClosePopupClick={closeEditProfileForm}
+					>
+						<EditProfileForm
+							userData={userData}
+							editProfileData={editProfileDataHandler}
+							onCancelClick={closeEditProfileForm}
+						/>
+					</Popup>
+				) : null
+			}
 		</div>
 	)
-}
+};
 
 export default ProfileView;
