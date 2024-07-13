@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const UserPostSchema = new mongoose.Schema({
+const UserImageSchema = new mongoose.Schema({
     imageIdentifier: {
         type: String,
         required: true,
@@ -17,5 +17,5 @@ const UserPostSchema = new mongoose.Schema({
     },
 });
 
-const model = mongoose.model('UserPost', UserPostSchema);
+const model = mongoose.model('UserImage', UserImageSchema);
 module.exports = model;

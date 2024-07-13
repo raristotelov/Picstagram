@@ -14,10 +14,12 @@ const ProfileHeader = (props) => {
 	const followingCount = userData?.following?.length ? userData.following.length : 0;
 	const bio = userData.bio ? userData.bio : "No bio";
 
+	const profilePictureUrl = userData?.profilePicture?.imageUrl ? userData.profilePicture.imageUrl : "/images/default-profile-picture.png";
+
 	return (
 		<header className="profile-header">
 			<div className="profile-picture-wrapper">
-				<img src="/images/default-profile-picture.png" alt="" />
+				<img src={profilePictureUrl} alt="" />
 			</div>
 
 			<div className="user-data-wrapper">

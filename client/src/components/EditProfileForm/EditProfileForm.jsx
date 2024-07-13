@@ -1,32 +1,32 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 
 import { useForm } from "../../hooks/useForm";
 
 import Button from "../Button/Button";
-import PictureFrameIcon from "../icons/PictureFrameIcon";
 import ImageInput from "../ImageInput/ImageInput";
 import AddProfilePictureIcon from "../icons/AddProfilePictureIcon";
 
-const EditProfileForm = ({ userData, editProfileData }) => {
+import "./EditProfileForm.css";
+
+const EditProfileForm = ({ userData, editProfileData, onCancelClick }) => {
+	const [profilePicture, setProfilePicture] = useState(null);
+
+	const editProfileDataHandler = (updatedValues) => {
+		let updatedUserValues = { ...updatedValues };
+
+		if (profilePicture) {
+			updatedUserValues = { ...updatedValues, profilePicture};
+		}
+
+		editProfileData(updatedUserValues);
+	}
+
 	const { values, changeHandler, onSubmit } = useForm({
         email: userData.email,
 		username: userData.username,
 		bio: userData.bio ? userData.bio : "",
         password: '',
-    }, editProfileData);
-
-	const [uploadedImage, setUploadedImage] = useState(null);
-	const [imagePreview, setImagePreview] = useState(null);
-
-	const inputRef = useRef(null);
-
-	const onChangeHandler = (e) => {
-		
-	}
-
-	const onCancelClick = () => {
-	
-	}
+    }, editProfileDataHandler);
 
 	return (
 		<form
@@ -36,18 +36,21 @@ const EditProfileForm = ({ userData, editProfileData }) => {
 		>
 			<h1>Edit Profile</h1>
 
-			<ImageInput
-				onChange={setUploadedImage}
-				PlaceHolderImageProp={AddProfilePictureIcon}
-				isRoundImage={true}
-				imageWidthProp={120}
-				imageHeightProp={120}
-				iconWidthProp={60}
-				iconHeightProp={60}
-				fontSizeProp={13}
-			/>
+			<div className="profile-form-profile-picture-wrapper">
+				<ImageInput
+					initialValue={userData?.profilePicture.imageUrl}
+					onChange={setProfilePicture}
+					PlaceHolderImageProp={AddProfilePictureIcon}
+					isRoundImage={true}
+					imageWidthProp={120}
+					imageHeightProp={120}
+					iconWidthProp={60}
+					iconHeightProp={60}
+					fontSizeProp={13}
+				/>
+			</div>
 
-			<div className="input-wrapper">
+			<div className="profile-form-input-wrapper">
 				<input
 					type="email"
 					id="email"
@@ -58,7 +61,7 @@ const EditProfileForm = ({ userData, editProfileData }) => {
 				/>
 			</div>
 
-			<div className="input-wrapper">
+			<div className="profile-form-input-wrapper">
 				<input
 					type="username"
 					id="username"
@@ -69,7 +72,7 @@ const EditProfileForm = ({ userData, editProfileData }) => {
 				/>
 			</div>
 
-			<div className="input-wrapper">
+			<div className="profile-form-input-wrapper">
 				<input
 					type="password"
 					id="password"
@@ -80,7 +83,7 @@ const EditProfileForm = ({ userData, editProfileData }) => {
 				/>
 			</div>
 
-			<div className="input-wrapper">
+			<div className="profile-form-input-wrapper">
 				<input
 					type="bio"
 					id="bio"
@@ -91,7 +94,7 @@ const EditProfileForm = ({ userData, editProfileData }) => {
 				/>
 			</div>
 
-			<div className="button-row">
+			<div className="profile-form-button-row">
 				<Button
 					type="submit"
 					label="Submit"

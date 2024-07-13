@@ -18,9 +18,13 @@ const UserSchema = new mongoose.Schema({
 	bio: {
 		type: String
 	},
+	profilePicture: {
+		type: 'ObjectId',
+		ref: 'UserImage'
+	},
 	posts: [{
         type: 'ObjectId',
-        ref: 'UserPost'
+        ref: 'UserImage'
     }],
 	following: [{
 		type: 'ObjectId',

@@ -2,6 +2,7 @@ const JWT = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const UserModel = require('../models/userModel');
+const UserImageModel = require('../models/userImageModel');
 const constants = require('../config/constants');
 
 const signUp = async ({ email, username, password }) => {
@@ -54,7 +55,10 @@ const login = async ({ email, password }) => {
 
 const getUserAccoutData = async (userId) => {
 	try {
-		const user = await UserModel.find({ _id: userId }).select({ "_id": 1, username: 1, email: 1, posts: 1, bio: 1 }).populate({ path: "posts" });
+		const user = await UserModel
+			.find({ _id: userId })
+			.select({ "_id": 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1 })
+			.populate({ path: "posts" }).populate({ path: "profilePicture" });
 
 		return user;
 	} catch (error) {
@@ -64,12 +68,32 @@ const getUserAccoutData = async (userId) => {
 
 const updateUserProfileData = async (userId, updatedProfileData) => {
 	try {
+		let profilePicture = null;
+
+		if (updatedProfileData.profilePicture) {
+			const updatedProfilePicture = updatedProfileData.profilePicture;
+
+			const userWithProfilePicture = await UserModel.findOne({ _id: userId }).populate({ path: "profilePicture" });
+
+			if (userWithProfilePicture.profilePicture) {
+				await UserImageModel.deleteOne({ _id: userWithProfilePicture.profilePicture._id });
+			}
+
+			profilePicture = new UserImageModel({ imageIdentifier: updatedProfilePicture.imageIdentifier, imageUrl: updatedProfilePicture.imageUrl, userId });
+
+			await profilePicture.save();
+		}
+
+		if (profilePicture) {
+			updatedProfileData.profilePicture = profilePicture._id;
+		}
+
 		const user = await UserModel
 			.findOneAndUpdate(
 				{ _id: userId },
 				updatedProfileData,
 				{ new: true }
-			);
+			).populate("profilePicture");
 
 		return user;
 	} catch (error) {

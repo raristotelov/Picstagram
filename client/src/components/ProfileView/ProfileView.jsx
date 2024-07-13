@@ -5,10 +5,8 @@ import { useParams } from 'react-router-dom';
 
 import { storage } from '../../firebase';
 import LoggedInUserContext from '../../contexts/LoggedInUserContext';
-import { getAllUserPosts, addUserPost } from "../../services/userPostService";
-import { updateUserProfileData } from "../../services/userService";
-
-import { getUserAccountData } from '../../services/userService';
+import { addUserPost } from "../../services/userPostService";
+import { getUserAccountData, updateUserProfileData } from "../../services/userService";
 
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import UserProfilePost from '../UserProfilePost/UserProfilePost';
@@ -18,6 +16,25 @@ import EditProfileForm from "../EditProfileForm/EditProfileForm";
 import PlusIcon from '../icons/Plus';
 
 import './ProfileView.css';
+
+const uploadImageToFirebaseStorage = async (imageData) => {
+	try {
+		const imageIdentifier = `/userUploadedImages/${imageData.name + v4()}`;
+
+		const imageRef = ref(storage, imageIdentifier);
+
+		await uploadBytes(imageRef, imageData);
+
+		const imageUrl = await getDownloadURL(imageRef);
+
+		const createdImage = { imageIdentifier, imageUrl };
+
+		return createdImage;
+	} catch(error) {
+		// TODO add some error handling
+		console.log("Something went wrong while trying to uploade image");
+	}
+}
 
 const ProfileView = (props) => {
 	const [userPosts, setUserPosts] = useState([]);
@@ -82,10 +99,23 @@ const ProfileView = (props) => {
 	}
 
 	const editProfileDataHandler = async (userUpdatedData) => {
-		const updatedUser = await updateUserProfileData(userId, jwtToken, userUpdatedData);
+		try {
+			let userUpdates = { ...userUpdatedData };
 
-		setUserData(updatedUser);
-		closeEditProfileForm();
+			if (userUpdates.profilePicture) {
+				const createdImageForProflePicrture = await uploadImageToFirebaseStorage(userUpdates.profilePicture);
+				userUpdates = {...userUpdates, profilePicture: createdImageForProflePicrture };
+			} 
+			
+			const updatedUser = await updateUserProfileData(userId, jwtToken, userUpdates);
+			
+			setUserData(updatedUser);
+
+			closeEditProfileForm();
+		} catch(error) {
+			// TODO add some error handling
+			console.log("Something went wrong while trying to update user profile");
+		}
 	}
 
 	if (!userData) {

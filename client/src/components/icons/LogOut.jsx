@@ -9,9 +9,9 @@ const LogOut = () => {
 		>
 			<g
 				stroke="#141414"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="1.5"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
 			>
 				<path
 					d="m15.75 8.75 3.5 3.25-3.5 3.25"

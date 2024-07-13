@@ -18,6 +18,7 @@ const ImageInput = (props) => {
 
 	const {
 		onChange,
+		initialValue,
 		placeholderText,
 		isRoundImage,
 		PlaceHolderImageProp,
@@ -28,36 +29,33 @@ const ImageInput = (props) => {
 		fontSizeProp
 	} = props;
 
-	const PlaceHolderImage = PlaceHolderImageProp || PictureFrameIcon;
-	const imageWidth = imageWidthProp || defaultImageWidth;
-	const imageHeigth = imageHeightProp || defaultImageHeight;
-	const iconWidth = iconWidthProp || defaultIconWidth;
-	const iconHeight = iconHeightProp || defaultIconHeight;
-	const fontSize = fontSizeProp || defaultFontSize;
+	useEffect(() => {
+		if (initialValue) {
+			setUploadedImage(initialValue);
+		}
+	}, [initialValue]);
 
 	useEffect(() => {
         if (!uploadedImage) {
-            setImagePreview(undefined);
-            return
+            setImagePreview(null);
+            return;
         }
 
-        const objectUrl = URL.createObjectURL(uploadedImage);
-        setImagePreview(objectUrl);
+		if (uploadedImage === initialValue) {
+			setImagePreview(uploadedImage);
+			return;
+		}
 
-        // free memory when ever this component is unmounted
-        return () => URL.revokeObjectURL(objectUrl);
-    }, [uploadedImage]);
+		const objectUrl = URL.createObjectURL(uploadedImage);
+		setImagePreview(objectUrl);
 
+		// free memory when ever this component is unmounted
+		return () => URL.revokeObjectURL(objectUrl);
+    }, [uploadedImage, initialValue]);
 
 	const onChangeHandler = (e) => {
 		setUploadedImage(e.target.files[0]);
 		onChange(e.target.files[0]);
-	}
-
-	const onCancelClick = () => {
-		inputRef.current.value = null;
-		setUploadedImage(null);
-		setImagePreview(null);
 	}
 
 	const getImageInputWrapperClasses = () => {
@@ -88,6 +86,13 @@ const ImageInput = (props) => {
 		return previewWrapperClasses;
 	}
 
+	const PlaceHolderImage = PlaceHolderImageProp || PictureFrameIcon;
+	const imageWidth = imageWidthProp || defaultImageWidth;
+	const imageHeigth = imageHeightProp || defaultImageHeight;
+	const iconWidth = iconWidthProp || defaultIconWidth;
+	const iconHeight = iconHeightProp || defaultIconHeight;
+	const fontSize = fontSizeProp || defaultFontSize;
+
 	return (
 		<Fragment>
 			<div className={getImageInputWrapperClasses()} style={{width: `${imageWidth}px`, height: `${imageHeigth}px`}}>
@@ -115,7 +120,17 @@ const ImageInput = (props) => {
 			</div>
 
 			<div className={getPreviewWrapperClasses()} style={{width: `${imageWidth}px`, height: `${imageHeigth}px`}}>
-				<img src={imagePreview} alt="preview" width={imageWidth} height={imageHeigth} style={{}} />
+				<img src={imagePreview} alt="preview" width={imageWidth} height={imageHeigth} />
+
+				<button
+					onClick={(e) => {
+						e.preventDefault();
+						inputRef.current.click()
+					}}
+					className="image-change-button" style={{width: `${imageWidth}px`, height: `${imageHeigth}px`}}
+				>
+					Change
+				</button>
 			</div>
 		</Fragment>
 	);
