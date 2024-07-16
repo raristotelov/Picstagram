@@ -53,15 +53,29 @@ const login = async ({ email, password }) => {
 	}
 };
 
-const getUserAccoutData = async (userId) => {
+const getUsersProfileDataByUserIds = async ({ userIds }) => {
 	try {
-		const user = await UserModel
-			.find({ _id: userId })
+		const users = await UserModel
+			.find({ _id: { "$in": userIds } })
 			.select({ "_id": 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1 })
 			.populate({ path: "posts" }).populate({ path: "profilePicture" });
 
-		return user;
+		return users;
 	} catch (error) {
+		throw new Error("Something went wrong while trying to get user accound data!");
+	}
+}
+
+const getUsersProfileDataBySearchWord= async ({ searchWord }) => {
+	try {
+		const users = await UserModel
+			.find({ "username": { $regex: `^${searchWord}`, $options: "i" } })
+			.select({ "_id": 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1 })
+			.populate({ path: "posts" }).populate({ path: "profilePicture" });
+
+		return users;
+	} catch (error) {
+		console.log(error);
 		throw new Error("Something went wrong while trying to get user accound data!");
 	}
 }
@@ -104,6 +118,7 @@ const updateUserProfileData = async (userId, updatedProfileData) => {
 module.exports = {
 	signUp,
 	login,
-	getUserAccoutData,
+	getUsersProfileDataByUserIds,
+	getUsersProfileDataBySearchWord,
 	updateUserProfileData
 };

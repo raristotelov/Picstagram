@@ -1,4 +1,8 @@
+import { useState, useEffect, useContext } from 'react';
 import { Link } from "react-router-dom";
+
+import LoggedInUserContext from '../../contexts/LoggedInUserContext';
+import { getUserProfileData } from "../../services/userService";
 
 import Logo from "../Logo/Logo";
 import SearchInput from "../SearchInput/SearchInput";
@@ -7,7 +11,27 @@ import LogOut from "../icons/LogOut";
 
 import './Header.css';
 
-const MainHeader = ({ loggedInUser, logoutHandler }) => {
+const MainHeader = ({ logoutHandler }) => {
+	const [searchWord, setSearchWord] = useState("");
+	const [searchResults, setSearchResults] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const { jwtToken, loggedInUser } = useContext(LoggedInUserContext);
+
+	useEffect(() => {
+		if (searchWord.length >= 2) {
+			setIsLoading(true);
+
+			getUserProfileData({ searchWord, jwtToken })
+				.then((result) => {
+					setSearchResults(result);
+					setIsLoading(false);
+				}).catch(() => {
+					setIsLoading(false);
+					console.log("something went wrong while trying to fetch user data");
+				})
+		}
+	}, [jwtToken, searchWord]);
+
 	const loggedUserLinks = (
 		<ul>
 			<li>
@@ -41,7 +65,12 @@ const MainHeader = ({ loggedInUser, logoutHandler }) => {
 
 				
 				<div className="search-component-wrapper">
-					<SearchInput className={'search-component-header-class'} />
+					<SearchInput
+						onUpdate={setSearchWord}
+						dropDownOptions={searchResults}
+						isLoading={isLoading}
+						className={'search-component-header-class'}
+					/>
 				</div>
 
 				<div className="navbar-logged-user-container">

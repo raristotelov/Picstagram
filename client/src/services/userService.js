@@ -10,17 +10,27 @@ export const signUp = (data) => {
 export const login = (data) => {
 	const request = requestFactory();
 
-    return request.post(`${serverUrl}/user/login`, data);
+    return request.post(`${serverUrl}/users/login`, data);
 };
 
-export const getUserAccountData = (userId, jwtToken) => {
+export const getUserProfileData = ({ userIds, searchWord, jwtToken }) => {
 	const request = requestFactory(jwtToken);
 
-	return request.get(`${serverUrl}/user?userId=${userId}`);
+	let requestUrl = `${serverUrl}/users?`;
+
+	if (userIds?.length) {
+		requestUrl = requestUrl.concat("userIds=", userIds.join(","));
+	}
+
+	if (searchWord) {
+		requestUrl = requestUrl.concat("searchWord=", searchWord);
+	}
+
+	return request.get(requestUrl);
 }
 
-export const updateUserProfileData = (userId, jwtToken, updatedProfileData) => {
+export const updateUserProfileData = ({ userId, jwtToken, updatedProfileData }) => {
 	const request = requestFactory(jwtToken);
 
-	return request.post(`${serverUrl}/user/update?userId=${userId}`, updatedProfileData);
+	return request.post(`${serverUrl}/users/update?userId=${userId}`, updatedProfileData);
 }

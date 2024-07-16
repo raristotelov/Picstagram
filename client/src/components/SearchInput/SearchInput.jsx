@@ -1,61 +1,110 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Link } from "react-router-dom";
 
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 import './SearchInput.css';
 
-const SearchInput = ({ className }) => {
-	const [searchedText, setSearchedText] = useState('');
-	const [displayOptions, setDisplayOptions] = useState(false);
+const SearchInput = (props) => {
+	const [isSearchDropDownOpen, setIsSearchDropDownOpen] = useState(false);
+	const [searchedText, setSearchedText] = useState("");
+
+	const {
+		className,
+		onUpdate,
+		dropDownOptions,
+		isLoading
+	} = props;
+
+	const dropdownOptionsRef = useRef();
+	const searchInputRef = useRef();
+
+	const handleClickOutside = useCallback((event) => {
+		if (dropdownOptionsRef.current && !dropdownOptionsRef.current.contains(event.target) && !searchInputRef.current.contains(event.target)) {
+			setIsSearchDropDownOpen(false);
+		}
+	}, []);
+
+	const openSearchDropdown = useCallback(() => {
+		setIsSearchDropDownOpen(true);
+	}, []);
+
+	const closeSearchDropdown = useCallback(() => {
+		setIsSearchDropDownOpen(false);
+	}, []);
+
+	const handleDropdownActions = useCallback((action) => {
+		if (searchedText.length >= 2) {
+			openSearchDropdown();
+		}
+
+		if (searchedText === "") {
+			closeSearchDropdown();
+		}
+	}, [openSearchDropdown, closeSearchDropdown, searchedText]);
 
 	useEffect(() => {
-		if (searchedText) {
-			setDisplayOptions(true);
-		} else {
-			setDisplayOptions(false);
-		}
-	}, [searchedText]);
+		document.addEventListener('click', handleClickOutside);
 
+		return () => {
+			document.removeEventListener('click', handleClickOutside);
+		};
+	}, [handleClickOutside]);
 
-	const onSearch = (e) => {
+	useEffect(() => {
+		handleDropdownActions();
+	}, [searchedText, handleDropdownActions]);
+
+	const onChange = (e) => {
 		setSearchedText(e.target.value)
+		onUpdate(e.target.value);
 	};
 
-	let classes = 'search-input-wrapper'
+	const onSearchOptionClick = () => {
+		closeSearchDropdown();
+		setSearchedText("");
+	}
+
+	let classes = "search-input-wrapper"
 
 	if (className) {
 		classes = `search-input-wrapper ${className}`
 	}
 
+	const dropdownOptions = dropDownOptions.length ? dropDownOptions.map((option) => (
+		<Link to={`/user/${option._id}`} key={option.username} className="search-option" onClick={onSearchOptionClick}>
+			{option.username}
+		</Link>
+	)) : "No Data";
+
+	const dropdownContent = isLoading
+		? <LoadingSpinner /> 
+		: dropdownOptions;
+
 	return (
 		<div className={classes}>
 			<input
-				type='text'
-				id='searched-text'
-				name='searchedText'
-				placeholder='Search'
+				type="text"
+				id="searched-text"
+				name="searchedText"
+				placeholder="Search"
 				value={searchedText}
-				onChange={onSearch}
-				className='search-input'
+				onChange={onChange}
+				onFocus={handleDropdownActions}
+				className="search-input"
+				ref={searchInputRef}
 			/>
 
-			{displayOptions
+			{isSearchDropDownOpen
 				? (
-					<div className='options-wrapper'>
-						<div className='option'>
-							here
-						</div>
-		
-						<div className='option'>
-							Here 2
-						</div>
-		
-						<div className='option'>
-							here 3
-						</div>
+					<div
+						className="options-wrapper"
+						ref={dropdownOptionsRef}
+					>
+						{dropdownContent}
 					</div>
-				)
-				: null
+				) : null
 			}
 		</div>
 	)

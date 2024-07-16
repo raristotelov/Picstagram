@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { storage } from '../../firebase';
 import LoggedInUserContext from '../../contexts/LoggedInUserContext';
 import { addUserPost } from "../../services/userPostService";
-import { getUserAccountData, updateUserProfileData } from "../../services/userService";
+import { getUserProfileData, updateUserProfileData } from "../../services/userService";
 
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import UserProfilePost from '../UserProfilePost/UserProfilePost';
@@ -49,7 +49,7 @@ const ProfileView = (props) => {
 	const isLoggedInUserProfile = userId === loggedInUser?._id;
 
 	useEffect(() => {
-		getUserAccountData(userId, jwtToken)
+		getUserProfileData({ userIds: [userId], jwtToken })
 			.then((result) => {
 				setUserData(result[0]);
 				setUserPosts(result[0].posts);
@@ -107,7 +107,7 @@ const ProfileView = (props) => {
 				userUpdates = {...userUpdates, profilePicture: createdImageForProflePicrture };
 			} 
 			
-			const updatedUser = await updateUserProfileData(userId, jwtToken, userUpdates);
+			const updatedUser = await updateUserProfileData({ userId, jwtToken, userUpdates });
 			
 			setUserData(updatedUser);
 
