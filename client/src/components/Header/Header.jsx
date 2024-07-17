@@ -1,7 +1,7 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 
-import LoggedInUserContext from '../../contexts/LoggedInUserContext';
+import LoggedInUserContext from "../../contexts/LoggedInUserContext";
 import { getUserProfileData } from "../../services/userService";
 
 import Logo from "../Logo/Logo";
@@ -9,7 +9,7 @@ import SearchInput from "../SearchInput/SearchInput";
 import PopularPosts from "../icons/PopularPosts";
 import LogOut from "../icons/LogOut";
 
-import './Header.css';
+import "./Header.css";
 
 const MainHeader = ({ logoutHandler }) => {
 	const [searchWord, setSearchWord] = useState("");
@@ -57,8 +57,8 @@ const MainHeader = ({ logoutHandler }) => {
     return (
         <div className="header-wrapper">
 			<header className="header">
-				<div className='header-logo-wrapper'>
-					<Link to='/'>
+				<div className="header-logo-wrapper">
+					<Link to="/">
 						<Logo />
 					</Link>
 				</div>
@@ -69,7 +69,7 @@ const MainHeader = ({ logoutHandler }) => {
 						onUpdate={setSearchWord}
 						dropDownOptions={searchResults}
 						isLoading={isLoading}
-						className={'search-component-header-class'}
+						className={"search-component-header-class"}
 					/>
 				</div>
 

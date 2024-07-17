@@ -1,21 +1,21 @@
-const { Router } = require('express');
+const { Router } = require("express");
 const router = Router();
 
-const { usersService } = require('../services');
+const { usersService } = require("../services");
 
-router.post('/sign-up', async (req, res) => {
+router.post("/sign-up", async (req, res) => {
     const userData = await usersService.signUp(req.body);
 	
     return res.json(userData);
 });
 
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
     const userData = await usersService.login(req.body);
 	
     return res.json(userData);
 });
 
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
 	const userIdsString = req.query.userIds;
 	const searchWord = req.query.searchWord;
 
@@ -32,10 +32,28 @@ router.get('/', async (req, res) => {
 	return res.json(usersAccountData);
 });
 
-router.post('/update', async (req, res) => {
-	const userId  = req.query.userId;
+router.patch("/update/:userId", async (req, res) => {
+	const userId  = req.params.userId;
 
     const userAccountData = await usersService.updateUserProfileData(userId, req.body);
+	
+    return res.json(userAccountData);
+});
+
+router.post("/:userId/follow/:userIdToFollow", async (req, res) => {
+	const userId  = req.params.userId;
+	const userIdToFollow  = req.params.userIdToFollow;
+
+    const userAccountData = await usersService.followUser(userId, userIdToFollow);
+	
+    return res.json(userAccountData);
+});
+
+router.post("/:userId/unfollow/:userIdToUnfollow", async (req, res) => {
+	const userId  = req.params.userId;
+	const userIdToUnfollow  = req.params.userIdToUnfollow;
+
+    const userAccountData = await usersService.unfollowUser(userId, userIdToUnfollow);
 	
     return res.json(userAccountData);
 });

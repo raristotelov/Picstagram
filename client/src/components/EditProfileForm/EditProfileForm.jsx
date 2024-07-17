@@ -25,7 +25,7 @@ const EditProfileForm = ({ userData, editProfileData, onCancelClick }) => {
         email: userData.email,
 		username: userData.username,
 		bio: userData.bio ? userData.bio : "",
-        password: '',
+        password: "",
     }, editProfileDataHandler);
 
 	return (
@@ -38,7 +38,7 @@ const EditProfileForm = ({ userData, editProfileData, onCancelClick }) => {
 
 			<div className="profile-form-profile-picture-wrapper">
 				<ImageInput
-					initialValue={userData?.profilePicture.imageUrl}
+					initialValue={userData?.profilePicture?.imageUrl}
 					onChange={setProfilePicture}
 					PlaceHolderImageProp={AddProfilePictureIcon}
 					isRoundImage={true}

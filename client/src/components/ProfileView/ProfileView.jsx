@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { storage } from '../../firebase';
 import LoggedInUserContext from '../../contexts/LoggedInUserContext';
 import { addUserPost } from "../../services/userPostService";
-import { getUserProfileData, updateUserProfileData } from "../../services/userService";
+import { getUserProfileData, updateUserProfileData, followUser, unfollowUser } from "../../services/userService";
 
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import UserProfilePost from '../UserProfilePost/UserProfilePost';
@@ -42,7 +42,7 @@ const ProfileView = (props) => {
 	const [isAddPicturePopupOpen, setIsAddPicturePopupOpen] = useState(false);
 	const [isEditProfileFormOpen, setIsEditProfileFormOpen] = useState(false);
 
-	const { jwtToken, loggedInUser } = useContext(LoggedInUserContext);
+	const { jwtToken, loggedInUser, updateLoggedInUser } = useContext(LoggedInUserContext);
 
 	let { userId } = useParams();
 
@@ -100,21 +100,41 @@ const ProfileView = (props) => {
 
 	const editProfileDataHandler = async (userUpdatedData) => {
 		try {
-			let userUpdates = { ...userUpdatedData };
+			let updatedProfileData = { ...userUpdatedData };
 
-			if (userUpdates.profilePicture) {
-				const createdImageForProflePicrture = await uploadImageToFirebaseStorage(userUpdates.profilePicture);
-				userUpdates = {...userUpdates, profilePicture: createdImageForProflePicrture };
-			} 
-			
-			const updatedUser = await updateUserProfileData({ userId, jwtToken, userUpdates });
-			
+			if (updatedProfileData.profilePicture) {
+				const createdImageForProflePicrture = await uploadImageToFirebaseStorage(updatedProfileData.profilePicture);
+				updatedProfileData = {...updatedProfileData, profilePicture: createdImageForProflePicrture };
+			}
+
+			const updatedUser = await updateUserProfileData({ userId, jwtToken, updatedProfileData });
+
 			setUserData(updatedUser);
 
 			closeEditProfileForm();
 		} catch(error) {
 			// TODO add some error handling
 			console.log("Something went wrong while trying to update user profile");
+		}
+	}
+
+	const followUserHandler = async (userIdToFollow) => {
+		try {
+			const updatedUserData = await followUser({ userId: loggedInUser?._id, jwtToken, userIdToFollow });
+
+			updateLoggedInUser(updatedUserData);
+		} catch(error) {
+
+		}
+	}
+
+	const onUnfollowUserHandler = async (userIdToUnfollow) => {
+		try {
+			const updatedUserData = await unfollowUser({ userId: loggedInUser?._id, jwtToken, userIdToUnfollow });
+
+			updateLoggedInUser(updatedUserData);
+		} catch(error) {
+
 		}
 	}
 
@@ -126,8 +146,11 @@ const ProfileView = (props) => {
 		<div className="profile-view-wrapper">
 			<ProfileHeader
 				userData={userData}
+				loggedInUserData={loggedInUser}
 				isLoggedInUserProfile={isLoggedInUserProfile}
 				onEditProfileClick={openEditProfileForm}
+				onFollowUserClick={followUserHandler}
+				onUnfollowUserClick={onUnfollowUserHandler}
 			/>
 
 			<section className="profile-posts-wrapper">

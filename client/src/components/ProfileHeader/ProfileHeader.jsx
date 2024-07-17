@@ -5,7 +5,10 @@ import "./ProfileHeader.css";
 const ProfileHeader = (props) => {
 	const {
 		userData,
+		loggedInUserData,
 		onEditProfileClick,
+		onFollowUserClick,
+		onUnfollowUserClick,
 		isLoggedInUserProfile
 	} = props;
 
@@ -47,6 +50,23 @@ const ProfileHeader = (props) => {
 				<p className="bio">
 					{bio}
 				</p>
+
+				<div className="follow-button-wrapper">
+					{!isLoggedInUserProfile
+						? (
+							<Button
+								onClick={() => {
+									if (loggedInUserData?.following?.includes(userData._id)) {
+										onUnfollowUserClick(userData._id);
+									} else {
+										onFollowUserClick(userData._id);
+									}
+								}}
+								label={loggedInUserData?.following?.includes(userData._id) ? "Unfollow" : "Follow"}
+							/>
+						): null
+					}
+				</div>
 			</div>
 		</header>
 	);

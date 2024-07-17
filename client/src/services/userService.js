@@ -4,7 +4,7 @@ import { serverUrl } from "../constants/serverUrl";
 export const signUp = (data) => {
 	const request = requestFactory();
 
-    return request.post(`${serverUrl}/user/sign-up`, data);
+    return request.post(`${serverUrl}/users/sign-up`, data);
 };
 
 export const login = (data) => {
@@ -32,5 +32,17 @@ export const getUserProfileData = ({ userIds, searchWord, jwtToken }) => {
 export const updateUserProfileData = ({ userId, jwtToken, updatedProfileData }) => {
 	const request = requestFactory(jwtToken);
 
-	return request.post(`${serverUrl}/users/update?userId=${userId}`, updatedProfileData);
+	return request.patch(`${serverUrl}/users/update/${userId}`, updatedProfileData);
+}
+
+export const followUser = ({ userId, userIdToFollow, jwtToken }) => {
+	const request = requestFactory(jwtToken);
+
+	return request.post(`${serverUrl}/users/${userId}/follow/${userIdToFollow}`);
+}
+
+export const unfollowUser = ({ userId, userIdToUnfollow, jwtToken }) => {
+	const request = requestFactory(jwtToken);
+
+	return request.post(`${serverUrl}/users/${userId}/unfollow/${userIdToUnfollow}`);
 }

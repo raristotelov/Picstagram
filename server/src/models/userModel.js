@@ -19,22 +19,22 @@ const UserSchema = new mongoose.Schema({
 		type: String
 	},
 	profilePicture: {
-		type: 'ObjectId',
-		ref: 'UserImage'
+		type: "ObjectId",
+		ref: "UserImage"
 	},
 	posts: [{
-        type: 'ObjectId',
-        ref: 'UserImage'
+        type: "ObjectId",
+        ref: "UserImage"
     }],
 	following: [{
-		type: 'ObjectId',
-        ref: 'User'
+		type: "ObjectId",
+        ref: "User"
 	}],
 	followers: [{
-		type: 'ObjectId',
-        ref: 'User'
+		type: "ObjectId",
+        ref: "User"
 	}]
 });
 
-const model = mongoose.model('User', UserSchema);
+const model = mongoose.model("User", UserSchema);
 module.exports = model;
