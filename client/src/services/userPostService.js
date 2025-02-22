@@ -12,3 +12,9 @@ export const addUserPost = (data, jwtToken) => {
 
     return request.post(`${serverUrl}/user-posts`, data);
 };
+
+export const getFollowedUsersPosts = ({ jwtToken }) => {
+    const request = requestFactory(jwtToken);
+
+    return request.get(`${serverUrl}/user-posts/followed-users-posts`)
+}
