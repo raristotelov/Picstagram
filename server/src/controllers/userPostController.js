@@ -16,4 +16,10 @@ router.post('/', verifyJwtToken,  async (req, res) => {
     return res.json(userPostData);
 });
 
+router.get('/followed-users-posts', verifyJwtToken, async (req, res) => {
+    const followedUsersPostsData = await userPostService.getFollowedUsersPosts(res._id);
+	
+    return res.json(followedUsersPostsData);
+});
+
 module.exports = router;

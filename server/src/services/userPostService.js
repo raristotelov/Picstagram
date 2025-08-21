@@ -29,7 +29,35 @@ const addUserPost = async (postData, userId) => {
 	}
 };
 
+const getFollowedUsersPosts = async (userId) => {
+	try {
+		const userResult = await UserModel
+			.find({ _id: userId })
+			.select({ following: 1 })
+			.populate({ path: "following", populate: 'posts' })
+
+		const currentUser = userResult[0];
+
+		const currentUserFollowedUsers = currentUser.following;
+
+		const followedUsersPosts = [];
+
+		for (let i = 0; i < currentUserFollowedUsers.length; i += 1) {
+			const followedUser = currentUserFollowedUsers[i];
+
+			if (followedUser?.posts?.length) {
+				followedUsersPosts.push(...followedUser.posts);
+			}
+		}
+
+		return followedUsersPosts;
+	} catch (error) {
+		throw new Error("Something went wrong while trying save the user post to the DB!");
+	}
+};
+
 module.exports = {
 	getAllUserPosts,
-	addUserPost
+	addUserPost,
+	getFollowedUsersPosts
 };
