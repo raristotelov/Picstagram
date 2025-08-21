@@ -11,14 +11,16 @@ import LoginForm from "../LoginForm/LoginForm";
 import "./LoginView.css";
 
 const LoginView = () => {
-	const { updateLoggedInUser } = useContext(LoggedInUserContext);
+	const { setJwtToken } = useContext(LoggedInUserContext);
 	const navigate = useNavigate();
 
 	const loginHandler = async (loginCredentials) => {
-		const loggedUserData = await login(loginCredentials);
-		updateLoggedInUser(loggedUserData);
+		const loggedInUserJwt = await login(loginCredentials);
 
-		navigate("/feed");
+		console.log(loggedInUserJwt);
+
+		setJwtToken(loggedInUserJwt);
+		navigate("/user-feed");
 	};
 
 	return (

@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 import useLocalStorage from "./hooks/useLocalStorage"; 
 import LoggedInUserContext from "./contexts/LoggedInUserContext";
+import { getUserProfileData } from "./services/userService";
 
-import Header from "./components/Header/Header";
+import MainHeader from "./components/Header/MainHeader";
 import Router from "./Router";
 
 import "./App.css";
@@ -20,7 +21,13 @@ function App() {
 		if (jwtToken && !loggedInUser) {
 			const userData = jwt.decode(jwtToken);
 
-			setLoggedInUser(userData);
+			getUserProfileData({ userIds: [userData.userId], jwtToken })
+				.then((result) => {
+					console.log("result", result);
+					setLoggedInUser(result[0]);
+				}).catch(() => {
+					console.log("something went wrong while trying to fetch user data");
+				})
 		} else if (!jwtToken) {
 			setLoggedInUser(null);
 		}
@@ -48,9 +55,8 @@ function App() {
 
     return (
 		<LoggedInUserContext.Provider value={loggedInUserContextValues}>
-			<Header
+			<MainHeader
 				logoutHandler={logoutHandler}
-				loggedInUser={loggedInUser}
 			/>
 
 			<Router />

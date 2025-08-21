@@ -9,12 +9,13 @@ import SearchInput from "../SearchInput/SearchInput";
 import PopularPosts from "../icons/PopularPosts";
 import LogOut from "../icons/LogOut";
 
-import "./Header.css";
+import "./MainHeader.css";
 
 const MainHeader = ({ logoutHandler }) => {
 	const [searchWord, setSearchWord] = useState("");
 	const [searchResults, setSearchResults] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	
 	const { jwtToken, loggedInUser } = useContext(LoggedInUserContext);
 
 	useEffect(() => {
@@ -83,7 +84,7 @@ const MainHeader = ({ logoutHandler }) => {
 							<Link to={`/user/${loggedInUser._id}`} className="logged-user-avatar">
 								<img src="https://i.pinimg.com/736x/30/df/1c/30df1cb8981338d42ed2722ab74cb51e.jpg" alt="post-img" />
 
-								<h4>harold.memara</h4>
+								<h4>{loggedInUser.username}</h4>
 							</Link>
 						) : null
 					}

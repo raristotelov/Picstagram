@@ -7,10 +7,12 @@ import ArrowUpIcon from "../icons/ArrowUp";
 import ArrowDownIcon from "../icons/ArrowDown";
 
 
-import './UserPost.css';
+import "./UserPost.css";
 
-const FollowerPost = () => {
+const UserPost = (props) => {
 	const [toggledCommentsSection, setToggledCommentsSection] = useState(false);
+
+	const { userPostData } = props;
 
 	const toggleCommentsSection = () => {
 		setToggledCommentsSection((state) => !state);
@@ -24,8 +26,8 @@ const FollowerPost = () => {
                 <h4>harold.memara</h4>
             </div>
 
-            <div className='post-image-wrapper'>
-                <img src="https://i.pinimg.com/736x/30/df/1c/30df1cb8981338d42ed2722ab74cb51e.jpg" alt="post-img" />
+            <div className="post-image-wrapper">
+                <img src={`${userPostData.imageUrl}`} alt="post-img" />
             </div>
 
             <div className="like-action-wrapper">
@@ -60,4 +62,4 @@ const FollowerPost = () => {
     );
 };
 
-export default FollowerPost;
+export default UserPost;

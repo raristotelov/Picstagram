@@ -9,24 +9,25 @@ import ProfileView from './components/ProfileView/ProfileView';
 import FeedView from './components/FeedView/FeedView';
 import PopularPostsView from './components/PopularPostsView/PopularPostsView';
 
-
 import './index.css';
 
 const Router = () => {
-	const { jwtToken } = useContext(LoggedInUserContext);
+	const { jwtToken, loggedInUser } = useContext(LoggedInUserContext);
+
+	console.log({loggedInUser});
 
 	return (
 		<div className='routes-wrapper'>
 			<Routes>
-				<Route path='/' element={jwtToken ? <Navigate to='/feed' /> : <Navigate to='/login' />} />
+				<Route path='/' element={jwtToken ? <Navigate to='/user-feed' /> : <Navigate to='/login' />} />
 
 				<Route path='/sign-up' element={<SignUpView />} />
 
 				<Route path='/login' element={<LoginView />} />
 
-				<Route path='/my-profile' element={<ProfileView />} />
+				<Route path='/user-feed' element={<FeedView posts={loggedInUser?.followedUsersPosts} />} />
 
-				<Route path='/feed' element={<FeedView />} />
+				<Route path='/my-profile' element={<ProfileView />} />
 
 				<Route path='/popular-posts' element={<PopularPostsView />} />
 

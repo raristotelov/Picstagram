@@ -2,16 +2,19 @@ const JWT = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const UserModel = require("../models/userModel");
+const userImageModel = require("../models/userImageModel");
 const UserImageModel = require("../models/userImageModel");
 const constants = require("../config/constants");
 
-const necessaryUserFields = ["_id", "email", "username", "bio", "profilePic", "posts", "followers", "following"];
+const necessaryUserFields = ["_id", "email", "username", "bio", "profilePic", "posts", "followers", "following", "followedUsersPosts"];
 
 const getNeccessaryUserData = (user) => {
 	const userObject = {};
 
 	for (let i = 0; i < necessaryUserFields.length; i++) {
-		userObject[necessaryUserFields[i]] = user[necessaryUserFields[i]];
+		if (user[necessaryUserFields[i]]) {
+			userObject[necessaryUserFields[i]] = user[necessaryUserFields[i]];
+		}
 	}
 
 	const jwt = JWT.sign(userObject, constants.JWT_SECRET, {
@@ -43,15 +46,34 @@ const login = async ({ email, password }) => {
 	try {
 		const dbUser = await UserModel.findOne({ email });
 
-		const passwordIsCorrect = await bcrypt.compare(password, dbUser.password);
+		// const passwordIsCorrect = await bcrypt.compare(password, dbUser.password);
 
-		if (!passwordIsCorrect) {
-			throw new Error("Wrong email or password!");
+		// if (!passwordIsCorrect) {
+		// 	throw new Error("Wrong email or password!");
+		// }
+
+		const claim = {
+			userId: dbUser._id,
+			username: dbUser.username
 		}
 
-		const user = getNeccessaryUserData(dbUser);
+		const loggedInUserJwt = JWT.sign(claim, constants.JWT_SECRET, {
+			expiresIn: constants.JWT_EXPIRY
+		});
 
-		return user;
+		// console.log({dbUser});
+		// console.log("dbUser.following", dbUser.following);
+
+
+		// const followedUsersPosts = await userImageModel.find({ userId: { $in: dbUser.following } }).populate({ path: "user" });
+
+		// console.log({followedUsersPosts});
+
+		// const loginData = getNeccessaryUserData({ ...dbUser, followedUsersPosts });
+
+		console.log("loggedInUserJwt", loggedInUserJwt);
+
+		return loggedInUserJwt;
 	} catch (error) {
 		console.log(error);
 		throw new Error("Something went wrong while trying to login!");
@@ -68,6 +90,7 @@ const getUsersProfileDataByUserIds = async ({ userIds }) => {
 
 		return users;
 	} catch (error) {
+		console.log({error})
 		throw new Error("Something went wrong while trying to get user accound data!");
 	}
 }
@@ -81,6 +104,7 @@ const getUsersProfileDataBySearchWord= async ({ searchWord }) => {
 
 		return users;
 	} catch (error) {
+		console.log({error})
 		throw new Error("Something went wrong while trying to get user accound data!");
 	}
 }

@@ -1,8 +1,8 @@
-const usersService = require('./usersService');
+const userService = require('./userService');
 const userPostService = require('./userPostService');
 
 
 module.exports = {
-    usersService,
+    userService,
 	userPostService
 };

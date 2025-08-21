@@ -1,16 +1,16 @@
 const { Router } = require("express");
 const router = Router();
 
-const { usersService } = require("../services");
+const { userService } = require("../services");
 
 router.post("/sign-up", async (req, res) => {
-    const userData = await usersService.signUp(req.body);
+    const userData = await userService.signUp(req.body);
 	
     return res.json(userData);
 });
 
 router.post("/login", async (req, res) => {
-    const userData = await usersService.login(req.body);
+    const userData = await userService.login(req.body);
 	
     return res.json(userData);
 });
@@ -24,9 +24,9 @@ router.get("/", async (req, res) => {
 	let usersAccountData = [];
 
 	if (userIds) {
-		usersAccountData = await usersService.getUsersProfileDataByUserIds({ userIds });
+		usersAccountData = await userService.getUsersProfileDataByUserIds({ userIds });
 	} else if (searchWord) {
-		usersAccountData = await usersService.getUsersProfileDataBySearchWord({ searchWord });
+		usersAccountData = await userService.getUsersProfileDataBySearchWord({ searchWord });
 	}
 
 	return res.json(usersAccountData);
@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
 router.patch("/update/:userId", async (req, res) => {
 	const userId  = req.params.userId;
 
-    const userAccountData = await usersService.updateUserProfileData(userId, req.body);
+    const userAccountData = await userService.updateUserProfileData(userId, req.body);
 	
     return res.json(userAccountData);
 });
@@ -44,7 +44,7 @@ router.post("/:userId/follow/:userIdToFollow", async (req, res) => {
 	const userId  = req.params.userId;
 	const userIdToFollow  = req.params.userIdToFollow;
 
-    const userAccountData = await usersService.followUser(userId, userIdToFollow);
+    const userAccountData = await userService.followUser(userId, userIdToFollow);
 	
     return res.json(userAccountData);
 });
@@ -53,7 +53,7 @@ router.post("/:userId/unfollow/:userIdToUnfollow", async (req, res) => {
 	const userId  = req.params.userId;
 	const userIdToUnfollow  = req.params.userIdToUnfollow;
 
-    const userAccountData = await usersService.unfollowUser(userId, userIdToUnfollow);
+    const userAccountData = await userService.unfollowUser(userId, userIdToUnfollow);
 	
     return res.json(userAccountData);
 });
