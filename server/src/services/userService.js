@@ -1,12 +1,12 @@
-const JWT = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const JWT = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
-const UserModel = require("../models/userModel");
-const userImageModel = require("../models/userImageModel");
-const UserImageModel = require("../models/userImageModel");
-const constants = require("../config/constants");
+const UserModel = require('../models/userModel');
+const userImageModel = require('../models/userImageModel');
+const UserImageModel = require('../models/userImageModel');
+const constants = require('../config/constants');
 
-const necessaryUserFields = ["_id", "email", "username", "bio", "profilePic", "posts", "followers", "following", "followedUsersPosts"];
+const necessaryUserFields = ['_id', 'email', 'username', 'bio', 'profilePic', 'posts', 'followers', 'following', 'followedUsersPosts'];
 
 const getNeccessaryUserData = (user) => {
 	const userObject = {};
@@ -38,7 +38,7 @@ const signUp = async ({ email, username, password }) => {
 
 		return user;
 	} catch(error) {
-		throw new Error("Something went wrong while trying to sign up!");
+		throw new Error('Something went wrong while trying to sign up!');
 	}
 };
 
@@ -49,7 +49,7 @@ const login = async ({ email, password }) => {
 		// const passwordIsCorrect = await bcrypt.compare(password, dbUser.password);
 
 		// if (!passwordIsCorrect) {
-		// 	throw new Error("Wrong email or password!");
+		// 	throw new Error('Wrong email or password!');
 		// }
 
 		const claim = {
@@ -62,50 +62,50 @@ const login = async ({ email, password }) => {
 		});
 
 		// console.log({dbUser});
-		// console.log("dbUser.following", dbUser.following);
+		// console.log('dbUser.following', dbUser.following);
 
 
-		// const followedUsersPosts = await userImageModel.find({ userId: { $in: dbUser.following } }).populate({ path: "user" });
+		// const followedUsersPosts = await userImageModel.find({ userId: { $in: dbUser.following } }).populate({ path: 'user' });
 
 		// console.log({followedUsersPosts});
 
 		// const loginData = getNeccessaryUserData({ ...dbUser, followedUsersPosts });
 
-		console.log("loggedInUserJwt", loggedInUserJwt);
+		console.log('loggedInUserJwt', loggedInUserJwt);
 
 		return loggedInUserJwt;
 	} catch (error) {
 		console.log(error);
-		throw new Error("Something went wrong while trying to login!");
+		throw new Error('Something went wrong while trying to login!');
 	}
 };
 
 const getUsersProfileDataByUserIds = async ({ userIds }) => {
 	try {
 		const users = await UserModel
-			.find({ _id: { "$in": userIds } })
-			.select({ "_id": 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1, following: 1, followers: 1 })
-			.populate({ path: "posts" })
-			.populate({ path: "profilePicture" });
+			.find({ _id: { '$in': userIds } })
+			.select({ '_id': 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1, following: 1, followers: 1 })
+			.populate({ path: 'posts' })
+			.populate({ path: 'profilePicture' });
 
 		return users;
 	} catch (error) {
 		console.log({error})
-		throw new Error("Something went wrong while trying to get user accound data!");
+		throw new Error('Something went wrong while trying to get user accound data!');
 	}
 }
 
 const getUsersProfileDataBySearchWord= async ({ searchWord }) => {
 	try {
 		const users = await UserModel
-			.find({ "username": { $regex: `^${searchWord}`, $options: "i" } })
-			.select({ "_id": 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1 })
-			.populate({ path: "posts" }).populate({ path: "profilePicture" });
+			.find({ 'username': { $regex: `^${searchWord}`, $options: 'i' } })
+			.select({ '_id': 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1 })
+			.populate({ path: 'posts' }).populate({ path: 'profilePicture' });
 
 		return users;
 	} catch (error) {
 		console.log({error})
-		throw new Error("Something went wrong while trying to get user accound data!");
+		throw new Error('Something went wrong while trying to get user accound data!');
 	}
 }
 
@@ -116,7 +116,7 @@ const updateUserProfileData = async (userId, updatedProfileData) => {
 		if (updatedProfileData.profilePicture) {
 			const updatedProfilePicture = updatedProfileData.profilePicture;
 
-			const userWithProfilePicture = await UserModel.findOne({ _id: userId }).populate({ path: "profilePicture" });
+			const userWithProfilePicture = await UserModel.findOne({ _id: userId }).populate({ path: 'profilePicture' });
 
 			if (userWithProfilePicture.profilePicture) {
 				await UserImageModel.deleteOne({ _id: userWithProfilePicture.profilePicture._id });
@@ -136,14 +136,14 @@ const updateUserProfileData = async (userId, updatedProfileData) => {
 				{ _id: userId },
 				updatedProfileData,
 				{ new: true }
-			).populate("profilePicture");
+			).populate('profilePicture');
 
 		const updatedUserData = getNeccessaryUserData(user); 
 
 		return updatedUserData;
 	} catch (error) {
 		console.log(error);
-		throw new Error("Something went wrong while trying to update user accound data!");
+		throw new Error('Something went wrong while trying to update user accound data!');
 	}
 }
 
@@ -167,7 +167,7 @@ const followUser = async (userId, userIdToFollow) => {
 		
 		return updatedUserData;
 	} catch (error) {
-		throw new Error("Something went wrong while trying to follow user!");
+		throw new Error('Something went wrong while trying to follow user!');
 	}
 }
 
@@ -191,7 +191,7 @@ const unfollowUser = async (userId, userIdToUnfollow) => {
 	
 		return updatedUserData;
 	} catch (error) {
-		throw new Error("Something went wrong while trying to follow user!");
+		throw new Error('Something went wrong while trying to follow user!');
 	}
 }
 

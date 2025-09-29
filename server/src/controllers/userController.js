@@ -1,25 +1,25 @@
-const { Router } = require("express");
+const { Router } = require('express');
 const router = Router();
 
-const { userService } = require("../services");
+const { userService } = require('../services');
 
-router.post("/sign-up", async (req, res) => {
+router.post('/sign-up', async (req, res) => {
     const userData = await userService.signUp(req.body);
 	
     return res.json(userData);
 });
 
-router.post("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
     const userData = await userService.login(req.body);
 	
     return res.json(userData);
 });
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
 	const userIdsString = req.query.userIds;
 	const searchWord = req.query.searchWord;
 
-	const userIds = userIdsString?.split(",");
+	const userIds = userIdsString?.split(',');
 
 	let usersAccountData = [];
 
@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
 	return res.json(usersAccountData);
 });
 
-router.patch("/update/:userId", async (req, res) => {
+router.patch('/update/:userId', async (req, res) => {
 	const userId  = req.params.userId;
 
     const userAccountData = await userService.updateUserProfileData(userId, req.body);
@@ -40,7 +40,7 @@ router.patch("/update/:userId", async (req, res) => {
     return res.json(userAccountData);
 });
 
-router.post("/:userId/follow/:userIdToFollow", async (req, res) => {
+router.post('/:userId/follow/:userIdToFollow', async (req, res) => {
 	const userId  = req.params.userId;
 	const userIdToFollow  = req.params.userIdToFollow;
 
@@ -49,7 +49,7 @@ router.post("/:userId/follow/:userIdToFollow", async (req, res) => {
     return res.json(userAccountData);
 });
 
-router.post("/:userId/unfollow/:userIdToUnfollow", async (req, res) => {
+router.post('/:userId/unfollow/:userIdToUnfollow', async (req, res) => {
 	const userId  = req.params.userId;
 	const userIdToUnfollow  = req.params.userIdToUnfollow;
 

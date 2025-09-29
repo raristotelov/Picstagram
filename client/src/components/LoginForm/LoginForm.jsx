@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import { useForm } from "../../hooks/useForm";
+import { useForm } from '../../hooks/useForm';
 
-import Logo from "../Logo/Logo";
-import Button from "../Button/Button";
+import Logo from '../Logo/Logo';
+import Button from '../Button/Button';
 
 import './LoginForm.css';
 
@@ -15,45 +15,45 @@ const LoginForm = ({ loginHandler }) => {
 
     return (
 		<section
-			className="login-section"
+			className='login-section'
 		>
-			<Logo className="logo-color" />
+			<Logo className='logo-color' />
 
 			<form
-				id="login-form"
+				id='login-form'
 				onSubmit={onSubmit}
-				className="login-form"
+				className='login-form'
 			>
 				<h1>Login</h1>
 
-				<div className="input-wrapper">
+				<div className='input-wrapper'>
 					<input
-						type="email"
-						id="email"
-						name="email"
-						placeholder="Email"
+						type='email'
+						id='email'
+						name='email'
+						placeholder='Email'
 						value={values.email}
 						onChange={changeHandler}
 					/>
 				</div>
 
-				<div className="input-wrapper">
+				<div className='input-wrapper'>
 					<input
-						type="password"
-						id="password"
-						name="password"
-						placeholder="Password"
+						type='password'
+						id='password'
+						name='password'
+						placeholder='Password'
 						value={values.username}
 						onChange={changeHandler}
 					/>
 				</div>
 
 				<Button
-					label="Submit"
+					label='Submit'
 				/>
 			</form>
 
-			<span className="sign-up-link">Don't have an account? <Link to="/sign-up">Sign up</Link></span>
+			<span className='sign-up-link'>Don't have an account? <Link to='/sign-up'>Sign up</Link></span>
 		</section>
 	)
 }

@@ -1,7 +1,7 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
 const LoggedInUserContext = createContext();
 
-LoggedInUserContext.displayName = "LoggedInUserContext";
+LoggedInUserContext.displayName = 'LoggedInUserContext';
 
 export default LoggedInUserContext;

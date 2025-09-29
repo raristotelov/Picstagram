@@ -1,5 +1,5 @@
 import { requestFactory } from './requester';
-import { serverUrl } from "../constants/serverUrl";
+import { serverUrl } from '../constants/serverUrl';
 
 export const getAllUserPosts = (jwtToken) => {
 	const request = requestFactory(jwtToken);

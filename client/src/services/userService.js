@@ -1,5 +1,5 @@
 import { requestFactory } from './requester';
-import { serverUrl } from "../constants/serverUrl";
+import { serverUrl } from '../constants/serverUrl';
 
 export const signUp = (data) => {
 	const request = requestFactory();
@@ -19,11 +19,11 @@ export const getUserProfileData = ({ userIds, searchWord, jwtToken }) => {
 	let requestUrl = `${serverUrl}/users?`;
 
 	if (userIds?.length) {
-		requestUrl = requestUrl.concat("userIds=", userIds.join(","));
+		requestUrl = requestUrl.concat('userIds=', userIds.join(','));
 	}
 
 	if (searchWord) {
-		requestUrl = requestUrl.concat("searchWord=", searchWord);
+		requestUrl = requestUrl.concat('searchWord=', searchWord);
 	}
 
 	return request.get(requestUrl);

@@ -1,13 +1,13 @@
-import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
+import { initializeApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-	apiKey: "AIzaSyCBnJFFVzyt-WcQnpmr6gFQ2RBHdfXDCmE",
-	authDomain: "picstagram-857d3.firebaseapp.com",
-	projectId: "picstagram-857d3",
-	storageBucket: "picstagram-857d3.appspot.com",
-	messagingSenderId: "684296567400",
-	appId: "1:684296567400:web:edd0dd40d5e31f683799dd"
+	apiKey: 'AIzaSyCBnJFFVzyt-WcQnpmr6gFQ2RBHdfXDCmE',
+	authDomain: 'picstagram-857d3.firebaseapp.com',
+	projectId: 'picstagram-857d3',
+	storageBucket: 'picstagram-857d3.appspot.com',
+	messagingSenderId: '684296567400',
+	appId: '1:684296567400:web:edd0dd40d5e31f683799dd'
   };
 
 // Initialize Firebase

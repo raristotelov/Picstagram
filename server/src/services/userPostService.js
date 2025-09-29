@@ -1,5 +1,5 @@
 const UserImageModel = require('../models/userImageModel');
-const UserModel = require("../models/userModel");
+const UserModel = require('../models/userModel');
 
 const getAllUserPosts = async (userId) => {
 	try {
@@ -7,7 +7,7 @@ const getAllUserPosts = async (userId) => {
 
 		return userPosts;
 	} catch (error) {
-		throw new Error("Something went wrong while trying get all posts of the user!");
+		throw new Error('Something went wrong while trying get all posts of the user!');
 	}
 };
 
@@ -25,7 +25,7 @@ const addUserPost = async (postData, userId) => {
 
 		return userPost;
 	} catch (error) {
-		throw new Error("Something went wrong while trying save the user post to the DB!");
+		throw new Error('Something went wrong while trying save the user post to the DB!');
 	}
 };
 
@@ -34,7 +34,7 @@ const getFollowedUsersPosts = async (userId) => {
 		const userResult = await UserModel
 			.find({ _id: userId })
 			.select({ following: 1 })
-			.populate({ path: "following", populate: 'posts' })
+			.populate({ path: 'following', populate: 'posts' })
 
 		const currentUser = userResult[0];
 
@@ -52,7 +52,7 @@ const getFollowedUsersPosts = async (userId) => {
 
 		return followedUsersPosts;
 	} catch (error) {
-		throw new Error("Something went wrong while trying save the user post to the DB!");
+		throw new Error('Something went wrong while trying save the user post to the DB!');
 	}
 };
 

@@ -7,7 +7,7 @@ const FeedView = (props) => {
 	const { posts } = props;
 
     return (
-		<div className="feed-posts-wrapper">
+		<div className='feed-posts-wrapper'>
 			{
 				posts?.length 
 					? posts.map((post) => <UserPost key={post._id} userPostData={post} />)

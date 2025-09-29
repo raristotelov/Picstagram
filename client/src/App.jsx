@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
-import jwt from "jsonwebtoken"
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import jwt from 'jsonwebtoken'
+import { useNavigate } from 'react-router-dom';
 
-import useLocalStorage from "./hooks/useLocalStorage"; 
-import LoggedInUserContext from "./contexts/LoggedInUserContext";
-import { getUserProfileData } from "./services/userService";
+import useLocalStorage from './hooks/useLocalStorage'; 
+import LoggedInUserContext from './contexts/LoggedInUserContext';
+import { getUserProfileData } from './services/userService';
 
-import MainHeader from "./components/Header/MainHeader";
-import Router from "./Router";
+import MainHeader from './components/Header/MainHeader';
+import Router from './Router';
 
-import "./App.css";
+import './App.css';
 
 function App() {
-	const [jwtToken, setJwtToken] = useLocalStorage("jwt-token", null);
+	const [jwtToken, setJwtToken] = useLocalStorage('jwt-token', null);
 	const [loggedInUser, setLoggedInUser] = useState(null);
 
 	const navigate = useNavigate();
@@ -23,10 +23,10 @@ function App() {
 
 			getUserProfileData({ userIds: [userData.userId], jwtToken })
 				.then((result) => {
-					console.log("result", result);
+					console.log('result', result);
 					setLoggedInUser(result[0]);
 				}).catch(() => {
-					console.log("something went wrong while trying to fetch user data");
+					console.log('something went wrong while trying to fetch user data');
 				})
 		} else if (!jwtToken) {
 			setLoggedInUser(null);
@@ -41,9 +41,9 @@ function App() {
 	const logoutHandler = (e) => {
 		e.preventDefault();
 
-		localStorage.removeItem("dcbyte-jwt");
+		localStorage.removeItem('dcbyte-jwt');
 		setJwtToken(null);
-		navigate("/login");
+		navigate('/login');
 	};
 
 	const loggedInUserContextValues = {
