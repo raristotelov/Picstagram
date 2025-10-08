@@ -17,8 +17,6 @@ const LoginView = () => {
 	const loginHandler = async (loginCredentials) => {
 		const loggedInUserJwt = await login(loginCredentials);
 
-		console.log(loggedInUserJwt);
-
 		setJwtToken(loggedInUserJwt);
 		navigate("/user-feed");
 	};

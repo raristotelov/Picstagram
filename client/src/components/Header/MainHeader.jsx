@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import LoggedInUserContext from '../../contexts/LoggedInUserContext';
-import { getUserProfileData } from '../../services/userService';
+import { getUsersProfileData } from '../../services/userService';
 
 import Logo from '../Logo/Logo';
 import SearchInput from '../SearchInput/SearchInput';
@@ -22,7 +22,7 @@ const MainHeader = ({ logoutHandler }) => {
 		if (searchWord.length >= 2) {
 			setIsLoading(true);
 
-			getUserProfileData({ searchWord, jwtToken })
+			getUsersProfileData({ searchWord, jwtToken })
 				.then((result) => {
 					setSearchResults(result);
 					setIsLoading(false);

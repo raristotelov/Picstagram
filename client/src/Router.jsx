@@ -14,8 +14,6 @@ import './index.css';
 const Router = () => {
 	const { jwtToken, loggedInUser } = useContext(LoggedInUserContext);
 
-	console.log({loggedInUser});
-
 	return (
 		<div className='routes-wrapper'>
 			<Routes>

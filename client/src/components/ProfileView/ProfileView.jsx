@@ -1,18 +1,18 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useMemo } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 } from 'uuid';
 import { useParams } from 'react-router-dom';
 
 import { storage } from '../../firebase';
 import LoggedInUserContext from '../../contexts/LoggedInUserContext';
-import { addUserPost } from "../../services/userPostService";
-import { getUserProfileData, updateUserProfileData, followUser, unfollowUser } from "../../services/userService";
+import { addUserPost } from '../../services/userPostService';
+import { getUsersProfileData, updateUserProfileData, followUser, unfollowUser } from '../../services/userService';
 
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import UserProfilePost from '../UserProfilePost/UserProfilePost';
 import Popup from '../Popup/Popup';
 import AddImagePostForm from '../AddImagePostForm/AddImagePostForm';
-import EditProfileForm from "../EditProfileForm/EditProfileForm";
+import EditProfileForm from '../EditProfileForm/EditProfileForm';
 import PlusIcon from '../icons/Plus';
 
 import './ProfileView.css';
@@ -32,7 +32,7 @@ const uploadImageToFirebaseStorage = async (imageData) => {
 		return createdImage;
 	} catch(error) {
 		// TODO add some error handling
-		console.log("Something went wrong while trying to uploade image");
+		console.log('Something went wrong while trying to uploade image');
 	}
 }
 
@@ -46,17 +46,19 @@ const ProfileView = (props) => {
 
 	let { userId } = useParams();
 
-	const isLoggedInUserProfile = userId === loggedInUser?._id;
+	const isLoggedInUserProfile = useMemo(() => {
+		return userId === loggedInUser?._id;
+	}, [userId, loggedInUser]);
 
 	useEffect(() => {
-		getUserProfileData({ userIds: [userId], jwtToken })
+		getUsersProfileData({ userIds: [userId], jwtToken })
 			.then((result) => {
 				setUserData(result[0]);
 				setUserPosts(result[0].posts);
 			}).catch(() => {
-				console.log("something went wrong while trying to fetch user data");
+				console.log('something went wrong while trying to fetch user data');
 			})
-	}, [userId, jwtToken]);
+	}, [userId, jwtToken, isLoggedInUserProfile, loggedInUser]);
 
 	const openAddPictureForm = () => {
 		setIsAddPicturePopupOpen(true);
@@ -86,7 +88,7 @@ const ProfileView = (props) => {
 			closeAddPictureForm();
 		} catch(error) {
 			// TODO add some error handling
-			console.log("Something went wrong while trying to uploade image");
+			console.log('Something went wrong while trying to uploade image');
 		}
 	};
 
@@ -114,7 +116,7 @@ const ProfileView = (props) => {
 			closeEditProfileForm();
 		} catch(error) {
 			// TODO add some error handling
-			console.log("Something went wrong while trying to update user profile");
+			console.log('Something went wrong while trying to update user profile');
 		}
 	}
 
@@ -143,7 +145,7 @@ const ProfileView = (props) => {
 	}
 
 	return (
-		<div className="profile-view-wrapper">
+		<div className='profile-view-wrapper'>
 			<ProfileHeader
 				userData={userData}
 				loggedInUserData={loggedInUser}
@@ -153,9 +155,9 @@ const ProfileView = (props) => {
 				onUnfollowUserClick={onUnfollowUserHandler}
 			/>
 
-			<section className="profile-posts-wrapper">
-				<button className="add-post-button" onClick={openAddPictureForm}>
-					<PlusIcon iconColorProp="#B5B5B5" />
+			<section className='profile-posts-wrapper'>
+				<button className='add-post-button' onClick={openAddPictureForm}>
+					<PlusIcon iconColorProp='#B5B5B5' />
 
 					<span>Upload Picture</span>
 				</button>

@@ -11,7 +11,7 @@ const UserImageSchema = new mongoose.Schema({
         required: true,
 		unique: true
     },
-	user: {
+	userId: {
         type: 'ObjectId',
         ref: 'User',
     },

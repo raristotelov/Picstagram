@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
     if (jwtToken) {
         user = JWT.verify(jwtToken, constants.JWT_SECRET);
 
-		res._id = user._id;
+		res.userId = user.userId;
 
 		next();
     } else {

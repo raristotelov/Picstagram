@@ -8,10 +8,11 @@ const constants = require('../config/constants');
 
 const necessaryUserFields = ['_id', 'email', 'username', 'bio', 'profilePic', 'posts', 'followers', 'following', 'followedUsersPosts'];
 
+// This function is used to get user fields when user profile is opened
 const getNeccessaryUserData = (user) => {
 	const userObject = {};
 
-	for (let i = 0; i < necessaryUserFields.length; i++) {
+	for (let i = 0; i < necessaryUserFields.length; i += 1) {
 		if (user[necessaryUserFields[i]]) {
 			userObject[necessaryUserFields[i]] = user[necessaryUserFields[i]];
 		}
@@ -61,18 +62,6 @@ const login = async ({ email, password }) => {
 			expiresIn: constants.JWT_EXPIRY
 		});
 
-		// console.log({dbUser});
-		// console.log('dbUser.following', dbUser.following);
-
-
-		// const followedUsersPosts = await userImageModel.find({ userId: { $in: dbUser.following } }).populate({ path: 'user' });
-
-		// console.log({followedUsersPosts});
-
-		// const loginData = getNeccessaryUserData({ ...dbUser, followedUsersPosts });
-
-		console.log('loggedInUserJwt', loggedInUserJwt);
-
 		return loggedInUserJwt;
 	} catch (error) {
 		console.log(error);
@@ -80,18 +69,66 @@ const login = async ({ email, password }) => {
 	}
 };
 
+const getFollowedUsersPostsByUserIds = async ({ userIds }) => {
+	try {
+		// Fetch all user with the users they follow
+		const users = await UserModel
+			.find({ _id: { '$in': userIds } })
+			.select({ '_id': 1, following: 1,})
+
+		const usersToFollowedUsersMap = {};
+
+		// Create a mapping of user ids to their followed users
+		for (let i = 0; i < userIds.length; i += 1) {
+			usersToFollowedUsersMap[userIds[i]] = users[i].following;
+		}
+
+		// Get all followed users
+		const allFollowedUsers = users.map(user => user.following).flat();
+
+		// Get all user posts of the followed users
+		const followedUsersPosts = await userImageModel.find({ userId: { $in: allFollowedUsers } }).populate({ path: 'userId' });
+
+		const userToUserPostsMap = {};
+
+		// Create a mapping for user ids to their posts
+		for (let i = 0; i < followedUsersPosts.length; i += 1) {
+			userToUserPostsMap[followedUsersPosts[i].userId._id] = followedUsersPosts[i];
+		}
+
+		const usersWithFollowedUsersPosts = {};
+
+		for (let i = 0; i < userIds.length; i += 1) {
+			const followedUsersPosts = usersToFollowedUsersMap[userIds[i]].map((userId) => userToUserPostsMap[userId]).flat();
+
+			usersWithFollowedUsersPosts[userIds[i]] = followedUsersPosts;
+		}
+
+		return usersWithFollowedUsersPosts;
+	} catch (error) {
+		throw new Error('Something went wrong while trying to get followed users posts!');
+	}
+}
+
 const getUsersProfileDataByUserIds = async ({ userIds }) => {
 	try {
-		const users = await UserModel
+		const usersResult = await UserModel
 			.find({ _id: { '$in': userIds } })
 			.select({ '_id': 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1, following: 1, followers: 1 })
 			.populate({ path: 'posts' })
 			.populate({ path: 'profilePicture' });
 
-		return users;
+		const usersWithFollowedUsersPostsResult = await getFollowedUsersPostsByUserIds({ userIds });
+
+		const mappedUsers = usersResult.map((user) => ({
+			...user.toObject(),
+			followedUsersPosts: usersWithFollowedUsersPostsResult[user._id]
+		}));
+
+		return mappedUsers;
 	} catch (error) {
 		console.log({error})
-		throw new Error('Something went wrong while trying to get user accound data!');
+		throw new Error('Something went wrong while trying to get users accound data by user ids!');
 	}
 }
 
@@ -105,7 +142,7 @@ const getUsersProfileDataBySearchWord= async ({ searchWord }) => {
 		return users;
 	} catch (error) {
 		console.log({error})
-		throw new Error('Something went wrong while trying to get user accound data!');
+		throw new Error('Something went wrong while trying to get users accound data by search word!');
 	}
 }
 

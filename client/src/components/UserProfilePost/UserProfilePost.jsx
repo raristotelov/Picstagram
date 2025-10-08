@@ -1,9 +1,9 @@
-import "./UserProfilePost.css";
+import './UserProfilePost.css';
 
 const UserProfilePost = ({ post }) => {
 	return (
-		<div className="profile-post">
-			<img src={post.imageUrl} alt="user-post" />
+		<div className='profile-post'>
+			<img src={post.imageUrl} alt='user-post' />
 		</div>
 	);
 };

@@ -17,7 +17,7 @@ const addUserPost = async (postData, userId) => {
 
 		await userPost.save();
 
-        await UserModel.findByIdAndUpdate(userId, {
+        const result = await UserModel.findByIdAndUpdate(userId, {
             $addToSet: {
                 posts: userPost._id
             }

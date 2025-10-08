@@ -13,7 +13,7 @@ export const login = (data) => {
     return request.post(`${serverUrl}/users/login`, data);
 };
 
-export const getUserProfileData = ({ userIds, searchWord, jwtToken }) => {
+export const getUsersProfileData = ({ userIds, searchWord, jwtToken }) => {
 	const request = requestFactory(jwtToken);
 
 	let requestUrl = `${serverUrl}/users?`;
