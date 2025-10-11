@@ -18,3 +18,15 @@ export const getFollowedUsersPosts = ({ jwtToken }) => {
 
     return request.get(`${serverUrl}/user-posts/followed-users-posts`)
 }
+
+export const likeUserPost = ({ userPostToLikeId, jwtToken }) => {
+	const request = requestFactory(jwtToken);
+
+	return request.post(`${serverUrl}/user-posts/like/${userPostToLikeId}`);
+}
+
+export const unlikeUserPost = ({ userPostToUnlikeId, jwtToken }) => {
+	const request = requestFactory(jwtToken);
+
+	return request.post(`${serverUrl}/user-posts/unlike/${userPostToUnlikeId}`);
+}

@@ -49,7 +49,8 @@ function App() {
         jwtToken,
         setJwtToken,
         loggedInUser,
-        updateLoggedInUser
+        updateLoggedInUser,
+		setLoggedInUser
     };
 
     return (

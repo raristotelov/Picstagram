@@ -1,9 +1,11 @@
-const UserImageModel = require('../models/userImageModel');
+const mongoose = require('mongoose');
+
+const UserPostModel = require('../models/userPostModel');
 const UserModel = require('../models/userModel');
 
 const getAllUserPosts = async (userId) => {
 	try {
-		const userPosts = await UserImageModel.find({ userId });
+		const userPosts = await UserPostModel.find({ userId });
 
 		return userPosts;
 	} catch (error) {
@@ -13,7 +15,7 @@ const getAllUserPosts = async (userId) => {
 
 const addUserPost = async (postData, userId) => {
 	try {
-		const userPost = new UserImageModel({ imageIdentifier: postData.imageIdentifier, imageUrl: postData.imageUrl, userId });
+		const userPost = new UserPostModel({ imageIdentifier: postData.imageIdentifier, imageUrl: postData.imageUrl, userId });
 
 		await userPost.save();
 
@@ -56,8 +58,40 @@ const getFollowedUsersPosts = async (userId) => {
 	}
 };
 
+const likeUserPost = async ({ userPostId, userWhoLikedId }) => {
+	try {
+		const updatedUserPostData = await UserPostModel
+			.findOneAndUpdate(
+				{ _id: userPostId },
+				{ $push: { likes: userWhoLikedId } },
+				{ new: true }
+			);
+		
+		return updatedUserPostData;
+	} catch (error) {
+		throw new Error('Something went wrong while trying to like user!');
+	}
+}
+
+const unlikeUserPost = async ({ userPostId, userWhoUnlikedId }) => {
+	try {
+		const updatedUserPostData = await UserPostModel
+			.findOneAndUpdate(
+				{ _id: userPostId },
+				{ $pull: { likes: userWhoUnlikedId } },
+				{ new: true }
+			);
+
+		return updatedUserPostData;
+	} catch (error) {
+		throw new Error('Something went wrong while trying to unlike user!');
+	}
+}
+
 module.exports = {
 	getAllUserPosts,
 	addUserPost,
-	getFollowedUsersPosts
+	getFollowedUsersPosts,
+	likeUserPost,
+	unlikeUserPost
 };

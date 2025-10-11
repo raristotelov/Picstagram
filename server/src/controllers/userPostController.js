@@ -22,4 +22,22 @@ router.get('/followed-users-posts', verifyJwtToken, async (req, res) => {
     return res.json(followedUsersPostsData);
 });
 
+router.post('/like/:userPostId', verifyJwtToken, async (req, res) => {
+    const currentlyLoggedInUserId  = res.userId
+    const userPostId  = req.params.userPostId;
+
+    const userPostData = await userPostService.likeUserPost({ userPostId, userWhoLikedId: currentlyLoggedInUserId });
+
+    return res.json(userPostData);
+});
+
+router.post('/unlike/:userPostId', verifyJwtToken, async (req, res) => {
+    const currentlyLoggedInUserId  = res.userId
+    const userPostId  = req.params.userPostId;
+
+    const userPostData = await userPostService.unlikeUserPost({ userPostId, userWhoUnlikedId: currentlyLoggedInUserId });
+    
+    return res.json(userPostData);
+});
+
 module.exports = router;

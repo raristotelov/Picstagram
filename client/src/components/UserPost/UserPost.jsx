@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 import Comment from '../Comment/Comment';
 import LikeIcon from '../icons/Like';
@@ -6,6 +6,8 @@ import CommentIcon from '../icons/Comment';
 import ArrowUpIcon from '../icons/ArrowUp';
 import ArrowDownIcon from '../icons/ArrowDown';
 
+import { likeUserPost, unlikeUserPost } from '../../services/userPostService';
+import LoggedInUserContext from '../../contexts/LoggedInUserContext';
 
 import './UserPost.css';
 
@@ -14,16 +16,65 @@ const UserPost = (props) => {
 
 	const { userPostData } = props;
 
-	console.log("userPostData", userPostData);
-
 	const userPostAuthor = userPostData.userId;
 
-	console.log("userPostAuthor", userPostAuthor);
-
+	const { jwtToken, loggedInUser, setLoggedInUser } = useContext(LoggedInUserContext);
 
 	const toggleCommentsSection = () => {
 		setToggledCommentsSection((state) => !state);
 	}
+
+	const onLikeUserPostHandler = async ({ userPostToLikeId }) => {
+		try {
+			const updatedUserPostData = await likeUserPost({ userPostToLikeId, jwtToken });
+
+			// TODO make this better
+			setLoggedInUser((currLoggedInUser) => {
+				const followedUsersPosts = currLoggedInUser.followedUsersPosts;
+
+				const currUserPost = followedUsersPosts.find((userPost) => userPost._id === updatedUserPostData._id);
+
+				currUserPost.likes = updatedUserPostData.likes;
+
+				return {
+					...currLoggedInUser,
+					followedUsersPosts: [
+						...followedUsersPosts.filter((userPost) => userPost._id !== updatedUserPostData._id),
+						currUserPost
+					].sort((a, b) => b.createdAt - a.createdAt)
+				}
+			});
+		} catch(error) {
+			console.log("error", error);
+		}
+	}
+
+	const onUnlikeUserPostHandler = async ({ userPostToUnlikeId }) => {
+		try {
+			const updatedUserPostData = await unlikeUserPost({ userPostToUnlikeId, jwtToken });
+
+			// TODO make this better
+			setLoggedInUser((currLoggedInUser) => {
+				const followedUsersPosts = currLoggedInUser.followedUsersPosts;
+
+				const currUserPost = followedUsersPosts.find((userPost) => userPost._id === updatedUserPostData._id);
+
+				currUserPost.likes = updatedUserPostData.likes;
+
+				return {
+					...currLoggedInUser,
+					followedUsersPosts: [
+						...followedUsersPosts.filter((userPost) => userPost._id !== updatedUserPostData._id),
+						currUserPost
+					].sort((a, b) => b.createdAt - a.createdAt)
+				}
+			});
+		} catch(error) {
+			console.log("error", error);
+		}
+	}
+
+	const loggedInUserHasLikedUserPost = userPostData.likes.includes(loggedInUser?._id);
 
     return (
         <div className='post-wrapper'>
@@ -38,9 +89,18 @@ const UserPost = (props) => {
             </div>
 
             <div className='like-action-wrapper'>
-				<span>80 likes</span>
+				<span>{userPostData.likes.length} likes</span>
 
-				<LikeIcon />
+				<button
+					onClick={
+						loggedInUserHasLikedUserPost 
+							? () => onUnlikeUserPostHandler({ userPostToUnlikeId: userPostData._id }) 
+							: () => onLikeUserPostHandler({ userPostToLikeId: userPostData._id })
+					}
+					className='like-btn'
+				>
+					<LikeIcon fillColorProp={loggedInUserHasLikedUserPost ? "#4B4B4B" : "none"} />
+				</button>
             </div>
 
 			<div className='comments-section-toggle-wrapper'>

@@ -54,10 +54,20 @@
 
 }
 
-.like-action-wrapper svg {
+.like-btn {
+	border: none;
+	background-color: inherit;
+}
+
+.like-btn svg {
 	margin-right: 20px;
 	width: 30px;
 	height: 30px;
+}
+
+.like-btn svg:hover {
+	cursor: pointer;
+	opacity: 0.5;
 }
 
 .comments-section-toggle-wrapper {
@@ -100,8 +110,4 @@
 	font-size: 16px;
 	font-family: "Mada";
 	font-weight: bold;
-}
-
-.comments-wrapper {
-
 }

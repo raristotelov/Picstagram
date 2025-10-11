@@ -2,8 +2,7 @@ const JWT = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const UserModel = require('../models/userModel');
-const userImageModel = require('../models/userImageModel');
-const UserImageModel = require('../models/userImageModel');
+const UserPostModel = require('../models/userPostModel');
 const constants = require('../config/constants');
 
 const necessaryUserFields = ['_id', 'email', 'username', 'bio', 'profilePic', 'posts', 'followers', 'following', 'followedUsersPosts'];
@@ -87,7 +86,7 @@ const getFollowedUsersPostsByUserIds = async ({ userIds }) => {
 		const allFollowedUsers = users.map(user => user.following).flat();
 
 		// Get all user posts of the followed users
-		const followedUsersPosts = await userImageModel.find({ userId: { $in: allFollowedUsers } }).populate({ path: 'userId' });
+		const followedUsersPosts = await UserPostModel.find({ userId: { $in: allFollowedUsers } }).populate({ path: 'userId' });
 
 		const userToUserPostsMap = {};
 
@@ -99,7 +98,10 @@ const getFollowedUsersPostsByUserIds = async ({ userIds }) => {
 		const usersWithFollowedUsersPosts = {};
 
 		for (let i = 0; i < userIds.length; i += 1) {
-			const followedUsersPosts = usersToFollowedUsersMap[userIds[i]].map((userId) => userToUserPostsMap[userId]).flat();
+			const followedUsersPosts = usersToFollowedUsersMap[userIds[i]]
+				.filter((userId) => userToUserPostsMap[userId])
+				.map((userId) => userToUserPostsMap[userId])
+				.flat();
 
 			usersWithFollowedUsersPosts[userIds[i]] = followedUsersPosts;
 		}
@@ -156,10 +158,10 @@ const updateUserProfileData = async (userId, updatedProfileData) => {
 			const userWithProfilePicture = await UserModel.findOne({ _id: userId }).populate({ path: 'profilePicture' });
 
 			if (userWithProfilePicture.profilePicture) {
-				await UserImageModel.deleteOne({ _id: userWithProfilePicture.profilePicture._id });
+				await UserPostModel.deleteOne({ _id: userWithProfilePicture.profilePicture._id });
 			}
 
-			profilePicture = new UserImageModel({ imageIdentifier: updatedProfilePicture.imageIdentifier, imageUrl: updatedProfilePicture.imageUrl, userId });
+			profilePicture = new UserPostModel({ imageIdentifier: updatedProfilePicture.imageIdentifier, imageUrl: updatedProfilePicture.imageUrl, userId });
 
 			await profilePicture.save();
 		}
