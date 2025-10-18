@@ -17,13 +17,19 @@ const Router = () => {
 	return (
 		<div className='routes-wrapper'>
 			<Routes>
-				<Route path='/' element={jwtToken ? <Navigate to='/user-feed' /> : <Navigate to='/login' />} />
+				<Route
+					path='/'
+					element={jwtToken ? <Navigate to='/user-feed' /> : <Navigate to='/login' />}
+				/>
 
 				<Route path='/sign-up' element={<SignUpView />} />
 
 				<Route path='/login' element={<LoginView />} />
 
-				<Route path='/user-feed' element={<FeedView posts={loggedInUser?.followedUsersPosts} />} />
+				<Route
+					path='/user-feed'
+					element={<FeedView posts={loggedInUser?.followedUsersPosts} />}
+				/>
 
 				<Route path='/my-profile' element={<ProfileView />} />
 
@@ -32,7 +38,7 @@ const Router = () => {
 				<Route path='/user/:userId' element={<ProfileView />} />
 			</Routes>
 		</div>
-	)
-}
+	);
+};
 
 export default Router;

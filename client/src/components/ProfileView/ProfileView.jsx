@@ -6,12 +6,7 @@ import { useParams } from 'react-router-dom';
 import { storage } from '../../firebase';
 import LoggedInUserContext from '../../contexts/LoggedInUserContext';
 import { addUserPost } from '../../services/userPostService';
-import {
-	getUsersProfileData,
-	updateUserProfileData,
-	followUser,
-	unfollowUser,
-} from '../../services/userService';
+import { getUsersProfileData, updateUserProfileData, followUser, unfollowUser } from '../../services/userService';
 
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import UserProfilePost from '../UserProfilePost/UserProfilePost';
@@ -111,9 +106,7 @@ const ProfileView = (props) => {
 			let updatedProfileData = { ...userUpdatedData };
 
 			if (updatedProfileData.profilePicture) {
-				const createdImageForProflePicrture = await uploadImageToFirebaseStorage(
-					updatedProfileData.profilePicture
-				);
+				const createdImageForProflePicrture = await uploadImageToFirebaseStorage(updatedProfileData.profilePicture);
 				updatedProfileData = {
 					...updatedProfileData,
 					profilePicture: createdImageForProflePicrture,
@@ -164,7 +157,7 @@ const ProfileView = (props) => {
 	}
 
 	return (
-		<div className='profile-view-wrapper'>
+		<div className="profile-view-wrapper">
 			<ProfileHeader
 				userData={userData}
 				loggedInUserData={loggedInUser}
@@ -174,9 +167,9 @@ const ProfileView = (props) => {
 				onUnfollowUserClick={onUnfollowUserHandler}
 			/>
 
-			<section className='profile-posts-wrapper'>
-				<button className='add-post-button' onClick={openAddPictureForm}>
-					<PlusIcon iconColorProp='#B5B5B5' />
+			<section className="profile-posts-wrapper">
+				<button className="add-post-button" onClick={openAddPictureForm}>
+					<PlusIcon iconColorProp="#B5B5B5" />
 
 					<span>Upload Picture</span>
 				</button>
@@ -188,20 +181,13 @@ const ProfileView = (props) => {
 
 			{isAddPicturePopupOpen ? (
 				<Popup onClosePopupClick={closeAddPictureForm}>
-					<AddImagePostForm
-						addImagePostHandler={addImagePostHandler}
-						onCancelClick={closeAddPictureForm}
-					/>
+					<AddImagePostForm addImagePostHandler={addImagePostHandler} onCancelClick={closeAddPictureForm} />
 				</Popup>
 			) : null}
 
 			{isEditProfileFormOpen ? (
 				<Popup onClosePopupClick={closeEditProfileForm}>
-					<EditProfileForm
-						userData={userData}
-						editProfileData={editProfileDataHandler}
-						onCancelClick={closeEditProfileForm}
-					/>
+					<EditProfileForm userData={userData} editProfileData={editProfileDataHandler} onCancelClick={closeEditProfileForm} />
 				</Popup>
 			) : null}
 		</div>

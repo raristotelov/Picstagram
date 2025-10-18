@@ -19,14 +19,11 @@ const useLocalStorage = (key, initialValue) => {
 		if (value) {
 			localStorage.setItem(key, JSON.stringify(value));
 		} else {
-			localStorage.removeItem(key)
+			localStorage.removeItem(key);
 		}
 	};
 
-	return [
-		state,
-		setLocalStorageState
-	];
-}
+	return [state, setLocalStorageState];
+};
 
-export default useLocalStorage
+export default useLocalStorage;

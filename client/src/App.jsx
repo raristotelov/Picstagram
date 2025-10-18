@@ -12,55 +12,55 @@ import Router from './Router';
 import './App.css';
 
 function App() {
-    const [jwtToken, setJwtToken] = useLocalStorage('jwt-token', null);
-    const [loggedInUser, setLoggedInUser] = useState(null);
+	const [jwtToken, setJwtToken] = useLocalStorage('jwt-token', null);
+	const [loggedInUser, setLoggedInUser] = useState(null);
 
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 
-    useEffect(() => {
-        if (jwtToken && !loggedInUser) {
-            const userData = jwtDecode(jwtToken);
+	useEffect(() => {
+		if (jwtToken && !loggedInUser) {
+			const userData = jwtDecode(jwtToken);
 
-            getUsersProfileData({ userIds: [userData.userId], jwtToken })
-                .then((result) => {
-                    setLoggedInUser(result[0]);
-                })
-                .catch(() => {
-                    console.log('something went wrong while trying to fetch user data');
-                });
-        } else if (!jwtToken) {
-            setLoggedInUser(null);
-        }
-    }, [jwtToken, loggedInUser]);
+			getUsersProfileData({ userIds: [userData.userId], jwtToken })
+				.then((result) => {
+					setLoggedInUser(result[0]);
+				})
+				.catch(() => {
+					console.log('something went wrong while trying to fetch user data');
+				});
+		} else if (!jwtToken) {
+			setLoggedInUser(null);
+		}
+	}, [jwtToken, loggedInUser]);
 
-    const updateLoggedInUser = (updatedUser) => {
-        setLoggedInUser(updatedUser.user);
-        setJwtToken(updatedUser.jwt);
-    };
+	const updateLoggedInUser = (updatedUser) => {
+		setLoggedInUser(updatedUser.user);
+		setJwtToken(updatedUser.jwt);
+	};
 
-    const logoutHandler = (e) => {
-        e.preventDefault();
+	const logoutHandler = (e) => {
+		e.preventDefault();
 
-        localStorage.removeItem('dcbyte-jwt');
-        setJwtToken(null);
-        navigate('/login');
-    };
+		localStorage.removeItem('dcbyte-jwt');
+		setJwtToken(null);
+		navigate('/login');
+	};
 
-    const loggedInUserContextValues = {
-        jwtToken,
-        setJwtToken,
-        loggedInUser,
-        updateLoggedInUser,
-        setLoggedInUser,
-    };
+	const loggedInUserContextValues = {
+		jwtToken,
+		setJwtToken,
+		loggedInUser,
+		updateLoggedInUser,
+		setLoggedInUser,
+	};
 
-    return (
-        <LoggedInUserContext.Provider value={loggedInUserContextValues}>
-            <MainHeader logoutHandler={logoutHandler} />
+	return (
+		<LoggedInUserContext.Provider value={loggedInUserContextValues}>
+			<MainHeader logoutHandler={logoutHandler} />
 
-            <Router />
-        </LoggedInUserContext.Provider>
-    );
+			<Router />
+		</LoggedInUserContext.Provider>
+	);
 }
 
 export default App;
