@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import jwt from 'jsonwebtoken'
+import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
-import useLocalStorage from './hooks/useLocalStorage'; 
+import useLocalStorage from './hooks/useLocalStorage';
 import LoggedInUserContext from './contexts/LoggedInUserContext';
 import { getUsersProfileData } from './services/userService';
 
@@ -12,55 +12,54 @@ import Router from './Router';
 import './App.css';
 
 function App() {
-	const [jwtToken, setJwtToken] = useLocalStorage('jwt-token', null);
-	const [loggedInUser, setLoggedInUser] = useState(null);
+    const [jwtToken, setJwtToken] = useLocalStorage('jwt-token', null);
+    const [loggedInUser, setLoggedInUser] = useState(null);
 
-	const navigate = useNavigate();
+    const navigate = useNavigate();
 
-	useEffect(() => {
-		if (jwtToken && !loggedInUser) {
-			const userData = jwt.decode(jwtToken);
+    useEffect(() => {
+        if (jwtToken && !loggedInUser) {
+            const userData = jwtDecode(jwtToken);
 
-			getUsersProfileData({ userIds: [userData.userId], jwtToken })
-				.then((result) => {
-					setLoggedInUser(result[0]);
-				}).catch(() => {
-					console.log('something went wrong while trying to fetch user data');
-				})
-		} else if (!jwtToken) {
-			setLoggedInUser(null);
-		}
-	}, [jwtToken, loggedInUser]);
+            getUsersProfileData({ userIds: [userData.userId], jwtToken })
+                .then((result) => {
+                    setLoggedInUser(result[0]);
+                })
+                .catch(() => {
+                    console.log('something went wrong while trying to fetch user data');
+                });
+        } else if (!jwtToken) {
+            setLoggedInUser(null);
+        }
+    }, [jwtToken, loggedInUser]);
 
-	const updateLoggedInUser = (updatedUser) => {
+    const updateLoggedInUser = (updatedUser) => {
         setLoggedInUser(updatedUser.user);
-		setJwtToken(updatedUser.jwt);
-	}
+        setJwtToken(updatedUser.jwt);
+    };
 
-	const logoutHandler = (e) => {
-		e.preventDefault();
+    const logoutHandler = (e) => {
+        e.preventDefault();
 
-		localStorage.removeItem('dcbyte-jwt');
-		setJwtToken(null);
-		navigate('/login');
-	};
+        localStorage.removeItem('dcbyte-jwt');
+        setJwtToken(null);
+        navigate('/login');
+    };
 
-	const loggedInUserContextValues = {
+    const loggedInUserContextValues = {
         jwtToken,
         setJwtToken,
         loggedInUser,
         updateLoggedInUser,
-		setLoggedInUser
+        setLoggedInUser,
     };
 
     return (
-		<LoggedInUserContext.Provider value={loggedInUserContextValues}>
-			<MainHeader
-				logoutHandler={logoutHandler}
-			/>
+        <LoggedInUserContext.Provider value={loggedInUserContextValues}>
+            <MainHeader logoutHandler={logoutHandler} />
 
-			<Router />
-		</LoggedInUserContext.Provider>
+            <Router />
+        </LoggedInUserContext.Provider>
     );
 }
 
