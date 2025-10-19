@@ -16,6 +16,6 @@ const Popup = ({ onClosePopupClick, children }) => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Popup;

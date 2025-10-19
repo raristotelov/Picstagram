@@ -1,18 +1,21 @@
 import { useState, useContext } from 'react';
 
 import Comment from '../Comment/Comment';
-import LikeIcon from '../icons/Like';
 import CommentIcon from '../icons/Comment';
 import ArrowUpIcon from '../icons/ArrowUp';
 import ArrowDownIcon from '../icons/ArrowDown';
+import HeartIcon from '../icons/Heart';
 
 import { likeUserPost, unlikeUserPost } from '../../services/userPostService';
 import LoggedInUserContext from '../../contexts/LoggedInUserContext';
+import Popup from '../Popup/Popup';
 
 import './UserPost.css';
 
 const UserPost = (props) => {
 	const [toggledCommentsSection, setToggledCommentsSection] = useState(false);
+	const [isHeartPulsing, setIsHeartPulsing] = useState(false);
+	const [isCommentsPopupOpen, setIsCommentsPopupOpen] = useState(false);
 
 	const { userPostData } = props;
 
@@ -21,8 +24,15 @@ const UserPost = (props) => {
 	const { jwtToken, loggedInUser, setLoggedInUser } = useContext(LoggedInUserContext);
 
 	const toggleCommentsSection = () => {
-		setToggledCommentsSection((state) => !state);
-	}
+		// setToggledCommentsSection((state) => !state);
+
+		setIsCommentsPopupOpen(true);
+	};
+
+	const triggerPulse = () => {
+		setIsHeartPulsing(true);
+		setTimeout(() => setIsHeartPulsing(false), 500);
+	};
 
 	const onLikeUserPostHandler = async ({ userPostToLikeId }) => {
 		try {
@@ -38,16 +48,17 @@ const UserPost = (props) => {
 
 				return {
 					...currLoggedInUser,
-					followedUsersPosts: [
-						...followedUsersPosts.filter((userPost) => userPost._id !== updatedUserPostData._id),
-						currUserPost
-					].sort((a, b) => b.createdAt - a.createdAt)
-				}
+					followedUsersPosts: [...followedUsersPosts.filter((userPost) => userPost._id !== updatedUserPostData._id), currUserPost].sort(
+						(a, b) => b.createdAt - a.createdAt
+					),
+				};
 			});
-		} catch(error) {
-			console.log("error", error);
+
+			triggerPulse();
+		} catch (error) {
+			console.log('error', error);
 		}
-	}
+	};
 
 	const onUnlikeUserPostHandler = async ({ userPostToUnlikeId }) => {
 		try {
@@ -63,70 +74,96 @@ const UserPost = (props) => {
 
 				return {
 					...currLoggedInUser,
-					followedUsersPosts: [
-						...followedUsersPosts.filter((userPost) => userPost._id !== updatedUserPostData._id),
-						currUserPost
-					].sort((a, b) => b.createdAt - a.createdAt)
-				}
+					followedUsersPosts: [...followedUsersPosts.filter((userPost) => userPost._id !== updatedUserPostData._id), currUserPost].sort(
+						(a, b) => b.createdAt - a.createdAt
+					),
+				};
 			});
-		} catch(error) {
-			console.log("error", error);
+		} catch (error) {
+			console.log('error', error);
 		}
-	}
+	};
+
+	const closeCommentsPopup = () => {
+		setIsCommentsPopupOpen(false);
+	};
 
 	const loggedInUserHasLikedUserPost = userPostData.likes.includes(loggedInUser?._id);
 
-    return (
-        <div className='post-wrapper'>
-            <div className='account-details'>
+	return (
+		<div className='post-wrapper'>
+			<div className='account-details'>
 				<img src='https://i.pinimg.com/736x/30/df/1c/30df1cb8981338d42ed2722ab74cb51e.jpg' alt='post-img' />
 
-                <h4>{userPostAuthor.username}</h4>
-            </div>
+				<span>{userPostAuthor.username}</span>
+			</div>
 
-            <div className='post-image-wrapper'>
-                <img src={`${userPostData.imageUrl}`} alt='post-img' />
-            </div>
+			<div className='post-image-wrapper'>
+				<img src={`${userPostData.imageUrl}`} alt='post-img' />
+			</div>
 
-            <div className='like-action-wrapper'>
-				<span>{userPostData.likes.length} likes</span>
-
+			<div className='like-action-wrapper'>
 				<button
 					onClick={
-						loggedInUserHasLikedUserPost 
-							? () => onUnlikeUserPostHandler({ userPostToUnlikeId: userPostData._id }) 
+						loggedInUserHasLikedUserPost
+							? () => onUnlikeUserPostHandler({ userPostToUnlikeId: userPostData._id })
 							: () => onLikeUserPostHandler({ userPostToLikeId: userPostData._id })
 					}
-					className='like-btn'
+					className={`like-btn ${isHeartPulsing ? 'heart-pulse' : ''}`}
+					onMouseLeave={!loggedInUserHasLikedUserPost ? triggerPulse : () => {}}
 				>
-					<LikeIcon fillColorProp={loggedInUserHasLikedUserPost ? "#4B4B4B" : "none"} />
+					<HeartIcon
+						fillColorProp={loggedInUserHasLikedUserPost ? '#F64D4D' : 'none'}
+						iconColorProp={loggedInUserHasLikedUserPost ? '#F64D4D' : null}
+					/>
 				</button>
-            </div>
 
-			<div className='comments-section-toggle-wrapper'>
-				<div className='comments-count-section'>
-					<CommentIcon />
+				<span>
+					{userPostData.likes.length}
 
-					<span>5 comments</span>
-				</div>
-				
-				<button
-					className='toggle-comments-btn'
-					onClick={toggleCommentsSection}
-				>
-					{toggledCommentsSection ? <ArrowUpIcon /> : <ArrowDownIcon />}
-				</button>
-            </div>
+					{userPostData.likes.length === 1 ? ' like' : ' likes'}
+				</span>
+			</div>
 
-			{toggledCommentsSection
-				? (
-					<div className='comments-wrapper'>
-						<Comment />
+			<div className='comments-section'>
+				<div className='comments-section-toggle-wrapper' onClick={toggleCommentsSection}>
+					<div className='comments-count-section'>
+						<CommentIcon />
+
+						<span>5 comments</span>
 					</div>
-				) : null
-			}
-        </div>
-    );
+
+					<button className='toggle-comments-btn'>{toggledCommentsSection ? <ArrowUpIcon /> : <ArrowDownIcon />}</button>
+				</div>
+
+				{toggledCommentsSection ? (
+					<div className='comments-wrapper'>
+						<Comment
+							text={
+								'This is a test comment which is really long because it is a test comment which is really long because it is a test comment which is really long'
+							}
+						/>
+					</div>
+				) : null}
+			</div>
+
+			<div className='add-comment-textarea-wrapper'>
+				<input type='text' className='add-comment-input' placeholder='Add a comment...' />
+			</div>
+
+			{isCommentsPopupOpen ? (
+				<Popup onClosePopupClick={closeCommentsPopup}>
+					<div className='comments-wrapper'>
+						<Comment
+							text={
+								'This is a test comment which is really long because it is a test comment which is really long because it is a test comment which is really long'
+							}
+						/>
+					</div>
+				</Popup>
+			) : null}
+		</div>
+	);
 };
 
 export default UserPost;

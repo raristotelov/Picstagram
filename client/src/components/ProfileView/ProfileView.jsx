@@ -157,7 +157,7 @@ const ProfileView = (props) => {
 	}
 
 	return (
-		<div className="profile-view-wrapper">
+		<div className='profile-view-wrapper'>
 			<ProfileHeader
 				userData={userData}
 				loggedInUserData={loggedInUser}
@@ -167,9 +167,9 @@ const ProfileView = (props) => {
 				onUnfollowUserClick={onUnfollowUserHandler}
 			/>
 
-			<section className="profile-posts-wrapper">
-				<button className="add-post-button" onClick={openAddPictureForm}>
-					<PlusIcon iconColorProp="#B5B5B5" />
+			<section className='profile-posts-wrapper'>
+				<button className='add-post-button' onClick={openAddPictureForm}>
+					<PlusIcon iconColorProp='#B5B5B5' />
 
 					<span>Upload Picture</span>
 				</button>
