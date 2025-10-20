@@ -18,18 +18,17 @@ const getNeccessaryUserData = (user) => {
 	}
 
 	const jwt = JWT.sign(userObject, constants.JWT_SECRET, {
-		expiresIn: constants.JWT_EXPIRY
+		expiresIn: constants.JWT_EXPIRY,
 	});
 
 	return {
 		user: userObject,
-		jwt
+		jwt,
 	};
-}
+};
 
 const signUp = async ({ email, username, password }) => {
 	try {
-
 		const hashedPassword = await bcrypt.hash(password, constants.SALT_ROUNDS);
 
 		const user = new UserModel({ email, username, password: hashedPassword });
@@ -37,7 +36,7 @@ const signUp = async ({ email, username, password }) => {
 		await user.save();
 
 		return user;
-	} catch(error) {
+	} catch (error) {
 		throw new Error('Something went wrong while trying to sign up!');
 	}
 };
@@ -54,11 +53,11 @@ const login = async ({ email, password }) => {
 
 		const claim = {
 			userId: dbUser._id,
-			username: dbUser.username
-		}
+			username: dbUser.username,
+		};
 
 		const loggedInUserJwt = JWT.sign(claim, constants.JWT_SECRET, {
-			expiresIn: constants.JWT_EXPIRY
+			expiresIn: constants.JWT_EXPIRY,
 		});
 
 		return loggedInUserJwt;
@@ -71,9 +70,7 @@ const login = async ({ email, password }) => {
 const getFollowedUsersPostsByUserIds = async ({ userIds }) => {
 	try {
 		// Fetch all user with the users they follow
-		const users = await UserModel
-			.find({ _id: { '$in': userIds } })
-			.select({ '_id': 1, following: 1,})
+		const users = await UserModel.find({ _id: { $in: userIds } }).select({ _id: 1, following: 1 });
 
 		const usersToFollowedUsersMap = {};
 
@@ -83,7 +80,7 @@ const getFollowedUsersPostsByUserIds = async ({ userIds }) => {
 		}
 
 		// Get all followed users
-		const allFollowedUsers = users.map(user => user.following).flat();
+		const allFollowedUsers = users.map((user) => user.following).flat();
 
 		// Get all user posts of the followed users
 		const followedUsersPosts = await UserPostModel.find({ userId: { $in: allFollowedUsers } }).populate({ path: 'userId' });
@@ -110,13 +107,12 @@ const getFollowedUsersPostsByUserIds = async ({ userIds }) => {
 	} catch (error) {
 		throw new Error('Something went wrong while trying to get followed users posts!');
 	}
-}
+};
 
 const getUsersProfileDataByUserIds = async ({ userIds }) => {
 	try {
-		const usersResult = await UserModel
-			.find({ _id: { '$in': userIds } })
-			.select({ '_id': 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1, following: 1, followers: 1 })
+		const usersResult = await UserModel.find({ _id: { $in: userIds } })
+			.select({ _id: 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1, following: 1, followers: 1 })
 			.populate({ path: 'posts' })
 			.populate({ path: 'profilePicture' });
 
@@ -124,29 +120,28 @@ const getUsersProfileDataByUserIds = async ({ userIds }) => {
 
 		const mappedUsers = usersResult.map((user) => ({
 			...user.toObject(),
-			followedUsersPosts: usersWithFollowedUsersPostsResult[user._id]
+			followedUsersPosts: usersWithFollowedUsersPostsResult[user._id],
 		}));
 
 		return mappedUsers;
 	} catch (error) {
-		console.log({error})
+		console.log({ error });
 		throw new Error('Something went wrong while trying to get users accound data by user ids!');
 	}
-}
+};
 
-const getUsersProfileDataBySearchWord= async ({ searchWord }) => {
+const getUsersProfileDataBySearchWord = async ({ searchWord }) => {
 	try {
-		const users = await UserModel
-			.find({ 'username': { $regex: `^${searchWord}`, $options: 'i' } })
-			.select({ '_id': 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1 })
-			.populate({ path: 'posts' }).populate({ path: 'profilePicture' });
+		const users = await UserModel.find({ username: { $regex: `^${searchWord}`, $options: 'i' } })
+			.select({ _id: 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1 })
+			.populate({ path: 'posts' })
+			.populate({ path: 'profilePicture' });
 
 		return users;
 	} catch (error) {
-		console.log({error})
-		throw new Error('Something went wrong while trying to get users accound data by search word!');
+		throw new Error('Something went wrong while trying to get users account data by search word!');
 	}
-}
+};
 
 const updateUserProfileData = async (userId, updatedProfileData) => {
 	try {
@@ -161,7 +156,11 @@ const updateUserProfileData = async (userId, updatedProfileData) => {
 				await UserPostModel.deleteOne({ _id: userWithProfilePicture.profilePicture._id });
 			}
 
-			profilePicture = new UserPostModel({ imageIdentifier: updatedProfilePicture.imageIdentifier, imageUrl: updatedProfilePicture.imageUrl, userId });
+			profilePicture = new UserPostModel({
+				imageIdentifier: updatedProfilePicture.imageIdentifier,
+				imageUrl: updatedProfilePicture.imageUrl,
+				userId,
+			});
 
 			await profilePicture.save();
 		}
@@ -170,69 +169,44 @@ const updateUserProfileData = async (userId, updatedProfileData) => {
 			updatedProfileData.profilePicture = profilePicture._id;
 		}
 
-		const user = await UserModel
-			.findOneAndUpdate(
-				{ _id: userId },
-				updatedProfileData,
-				{ new: true }
-			).populate('profilePicture');
+		const user = await UserModel.findOneAndUpdate({ _id: userId }, updatedProfileData, { new: true }).populate('profilePicture');
 
-		const updatedUserData = getNeccessaryUserData(user); 
+		const updatedUserData = getNeccessaryUserData(user);
 
 		return updatedUserData;
 	} catch (error) {
 		console.log(error);
 		throw new Error('Something went wrong while trying to update user accound data!');
 	}
-}
+};
 
 const followUser = async (userId, userIdToFollow) => {
 	try {
-		const currentlyLoggedUser = await UserModel
-			.findOneAndUpdate(
-				{ _id: userId },
-				{ $push: { following: userIdToFollow } },
-				{ new: true }
-			);
+		const currentlyLoggedUser = await UserModel.findOneAndUpdate({ _id: userId }, { $push: { following: userIdToFollow } }, { new: true });
 
-		await UserModel
-			.updateOne(
-				{ _id: userIdToFollow },
-				{ $push: { followers: userId } },
-				{ new: true }
-			);
+		await UserModel.updateOne({ _id: userIdToFollow }, { $push: { followers: userId } }, { new: true });
 
 		const updatedUserData = getNeccessaryUserData(currentlyLoggedUser);
-		
+
 		return updatedUserData;
 	} catch (error) {
 		throw new Error('Something went wrong while trying to follow user!');
 	}
-}
+};
 
 const unfollowUser = async (userId, userIdToUnfollow) => {
 	try {
-		const currentlyLoggedUser = await UserModel
-			.findOneAndUpdate(
-				{ _id: userId },
-				{ $pull: { following: userIdToUnfollow } },
-				{ new: true }
-			);
+		const currentlyLoggedUser = await UserModel.findOneAndUpdate({ _id: userId }, { $pull: { following: userIdToUnfollow } }, { new: true });
 
-		await UserModel
-			.updateOne(
-				{ _id: userIdToUnfollow },
-				{ $pull: { followers: userId } },
-				{ new: true }
-			);
+		await UserModel.updateOne({ _id: userIdToUnfollow }, { $pull: { followers: userId } }, { new: true });
 
 		const updatedUserData = getNeccessaryUserData(currentlyLoggedUser);
-	
+
 		return updatedUserData;
 	} catch (error) {
 		throw new Error('Something went wrong while trying to follow user!');
 	}
-}
+};
 
 module.exports = {
 	signUp,
@@ -241,5 +215,5 @@ module.exports = {
 	getUsersProfileDataBySearchWord,
 	updateUserProfileData,
 	followUser,
-	unfollowUser
+	unfollowUser,
 };

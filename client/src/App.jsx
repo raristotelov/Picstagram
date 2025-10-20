@@ -43,7 +43,7 @@ function App() {
 
 		localStorage.removeItem('dcbyte-jwt');
 		setJwtToken(null);
-		navigate('/login');
+		navigate('/log-in');
 	};
 
 	const loggedInUserContextValues = {

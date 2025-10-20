@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 
 import { signUp } from '../../services/userService';
@@ -13,14 +12,12 @@ const SignUpView = () => {
 	const signUpHandler = async (newUserData) => {
 		await signUp(newUserData);
 
-		navigate('/login');
+		navigate('/log-in');
 	};
 
 	return (
 		<section className='sign-up-wrapper'>
-			<SignUpForm 
-				signUpHandler={signUpHandler}
-			/>
+			<SignUpForm signUpHandler={signUpHandler} />
 		</section>
 	);
 };
