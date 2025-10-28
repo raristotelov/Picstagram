@@ -94,7 +94,12 @@
 }
 
 .navigation-item-active {
-	border-bottom: 2px solid #4b4b4b;
+	border-bottom: 2px solid #f64d4d;
+	color: #f64d4d;
+}
+
+.navigation-item-active svg {
+	stroke: #f64d4d;
 }
 
 .navigation-item-active:hover {

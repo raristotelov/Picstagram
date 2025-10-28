@@ -27,8 +27,10 @@
 }
 
 .post-image-wrapper img {
-	width: 550px;
-	height: 800px;
+	width: 500px;
+	height: 550px;
+	/* It is object cover for testing. When done change it to object-fit: contain */
+	object-fit: cover;
 }
 
 .like-action-wrapper {
