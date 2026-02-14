@@ -11,12 +11,29 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+
+	::-webkit-scrollbar {
+		width: 2px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: #dbdbdb;
+		border-radius: 4px;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: #c0c0c0;
+	}
 }
 
 .popup-body {
 	position: absolute;
-	background: #FFFFFF;
-	border: 3px solid #B5B5B5;
+	background: #ffffff;
+	border: 3px solid #b5b5b5;
 	padding: 10px;
 }
 
@@ -27,7 +44,7 @@
 
 .close-btn-wrapper button {
 	border: none;
-	background-color: #FFFFFF;
+	background-color: #ffffff;
 }
 
 .close-btn-wrapper button:hover {

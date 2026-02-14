@@ -19,11 +19,11 @@ const addUserPost = async (postData, userId) => {
 
 		await userPost.save();
 
-        const result = await UserModel.findByIdAndUpdate(userId, {
-            $addToSet: {
-                posts: userPost._id
-            }
-        });
+		const result = await UserModel.findByIdAndUpdate(userId, {
+			$addToSet: {
+				posts: userPost._id,
+			},
+		});
 
 		return userPost;
 	} catch (error) {
@@ -33,10 +33,7 @@ const addUserPost = async (postData, userId) => {
 
 const getFollowedUsersPosts = async (userId) => {
 	try {
-		const userResult = await UserModel
-			.find({ _id: userId })
-			.select({ following: 1 })
-			.populate({ path: 'following', populate: 'posts' })
+		const userResult = await UserModel.find({ _id: userId }).select({ following: 1 }).populate({ path: 'following', populate: 'posts' });
 
 		const currentUser = userResult[0];
 
@@ -60,38 +57,28 @@ const getFollowedUsersPosts = async (userId) => {
 
 const likeUserPost = async ({ userPostId, userWhoLikedId }) => {
 	try {
-		const updatedUserPostData = await UserPostModel
-			.findOneAndUpdate(
-				{ _id: userPostId },
-				{ $push: { likes: userWhoLikedId } },
-				{ new: true }
-			);
-		
+		const updatedUserPostData = await UserPostModel.findOneAndUpdate({ _id: userPostId }, { $push: { likes: userWhoLikedId } }, { new: true });
+
 		return updatedUserPostData;
 	} catch (error) {
 		throw new Error('Something went wrong while trying to like user!');
 	}
-}
+};
 
 const unlikeUserPost = async ({ userPostId, userWhoUnlikedId }) => {
 	try {
-		const updatedUserPostData = await UserPostModel
-			.findOneAndUpdate(
-				{ _id: userPostId },
-				{ $pull: { likes: userWhoUnlikedId } },
-				{ new: true }
-			);
+		const updatedUserPostData = await UserPostModel.findOneAndUpdate({ _id: userPostId }, { $pull: { likes: userWhoUnlikedId } }, { new: true });
 
 		return updatedUserPostData;
 	} catch (error) {
 		throw new Error('Something went wrong while trying to unlike user!');
 	}
-}
+};
 
 module.exports = {
 	getAllUserPosts,
 	addUserPost,
 	getFollowedUsersPosts,
 	likeUserPost,
-	unlikeUserPost
+	unlikeUserPost,
 };

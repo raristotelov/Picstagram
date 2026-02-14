@@ -5,15 +5,15 @@ const { userService } = require('../services');
 const verifyJwtToken = require('../middlewares/verifyJwtToken');
 
 router.post('/sign-up', async (req, res) => {
-    const userData = await userService.signUp(req.body);
-	
-    return res.json(userData);
+	const userData = await userService.signUp(req.body);
+
+	return res.json(userData);
 });
 
 router.post('/login', async (req, res) => {
-    const userData = await userService.login(req.body);
-	
-    return res.json(userData);
+	const userData = await userService.login(req.body);
+
+	return res.json(userData);
 });
 
 router.get('/', async (req, res) => {
@@ -34,29 +34,29 @@ router.get('/', async (req, res) => {
 });
 
 router.patch('/update/:userId', verifyJwtToken, async (req, res) => {
-	const userId  = req.params.userId;
+	const userId = req.params.userId;
 
-    const userAccountData = await userService.updateUserProfileData(userId, req.body);
-	
-    return res.json(userAccountData);
+	const userAccountData = await userService.updateUserProfileData(userId, req.body);
+
+	return res.json(userAccountData);
 });
 
 router.post('/:userId/follow/:userIdToFollow', verifyJwtToken, async (req, res) => {
-	const userId  = req.params.userId;
-	const userIdToFollow  = req.params.userIdToFollow;
+	const userId = req.params.userId;
+	const userIdToFollow = req.params.userIdToFollow;
 
-    const userAccountData = await userService.followUser(userId, userIdToFollow);
-	
-    return res.json(userAccountData);
+	const userAccountData = await userService.followUser(userId, userIdToFollow);
+
+	return res.json(userAccountData);
 });
 
 router.post('/:userId/unfollow/:userIdToUnfollow', verifyJwtToken, async (req, res) => {
-	const userId  = req.params.userId;
-	const userIdToUnfollow  = req.params.userIdToUnfollow;
+	const userId = req.params.userId;
+	const userIdToUnfollow = req.params.userIdToUnfollow;
 
-    const userAccountData = await userService.unfollowUser(userId, userIdToUnfollow);
-	
-    return res.json(userAccountData);
+	const userAccountData = await userService.unfollowUser(userId, userIdToUnfollow);
+
+	return res.json(userAccountData);
 });
 
 module.exports = router;

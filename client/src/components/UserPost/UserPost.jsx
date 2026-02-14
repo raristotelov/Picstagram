@@ -13,7 +13,7 @@ import Popup from '../Popup/Popup';
 import './UserPost.css';
 
 const UserPost = (props) => {
-	const [toggledCommentsSection, setToggledCommentsSection] = useState(false);
+	const [toggledCommentsSection] = useState(false);
 	const [isHeartPulsing, setIsHeartPulsing] = useState(false);
 	const [isCommentsPopupOpen, setIsCommentsPopupOpen] = useState(false);
 
@@ -90,6 +90,14 @@ const UserPost = (props) => {
 
 	const loggedInUserHasLikedUserPost = userPostData.likes.includes(loggedInUser?._id);
 
+	const AddCommentInput = () => {
+		return (
+			<div className='add-comment-textarea-wrapper'>
+				<input type='text' className='add-comment-input' placeholder='Add a comment...' />
+			</div>
+		);
+	};
+
 	return (
 		<div className='post-wrapper'>
 			<div className='account-details'>
@@ -139,27 +147,44 @@ const UserPost = (props) => {
 				{toggledCommentsSection ? (
 					<div className='comments-wrapper'>
 						<Comment
-							text={
-								'This is a test comment which is really long because it is a test comment which is really long because it is a test comment which is really long'
-							}
+							text={`This is a test comment which is really long because 
+								it is a test comment which is really long because it is a test comment which is really long`}
 						/>
 					</div>
 				) : null}
 			</div>
 
-			<div className='add-comment-textarea-wrapper'>
-				<input type='text' className='add-comment-input' placeholder='Add a comment...' />
-			</div>
+			<AddCommentInput />
 
 			{isCommentsPopupOpen ? (
 				<Popup onClosePopupClick={closeCommentsPopup}>
 					<div className='comments-wrapper'>
 						<Comment
-							text={
-								'This is a test comment which is really long because it is a test comment which is really long because it is a test comment which is really long'
-							}
+							text={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+								sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+								Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}
+						/>
+
+						<Comment
+							text={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
+								labore et dolore magna aliqua. Ut enim ad minim veniam, 
+								quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}
+						/>
+
+						<Comment
+							text={`Lorem ipsum dolor sit amet, 
+								consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+								Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}
+						/>
+
+						<Comment
+							text={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+								sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+								Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}
 						/>
 					</div>
+
+					<AddCommentInput />
 				</Popup>
 			) : null}
 		</div>

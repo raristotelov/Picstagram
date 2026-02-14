@@ -17,7 +17,7 @@ const getNeccessaryUserData = (user) => {
 		}
 	}
 
-	const jwt = JWT.sign(userObject, constants.JWT_SECRET, {
+	const jwt = JWT.sign(userObject, process.env.JWT_SECRET, {
 		expiresIn: constants.JWT_EXPIRY,
 	});
 
@@ -56,7 +56,7 @@ const login = async ({ email, password }) => {
 			username: dbUser.username,
 		};
 
-		const loggedInUserJwt = JWT.sign(claim, constants.JWT_SECRET, {
+		const loggedInUserJwt = JWT.sign(claim, process.env.JWT_SECRET, {
 			expiresIn: constants.JWT_EXPIRY,
 		});
 

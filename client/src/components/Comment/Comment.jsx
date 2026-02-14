@@ -1,11 +1,15 @@
 import { useState } from 'react';
 
+import HeartIcon from '../icons/Heart';
+
 import './Comment.css';
 
 const Comment = ({ text }) => {
-	const [triggerWrite, setTriggerWrite] = useState(false);
+	const [setTriggerWrite] = useState(false);
 
 	console.log('in comment');
+
+	let loggedInUserHasLikedComment = true;
 	return (
 		<div className='comment-wrapper'>
 			<div className='commenter-account-details'>
@@ -18,9 +22,30 @@ const Comment = ({ text }) => {
 				<span className='comment-text' onClick={() => setTriggerWrite(true)}>
 					{text}
 				</span>
-			</div>
 
-			{/* <div className='comment-replies-wrapper'>test text</div> */}
+				<div className='comment-utils'>
+					<button
+						// onClick={
+						// 	loggedInUserHasLikedUserPost
+						// 		? () => onUnlikeUserPostHandler({ userPostToUnlikeId: userPostData._id })
+						// 		: () => onLikeUserPostHandler({ userPostToLikeId: userPostData._id })
+						// }
+						className={'comment-like-btn'}
+						// onMouseLeave={!loggedInUserHasLikedUserPost ? triggerPulse : () => {}}
+					>
+						<HeartIcon
+							fillColorProp={loggedInUserHasLikedComment ? '#F64D4D' : 'none'}
+							iconColorProp={loggedInUserHasLikedComment ? '#F64D4D' : null}
+						/>
+					</button>
+
+					<span className='comment-util-label'>20 likes</span>
+
+					<button className='comment-util-btn'>Reply</button>
+
+					<button className='comment-util-btn'>View replies</button>
+				</div>
+			</div>
 		</div>
 	);
 };
