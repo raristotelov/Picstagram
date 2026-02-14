@@ -4,32 +4,30 @@ import './PopularPostsView.css';
 
 const PopularPostsView = () => {
 	const userPosts = [
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-		{imageUrl: "/images/default-profile-picture.png"},
-
-
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
+		{ imageUrl: '/images/default-profile-picture.png' },
 	];
 
 	return (
@@ -39,6 +37,6 @@ const PopularPostsView = () => {
 			))}
 		</section>
 	);
-}
+};
 
 export default PopularPostsView;

@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef, Fragment } from "react";
+import { useState, useEffect, useRef, Fragment } from 'react';
 
-import PictureFrameIcon from "../icons/PictureFrameIcon";
+import PictureFrameIcon from '../icons/PictureFrameIcon';
 
-import "./ImageInput.css"
+import './ImageInput.css';
 
 const defaultImageWidth = 290;
 const defaultImageHeight = 320;
@@ -26,7 +26,7 @@ const ImageInput = (props) => {
 		imageHeightProp,
 		iconWidthProp,
 		iconHeightProp,
-		fontSizeProp
+		fontSizeProp,
 	} = props;
 
 	useEffect(() => {
@@ -36,10 +36,10 @@ const ImageInput = (props) => {
 	}, [initialValue]);
 
 	useEffect(() => {
-        if (!uploadedImage) {
-            setImagePreview(null);
-            return;
-        }
+		if (!uploadedImage) {
+			setImagePreview(null);
+			return;
+		}
 
 		if (uploadedImage === initialValue) {
 			setImagePreview(uploadedImage);
@@ -51,40 +51,40 @@ const ImageInput = (props) => {
 
 		// free memory when ever this component is unmounted
 		return () => URL.revokeObjectURL(objectUrl);
-    }, [uploadedImage, initialValue]);
+	}, [uploadedImage, initialValue]);
 
 	const onChangeHandler = (e) => {
 		setUploadedImage(e.target.files[0]);
 		onChange(e.target.files[0]);
-	}
+	};
 
 	const getImageInputWrapperClasses = () => {
-		let imageInputWrapperClasses = "image-input-wrapper";
+		let imageInputWrapperClasses = 'image-input-wrapper';
 
 		if (isRoundImage) {
-			imageInputWrapperClasses = imageInputWrapperClasses.concat(" round-image");
+			imageInputWrapperClasses = imageInputWrapperClasses.concat(' round-image');
 		}
-	
+
 		if (uploadedImage) {
-			imageInputWrapperClasses = imageInputWrapperClasses.concat(" hidden");
+			imageInputWrapperClasses = imageInputWrapperClasses.concat(' hidden');
 		}
 
 		return imageInputWrapperClasses;
-	}
+	};
 
 	const getPreviewWrapperClasses = () => {
-		let previewWrapperClasses = "preview-wrapper";
+		let previewWrapperClasses = 'preview-wrapper';
 
 		if (isRoundImage) {
-			previewWrapperClasses = previewWrapperClasses.concat(" round-image");
+			previewWrapperClasses = previewWrapperClasses.concat(' round-image');
 		}
-	
+
 		if (!uploadedImage) {
-			previewWrapperClasses = previewWrapperClasses.concat(" hidden");
+			previewWrapperClasses = previewWrapperClasses.concat(' hidden');
 		}
 
 		return previewWrapperClasses;
-	}
+	};
 
 	const PlaceHolderImage = PlaceHolderImageProp || PictureFrameIcon;
 	const imageWidth = imageWidthProp || defaultImageWidth;
@@ -95,39 +95,26 @@ const ImageInput = (props) => {
 
 	return (
 		<Fragment>
-			<div className={getImageInputWrapperClasses()} style={{width: `${imageWidth}px`, height: `${imageHeigth}px`}}>
-				<label htmlFor="picture">
-					<PlaceHolderImage
-						iconColorProp="#B5B5B5"
-						iconWidthProp={iconWidth}
-						iconHeightProp={iconHeight}
-					/>
+			<div className={getImageInputWrapperClasses()} style={{ width: `${imageWidth}px`, height: `${imageHeigth}px` }}>
+				<label htmlFor='picture'>
+					<PlaceHolderImage iconColorProp='#B5B5B5' iconWidthProp={iconWidth} iconHeightProp={iconHeight} />
 
-					{placeholderText 
-						? (
-							<span style={{fontSize: `${fontSize}px`}}>{placeholderText}</span>
-						) : null
-					}
+					{placeholderText ? <span style={{ fontSize: `${fontSize}px` }}>{placeholderText}</span> : null}
 				</label>
 
-				<input
-					type="file"
-					id="picture"
-					name="picture"
-					onChange={onChangeHandler}
-					ref={inputRef}
-				/>
+				<input type='file' id='picture' name='picture' onChange={onChangeHandler} ref={inputRef} />
 			</div>
 
-			<div className={getPreviewWrapperClasses()} style={{width: `${imageWidth}px`, height: `${imageHeigth}px`}}>
-				<img src={imagePreview} alt="preview" width={imageWidth} height={imageHeigth} />
+			<div className={getPreviewWrapperClasses()} style={{ width: `${imageWidth}px`, height: `${imageHeigth}px` }}>
+				<img src={imagePreview} alt='preview' width={imageWidth} height={imageHeigth} />
 
 				<button
 					onClick={(e) => {
 						e.preventDefault();
-						inputRef.current.click()
+						inputRef.current.click();
 					}}
-					className="image-change-button" style={{width: `${imageWidth}px`, height: `${imageHeigth}px`}}
+					className='image-change-button'
+					style={{ width: `${imageWidth}px`, height: `${imageHeigth}px` }}
 				>
 					Change
 				</button>
