@@ -7,8 +7,6 @@ import './Comment.css';
 const Comment = ({ text }) => {
 	const [setTriggerWrite] = useState(false);
 
-	console.log('in comment');
-
 	let loggedInUserHasLikedComment = true;
 	return (
 		<div className='comment-wrapper'>
