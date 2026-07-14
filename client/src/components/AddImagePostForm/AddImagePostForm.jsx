@@ -8,11 +8,12 @@ import './AddImagePostForm.css';
 
 const AddImagePostForm = ({ addImagePostHandler }) => {
 	const [uploadedImage, setUploadedImage] = useState(null);
+	const [caption, setCaption] = useState('');
 
 	const onSubmit = (e) => {
 		e.preventDefault();
 
-		addImagePostHandler(uploadedImage);
+		addImagePostHandler(uploadedImage, caption);
 	};
 
 	const onCancelClick = () => {
@@ -31,6 +32,13 @@ const AddImagePostForm = ({ addImagePostHandler }) => {
 				placeholderText='Choose a Picture'
 				imageWidth={290}
 				imageHeigth={320}
+			/>
+
+			<textarea
+				className='caption-input'
+				placeholder='Write a caption...'
+				value={caption}
+				onChange={(e) => setCaption(e.target.value)}
 			/>
 
 			<div className='button-row'>

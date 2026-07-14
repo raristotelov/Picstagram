@@ -28,7 +28,7 @@ const LoginForm = ({ loginHandler }) => {
 				</div>
 
 				<div className='input-wrapper'>
-					<input type='password' id='password' name='password' placeholder='Password' value={values.username} onChange={changeHandler} />
+					<input type='password' id='password' name='password' placeholder='Password' value={values.password} onChange={changeHandler} />
 				</div>
 
 				<Button label='Submit' />

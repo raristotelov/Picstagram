@@ -33,6 +33,23 @@
 	object-fit: cover;
 }
 
+.post-caption {
+	padding: 8px 0;
+	margin-left: 16px;
+	margin-right: 16px;
+
+	color: #4b4b4b;
+	font-family: 'Mada';
+	font-size: 16px;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+
+.post-caption-username {
+	font-weight: bold;
+	margin-right: 6px;
+}
+
 .like-action-wrapper {
 	padding: 8px 0 8px 0px;
 
