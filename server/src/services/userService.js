@@ -29,18 +29,61 @@ const getNeccessaryUserData = (user) => {
 	};
 };
 
+const signAuthToken = ({ _id, username }) =>
+	JWT.sign({ userId: _id, username }, process.env.JWT_SECRET, {
+		expiresIn: constants.JWT_EXPIRY,
+	});
+
 const signUp = async ({ email, username, password }) => {
 	try {
+		if (typeof password !== 'string' || password.length < constants.MIN_PASSWORD_LENGTH) {
+			const message = `Password must be at least ${constants.MIN_PASSWORD_LENGTH} characters`;
+
+			throw new AppError(message, 400, { fields: { password: message } });
+		}
+
+		if (Buffer.byteLength(password, 'utf8') > constants.MAX_PASSWORD_BYTES) {
+			const message = `Password must be at most ${constants.MAX_PASSWORD_BYTES} bytes`;
+
+			throw new AppError(message, 400, { fields: { password: message } });
+		}
+
 		const hashedPassword = await bcrypt.hash(password, constants.SALT_ROUNDS);
 
 		const user = new UserModel({ email, username, password: hashedPassword });
 
 		await user.save();
 
-		return user;
+		return signAuthToken(user);
 	} catch (error) {
+		if (error instanceof AppError) {
+			throw error;
+		}
+
+		if (error.name === 'ValidationError') {
+			const fields = {};
+
+			Object.keys(error.errors).forEach((path) => {
+				fields[path] = error.errors[path].message;
+			});
+
+			throw new AppError(Object.values(fields).join(', '), 400, { cause: error, fields });
+		}
+
 		if (error.code === 11000) {
-			throw new AppError('Email or username already in use', 409, { cause: error });
+			const duplicatedField = Object.keys(error.keyPattern || {})[0];
+
+			const duplicateMessages = {
+				email: 'This email is already registered',
+				username: 'This username is taken',
+			};
+
+			const message = duplicateMessages[duplicatedField] || 'Email or username already in use';
+
+			throw new AppError(message, 409, {
+				cause: error,
+				fields: duplicatedField ? { [duplicatedField]: message } : undefined,
+			});
 		}
 
 		throw new AppError('Could not sign up', 500, { cause: error });
@@ -55,22 +98,13 @@ const login = async ({ email, password }) => {
 			throw new AppError('Wrong email or password', 401);
 		}
 
-		// const passwordIsCorrect = await bcrypt.compare(password, dbUser.password);
+		const passwordIsCorrect = await bcrypt.compare(password, dbUser.password);
 
-		// if (!passwordIsCorrect) {
-		// 	throw new AppError('Wrong email or password', 401);
-		// }
+		if (!passwordIsCorrect) {
+			throw new AppError('Wrong email or password', 401);
+		}
 
-		const claim = {
-			userId: dbUser._id,
-			username: dbUser.username,
-		};
-
-		const loggedInUserJwt = JWT.sign(claim, process.env.JWT_SECRET, {
-			expiresIn: constants.JWT_EXPIRY,
-		});
-
-		return loggedInUserJwt;
+		return signAuthToken(dbUser);
 	} catch (error) {
 		if (error instanceof AppError) {
 			throw error;

@@ -17,11 +17,14 @@ Colours live as a Figma **variable collection (`Colours`) with Light and Dark mo
 | `border/divider` | `#C0C0C0` | `#333333` | Header bottom border, profile divider |
 | `border/inset` | `#E4E4E4` | `#2A2A2A` | Dividers inside cards |
 | `brand/red` | `#F64D4D` | `#F64D4D` | Identity and interactive accents — unchanged in dark |
+| `feedback/error` | `#C62828` | `#FF6B6B` | Validation messages and the border of an input in error |
 | `static/white` | `#FFFFFF` | `#FFFFFF` | Content **on** a colour or photo — button labels, tile hover counts |
 | `avatar/placeholder-disc` | `#E8E8E8` | `#2A2A2A` | No-profile-picture disc |
 | `avatar/placeholder-figure` | `#9A9A9A` | `#5A5A5A` | No-profile-picture silhouette |
 
 **Rule:** brand red is reserved for identity and interactive/active accents — never body text.
+
+**Why errors get their own red.** `brand/red` measures 3.45:1 on `#FFFFFF` and 3.03:1 on `#F0F0F0` — large-text only, below AA for a 15px message. `feedback/error` light is 5.62:1 on surface and 4.93:1 on page; dark is 6.52:1 on `#161616`. Not yet added to the Figma `Colours` collection.
 
 **`static/white` matters.** White does two jobs: the surface of a card, and the colour of content sitting on a photo or the red button. Only the first should darken. Binding both to `background/surface` turns button labels and hover counts near-black in dark mode.
 

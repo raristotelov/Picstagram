@@ -74,9 +74,7 @@ const Comment = ({ comment, userPostId, onReload, isReply }) => {
 						/>
 					</button>
 
-					<span className='comment-util-label'>
-						{likes.length} {likes.length === 1 ? 'like' : 'likes'}
-					</span>
+					<span className='comment-util-label'>{`${likes.length} ${likes.length === 1 ? 'like' : 'likes'}`}</span>
 
 					{!isReply ? (
 						<button className='comment-util-btn' onClick={() => setIsReplying((state) => !state)}>

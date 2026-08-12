@@ -27,8 +27,8 @@ Overview of the technologies used across Picstagram. Versions reflect the curren
 
 ## Image Storage
 
-- **Cloudinary** — chosen for image uploads and on-the-fly optimization/resizing (unsigned client-side uploads).
-- _Migration in progress:_ the code currently uploads to **Firebase Storage** (`firebase` SDK); Firebase is being replaced by Cloudinary. See [TODO.md](./TODO.md).
+- **Cloudinary** — image uploads and on-the-fly optimization/resizing, uploaded unsigned from the client.
+- Firebase is gone: the unused `firebase.js` module and the `firebase` dependency were removed, and the Firebase project deleted.
 
 ## Auth Model
 
@@ -36,5 +36,15 @@ Overview of the technologies used across Picstagram. Versions reflect the curren
 
 ## Tooling
 
-- **Client:** Prettier, ESLint (`react-app` config), Testing Library + Jest (via `react-scripts`).
-- **Server:** ESLint, `nodemon` for dev reload.
+- **Client:** Prettier, ESLint (`react-app` config), Testing Library + Jest via `react-scripts`, Cypress for end-to-end.
+- **Server:** Prettier, ESLint, Jest, `nodemon` for dev reload.
+
+### Commands
+
+Run from `client/` or `server/`:
+
+- `npm run lint` · `npm run format` · `npm run format:check`
+- `npm test` — unit tests. The client runs in watch mode; use `CI=true npm test -- --watchAll=false` for a single pass.
+- `npm run cypress:open` / `npm run cypress:run` — end-to-end, client only. **The client and the server must both already be running.**
+
+End-to-end specs run against the local dev database with its real data. A spec creates the records it needs and deletes only those; it never clears the database.

@@ -19,6 +19,8 @@ module.exports = [
 			indent: ['error', 'tab'],
 			'comma-dangle': ['error', 'always-multiline'],
 			'max-len': ['error', { code: 150 }],
+			// args: 'none' because Express error middleware must declare `next` without using it.
+			'no-unused-vars': ['error', { args: 'none' }],
 			'arrow-parens': ['error', 'always'],
 			'no-multiple-empty-lines': ['error', { max: 1 }],
 		},

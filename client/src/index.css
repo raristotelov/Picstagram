@@ -1,8 +1,44 @@
+/* Mirrors the Figma `Colours` collection. See docs/style-guide.md. */
+:root {
+	--background-page: #f0f0f0;
+	--background-surface: #ffffff;
+	--text-primary: #4b4b4b;
+	--text-secondary: #8e8e8e;
+	--text-muted: #b5b5b5;
+	--border-card: #dbdbdb;
+	--border-divider: #c0c0c0;
+	--border-inset: #e4e4e4;
+	--brand-red: #f64d4d;
+	--static-white: #ffffff;
+	--avatar-placeholder-disc: #e8e8e8;
+	--avatar-placeholder-figure: #9a9a9a;
+	--feedback-error: #c62828;
+
+	/* MainHeader and TabBar are position: fixed, so page content must reserve this space. */
+	--header-height: 54px;
+	--tab-bar-height: 56px;
+}
+
+/* Applied only once a theme is set, so nothing changes until the switch exists. */
+:root[data-theme='dark'] {
+	--background-page: #000000;
+	--background-surface: #161616;
+	--text-primary: #f0f0f0;
+	--text-secondary: #a8a8a8;
+	--text-muted: #6e6e6e;
+	--border-card: #2a2a2a;
+	--border-divider: #333333;
+	--border-inset: #2a2a2a;
+	--avatar-placeholder-disc: #2a2a2a;
+	--avatar-placeholder-figure: #5a5a5a;
+	--feedback-error: #ff6b6b;
+}
+
 body {
 	margin: 0;
 	font-family:
-		-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
-		'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+		-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+		sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -14,4 +50,70 @@ code {
 .routes-wrapper {
 	display: flex;
 	justify-content: center;
+}
+
+.form-error {
+	width: 450px;
+	margin: 0;
+
+	font-size: 15px;
+	font-family: 'Mada';
+	color: var(--feedback-error);
+	text-align: center;
+}
+
+.field-error {
+	margin-top: 6px;
+
+	font-size: 13px;
+	font-family: 'Mada';
+	color: var(--feedback-error);
+}
+
+/* Auth-specific so it cannot collide with the `.input-wrapper` other components define. */
+.auth-input-wrapper {
+	display: flex;
+	align-items: flex-start;
+	flex-direction: column;
+	justify-content: center;
+
+	width: 450px;
+	min-height: 44px;
+}
+
+.auth-input-wrapper input {
+	width: 100%;
+	height: 44px;
+
+	padding: 0 12px;
+	box-sizing: border-box;
+
+	border: 1px solid var(--text-muted);
+	border-radius: 12px;
+	background-color: var(--background-surface);
+	font-size: 16px;
+	font-family: 'Mada';
+	color: var(--text-primary);
+}
+
+.auth-input-wrapper input:focus {
+	outline: none;
+}
+
+.auth-input-wrapper input::placeholder {
+	color: var(--text-muted);
+	opacity: 1;
+}
+
+.auth-input-wrapper input.has-error,
+.auth-input-wrapper input.has-error:focus {
+	border-color: var(--feedback-error);
+}
+
+@media (max-width: 639px) {
+	.auth-input-wrapper,
+	.form-error {
+		width: 100%;
+		max-width: 450px;
+	}
 }

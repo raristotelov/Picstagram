@@ -172,7 +172,9 @@ const UserPost = (props) => {
 
 			{userPostData.caption ? (
 				<div className='post-caption'>
-					<span className='post-caption-username'>{userPostAuthor.username}</span> {userPostData.caption}
+					<span className='post-caption-username'>{userPostAuthor.username}</span>
+
+					{` ${userPostData.caption}`}
 				</div>
 			) : null}
 

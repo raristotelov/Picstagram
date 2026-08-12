@@ -1,23 +1,27 @@
 .button-classname {
-	width: 120px;
+	min-width: 120px;
 	height: 40px;
+	padding: 0 20px;
 	box-sizing: border-box;
-	color: #FFFFFF;
-	background-color: #F64D4D;
+	font-size: 15px;
+	font-family: 'Mada';
+	color: var(--static-white);
+	background-color: var(--brand-red);
 	border: 1px solid transparent;
 	border-radius: 20px;
 }
 
 .button-classname:hover {
-	color: #F64D4D;
-	background-color: #FFFFFF;
-	border: 1px solid #F64D4D;
+	color: var(--brand-red);
+	background-color: var(--background-surface);
+	border: 1px solid var(--brand-red);
 	cursor: pointer;
 }
 
 .button-classname:disabled {
-	color: #FFFFFF;
-	background-color: #F64D4D;
-	cursor: pointer;
+	color: var(--static-white);
+	background-color: var(--brand-red);
+	border: 1px solid transparent;
+	cursor: not-allowed;
 	opacity: 0.5;
 }

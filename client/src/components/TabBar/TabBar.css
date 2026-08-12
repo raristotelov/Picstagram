@@ -1,0 +1,71 @@
+.tab-bar {
+	display: none;
+}
+
+.tab-bar-item {
+	box-sizing: border-box;
+	height: 54px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 2px;
+
+	text-decoration: none;
+	color: var(--text-primary);
+}
+
+/* The icon components render at 24px; the design specifies 30px. */
+.tab-bar-item svg {
+	width: 30px;
+	height: 30px;
+}
+
+.tab-bar-item-active {
+	color: var(--brand-red);
+	border-bottom: 2px solid var(--brand-red);
+}
+
+.tab-bar-label {
+	font-size: 12px;
+	font-family: 'Mada';
+	font-weight: 700;
+}
+
+.tab-bar-item-text {
+	font-size: 18px;
+	font-family: 'Mada';
+	font-weight: 700;
+}
+
+.tab-bar-avatar {
+	width: 30px;
+	height: 30px;
+	box-sizing: border-box;
+
+	border: 0.5px solid var(--text-muted);
+	border-radius: 50%;
+	background-color: var(--avatar-placeholder-disc);
+}
+
+@media (max-width: 639px) {
+	.tab-bar {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		z-index: 1;
+
+		box-sizing: border-box;
+		width: 100%;
+		height: var(--tab-bar-height);
+		padding: 0 48px;
+
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		border-top: 1px solid var(--border-divider);
+		background-color: var(--background-surface);
+	}
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 const useLocalStorage = (key, initialValue) => {
 	const [state, setState] = useState(() => {
@@ -13,15 +13,19 @@ const useLocalStorage = (key, initialValue) => {
 		return initialValue;
 	});
 
-	const setLocalStorageState = (value) => {
-		setState(value);
+	// Stable identity so callers can safely list it as an effect dependency.
+	const setLocalStorageState = useCallback(
+		(value) => {
+			setState(value);
 
-		if (value) {
-			localStorage.setItem(key, JSON.stringify(value));
-		} else {
-			localStorage.removeItem(key);
-		}
-	};
+			if (value) {
+				localStorage.setItem(key, JSON.stringify(value));
+			} else {
+				localStorage.removeItem(key);
+			}
+		},
+		[key]
+	);
 
 	return [state, setLocalStorageState];
 };

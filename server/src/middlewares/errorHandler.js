@@ -12,5 +12,11 @@ module.exports = (err, req, res, next) => {
 	// is treated as unexpected and hidden behind a generic message.
 	const message = err.isOperational ? err.message : 'Something went wrong';
 
-	res.status(statusCode).json({ error: message });
+	const body = { error: message };
+
+	if (err.isOperational && err.fields) {
+		body.fields = err.fields;
+	}
+
+	res.status(statusCode).json(body);
 };

@@ -149,3 +149,10 @@
 .logged-user-options:hover {
 	display: block;
 }
+
+/* Below 640 the TabBar carries navigation, so the header must not duplicate it. */
+@media (max-width: 639px) {
+	.navbar {
+		display: none;
+	}
+}
