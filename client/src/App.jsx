@@ -41,7 +41,6 @@ function App() {
 	const logoutHandler = (e) => {
 		e.preventDefault();
 
-		localStorage.removeItem('dcbyte-jwt');
 		setJwtToken(null);
 		navigate('/log-in');
 	};

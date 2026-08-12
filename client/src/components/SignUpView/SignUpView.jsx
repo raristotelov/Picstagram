@@ -9,7 +9,7 @@ import './SignUpView.css';
 const SignUpView = () => {
 	const navigate = useNavigate();
 
-	const signUpHandler = async (newUserData) => {
+	const signUpHandler = async ({ repeatPassword, ...newUserData }) => {
 		await signUp(newUserData);
 
 		navigate('/log-in');
