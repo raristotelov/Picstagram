@@ -6,6 +6,19 @@
 	font-family: 'Mada';
 }
 
+.reply-form {
+	margin-top: 8px;
+}
+
+.replies-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+
+	margin-top: 16px;
+	margin-left: 40px;
+}
+
 .commenter-account-details {
 	margin-left: 16px;
 }

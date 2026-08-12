@@ -12,6 +12,25 @@
 	color: #B5B5B5;
 }
 
+.caption-input {
+	width: 290px;
+	height: 60px;
+	margin-top: 16px;
+	margin-bottom: 16px;
+	padding: 8px;
+	box-sizing: border-box;
+	resize: none;
+
+	border: 1px solid #b5b5b5;
+	font-family: 'Mada';
+	font-size: 16px;
+	color: #4b4b4b;
+}
+
+.caption-input:focus {
+	outline: none;
+}
+
 .button-row {
 	width: 290px;
 	display: flex;

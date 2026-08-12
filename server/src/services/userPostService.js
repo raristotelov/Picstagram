@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const UserPostModel = require('../models/userPostModel');
 const UserModel = require('../models/userModel');
+const AppError = require('../utils/AppError');
 
 const getAllUserPosts = async (userId) => {
 	try {
@@ -9,13 +10,13 @@ const getAllUserPosts = async (userId) => {
 
 		return userPosts;
 	} catch (error) {
-		throw new Error('Something went wrong while trying get all posts of the user!');
+		throw new AppError('Could not load user posts', 500, { cause: error });
 	}
 };
 
 const addUserPost = async (postData, userId) => {
 	try {
-		const userPost = new UserPostModel({ imageIdentifier: postData.imageIdentifier, imageUrl: postData.imageUrl, userId });
+		const userPost = new UserPostModel({ imageIdentifier: postData.imageIdentifier, imageUrl: postData.imageUrl, caption: postData.caption, userId });
 
 		await userPost.save();
 
@@ -27,7 +28,7 @@ const addUserPost = async (postData, userId) => {
 
 		return userPost;
 	} catch (error) {
-		throw new Error('Something went wrong while trying save the user post to the DB!');
+		throw new AppError('Could not save the user post', 500, { cause: error });
 	}
 };
 
@@ -51,7 +52,7 @@ const getFollowedUsersPosts = async (userId) => {
 
 		return followedUsersPosts;
 	} catch (error) {
-		throw new Error('Something went wrong while trying save the user post to the DB!');
+		throw new AppError('Could not load followed users posts', 500, { cause: error });
 	}
 };
 
@@ -61,7 +62,7 @@ const likeUserPost = async ({ userPostId, userWhoLikedId }) => {
 
 		return updatedUserPostData;
 	} catch (error) {
-		throw new Error('Something went wrong while trying to like user!');
+		throw new AppError('Could not like the post', 500, { cause: error });
 	}
 };
 
@@ -71,7 +72,7 @@ const unlikeUserPost = async ({ userPostId, userWhoUnlikedId }) => {
 
 		return updatedUserPostData;
 	} catch (error) {
-		throw new Error('Something went wrong while trying to unlike user!');
+		throw new AppError('Could not unlike the post', 500, { cause: error });
 	}
 };
 

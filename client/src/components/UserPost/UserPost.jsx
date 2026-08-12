@@ -2,20 +2,21 @@ import { useState, useContext } from 'react';
 
 import Comment from '../Comment/Comment';
 import CommentIcon from '../icons/Comment';
-import ArrowUpIcon from '../icons/ArrowUp';
 import ArrowDownIcon from '../icons/ArrowDown';
 import HeartIcon from '../icons/Heart';
 
 import { likeUserPost, unlikeUserPost } from '../../services/userPostService';
+import { getComments, addComment } from '../../services/commentService';
 import LoggedInUserContext from '../../contexts/LoggedInUserContext';
 import Popup from '../Popup/Popup';
 
 import './UserPost.css';
 
 const UserPost = (props) => {
-	const [toggledCommentsSection] = useState(false);
 	const [isHeartPulsing, setIsHeartPulsing] = useState(false);
 	const [isCommentsPopupOpen, setIsCommentsPopupOpen] = useState(false);
+	const [comments, setComments] = useState([]);
+	const [newComment, setNewComment] = useState('');
 
 	const { userPostData } = props;
 
@@ -23,11 +24,7 @@ const UserPost = (props) => {
 
 	const { jwtToken, loggedInUser, setLoggedInUser } = useContext(LoggedInUserContext);
 
-	const toggleCommentsSection = () => {
-		// setToggledCommentsSection((state) => !state);
-
-		setIsCommentsPopupOpen(true);
-	};
+	const [commentsCount, setCommentsCount] = useState(userPostData.commentsCount || 0);
 
 	const triggerPulse = () => {
 		setIsHeartPulsing(true);
@@ -84,19 +81,59 @@ const UserPost = (props) => {
 		}
 	};
 
+	const loadComments = async () => {
+		try {
+			const fetchedComments = await getComments({ userPostId: userPostData._id, jwtToken });
+
+			setComments(fetchedComments);
+
+			const total = fetchedComments.reduce((sum, comment) => sum + 1 + (comment.replies ? comment.replies.length : 0), 0);
+			setCommentsCount(total);
+		} catch (error) {
+			console.log('Something went wrong while loading comments', error);
+		}
+	};
+
+	const openCommentsPopup = () => {
+		setIsCommentsPopupOpen(true);
+		loadComments();
+	};
+
 	const closeCommentsPopup = () => {
 		setIsCommentsPopupOpen(false);
 	};
 
+	const onAddCommentSubmit = async (e) => {
+		e.preventDefault();
+
+		if (!newComment.trim()) {
+			return;
+		}
+
+		try {
+			await addComment({ userPostId: userPostData._id, text: newComment, jwtToken });
+
+			setNewComment('');
+
+			await loadComments();
+		} catch (error) {
+			console.log('Something went wrong while adding a comment', error);
+		}
+	};
+
 	const loggedInUserHasLikedUserPost = userPostData.likes.includes(loggedInUser?._id);
 
-	const AddCommentInput = () => {
-		return (
-			<div className='add-comment-textarea-wrapper'>
-				<input type='text' className='add-comment-input' placeholder='Add a comment...' />
-			</div>
-		);
-	};
+	const addCommentForm = (
+		<form className='add-comment-textarea-wrapper' onSubmit={onAddCommentSubmit}>
+			<input
+				type='text'
+				className='add-comment-input'
+				placeholder='Add a comment...'
+				value={newComment}
+				onChange={(e) => setNewComment(e.target.value)}
+			/>
+		</form>
+	);
 
 	return (
 		<div className='post-wrapper'>
@@ -133,58 +170,45 @@ const UserPost = (props) => {
 				</span>
 			</div>
 
+			{userPostData.caption ? (
+				<div className='post-caption'>
+					<span className='post-caption-username'>{userPostAuthor.username}</span> {userPostData.caption}
+				</div>
+			) : null}
+
 			<div className='comments-section'>
-				<div className='comments-section-toggle-wrapper' onClick={toggleCommentsSection}>
+				<div className='comments-section-toggle-wrapper' onClick={openCommentsPopup}>
 					<div className='comments-count-section'>
 						<CommentIcon />
 
-						<span>5 comments</span>
+						<span>
+							{commentsCount}
+
+							{commentsCount === 1 ? ' comment' : ' comments'}
+						</span>
 					</div>
 
-					<button className='toggle-comments-btn'>{toggledCommentsSection ? <ArrowUpIcon /> : <ArrowDownIcon />}</button>
+					<button className='toggle-comments-btn'>
+						<ArrowDownIcon />
+					</button>
 				</div>
-
-				{toggledCommentsSection ? (
-					<div className='comments-wrapper'>
-						<Comment
-							text={`This is a test comment which is really long because 
-								it is a test comment which is really long because it is a test comment which is really long`}
-						/>
-					</div>
-				) : null}
 			</div>
 
-			<AddCommentInput />
+			{addCommentForm}
 
 			{isCommentsPopupOpen ? (
 				<Popup onClosePopupClick={closeCommentsPopup}>
 					<div className='comments-wrapper'>
-						<Comment
-							text={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-								sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-								Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}
-						/>
-
-						<Comment
-							text={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
-								labore et dolore magna aliqua. Ut enim ad minim veniam, 
-								quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}
-						/>
-
-						<Comment
-							text={`Lorem ipsum dolor sit amet, 
-								consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-								Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}
-						/>
-
-						<Comment
-							text={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-								sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-								Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}
-						/>
+						{comments.length ? (
+							comments.map((comment) => (
+								<Comment key={comment._id} comment={comment} userPostId={userPostData._id} onReload={loadComments} />
+							))
+						) : (
+							<p className='no-comments-text'>No comments yet. Be the first to comment.</p>
+						)}
 					</div>
 
-					<AddCommentInput />
+					{addCommentForm}
 				</Popup>
 			) : null}
 		</div>

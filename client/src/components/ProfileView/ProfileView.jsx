@@ -1,11 +1,9 @@
 import { useState, useEffect, useContext, useMemo } from 'react';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { v4 } from 'uuid';
 import { useParams } from 'react-router-dom';
 
-import { storage } from '../../firebase';
 import LoggedInUserContext from '../../contexts/LoggedInUserContext';
 import { addUserPost } from '../../services/userPostService';
+import { uploadImageToCloudinary } from '../../services/cloudinaryService';
 import { getUsersProfileData, updateUserProfileData, followUser, unfollowUser } from '../../services/userService';
 
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
@@ -16,25 +14,6 @@ import EditProfileForm from '../EditProfileForm/EditProfileForm';
 import PlusIcon from '../icons/Plus';
 
 import './ProfileView.css';
-
-const uploadImageToFirebaseStorage = async (imageData) => {
-	try {
-		const imageIdentifier = `/userUploadedImages/${imageData.name + v4()}`;
-
-		const imageRef = ref(storage, imageIdentifier);
-
-		await uploadBytes(imageRef, imageData);
-
-		const imageUrl = await getDownloadURL(imageRef);
-
-		const createdImage = { imageIdentifier, imageUrl };
-
-		return createdImage;
-	} catch (error) {
-		// TODO add some error handling
-		console.log('Something went wrong while trying to uploade image');
-	}
-};
 
 const ProfileView = (props) => {
 	const [userPosts, setUserPosts] = useState([]);
@@ -69,20 +48,15 @@ const ProfileView = (props) => {
 		setIsAddPicturePopupOpen(false);
 	};
 
-	const addImagePostHandler = async (uploadedImage) => {
+	const addImagePostHandler = async (uploadedImage, caption) => {
 		if (uploadedImage === null) {
 			return;
 		}
 
 		try {
-			const imageIdentifier = `/userUploadedImages/${uploadedImage.name + v4()}`;
-			const imageRef = ref(storage, imageIdentifier);
-			await uploadBytes(imageRef, uploadedImage);
-			const imageUrl = await getDownloadURL(imageRef);
+			const createdImage = await uploadImageToCloudinary(uploadedImage);
 
-			const createdImage = { imageIdentifier, imageUrl };
-
-			const savedUserPost = await addUserPost(createdImage, jwtToken);
+			const savedUserPost = await addUserPost({ ...createdImage, caption }, jwtToken);
 
 			setUserPosts((state) => [...state, savedUserPost]);
 
@@ -106,7 +80,7 @@ const ProfileView = (props) => {
 			let updatedProfileData = { ...userUpdatedData };
 
 			if (updatedProfileData.profilePicture) {
-				const createdImageForProflePicrture = await uploadImageToFirebaseStorage(updatedProfileData.profilePicture);
+				const createdImageForProflePicrture = await uploadImageToCloudinary(updatedProfileData.profilePicture);
 				updatedProfileData = {
 					...updatedProfileData,
 					profilePicture: createdImageForProflePicrture,

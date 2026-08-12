@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const UserModel = require('../models/userModel');
 const UserPostModel = require('../models/userPostModel');
 const constants = require('../config/constants');
+const AppError = require('../utils/AppError');
+const commentService = require('./commentService');
 
 const necessaryUserFields = ['_id', 'email', 'username', 'bio', 'profilePic', 'posts', 'followers', 'following', 'followedUsersPosts'];
 
@@ -37,7 +39,11 @@ const signUp = async ({ email, username, password }) => {
 
 		return user;
 	} catch (error) {
-		throw new Error('Something went wrong while trying to sign up!');
+		if (error.code === 11000) {
+			throw new AppError('Email or username already in use', 409, { cause: error });
+		}
+
+		throw new AppError('Could not sign up', 500, { cause: error });
 	}
 };
 
@@ -45,10 +51,14 @@ const login = async ({ email, password }) => {
 	try {
 		const dbUser = await UserModel.findOne({ email });
 
+		if (!dbUser) {
+			throw new AppError('Wrong email or password', 401);
+		}
+
 		// const passwordIsCorrect = await bcrypt.compare(password, dbUser.password);
 
 		// if (!passwordIsCorrect) {
-		// 	throw new Error('Wrong email or password!');
+		// 	throw new AppError('Wrong email or password', 401);
 		// }
 
 		const claim = {
@@ -62,8 +72,11 @@ const login = async ({ email, password }) => {
 
 		return loggedInUserJwt;
 	} catch (error) {
-		console.log(error);
-		throw new Error('Something went wrong while trying to login!');
+		if (error instanceof AppError) {
+			throw error;
+		}
+
+		throw new AppError('Could not log in', 500, { cause: error });
 	}
 };
 
@@ -83,7 +96,15 @@ const getFollowedUsersPostsByUserIds = async ({ userIds }) => {
 		const allFollowedUsers = users.map((user) => user.following).flat();
 
 		// Get all user posts of the followed users
-		const followedUsersPosts = await UserPostModel.find({ userId: { $in: allFollowedUsers } }).populate({ path: 'userId' });
+		const followedUsersPostDocs = await UserPostModel.find({ userId: { $in: allFollowedUsers } }).populate({ path: 'userId' });
+
+		// Attach a comment count to each post for the feed cards
+		const postIds = followedUsersPostDocs.map((post) => post._id);
+		const commentCounts = await commentService.getCommentCountsForPosts(postIds);
+		const followedUsersPosts = followedUsersPostDocs.map((post) => ({
+			...post.toObject(),
+			commentsCount: commentCounts[post._id.toString()] || 0,
+		}));
 
 		const userToUserPostsMap = {};
 
@@ -105,7 +126,11 @@ const getFollowedUsersPostsByUserIds = async ({ userIds }) => {
 
 		return usersWithFollowedUsersPosts;
 	} catch (error) {
-		throw new Error('Something went wrong while trying to get followed users posts!');
+		if (error instanceof AppError) {
+			throw error;
+		}
+
+		throw new AppError('Could not load followed users posts', 500, { cause: error });
 	}
 };
 
@@ -125,8 +150,11 @@ const getUsersProfileDataByUserIds = async ({ userIds }) => {
 
 		return mappedUsers;
 	} catch (error) {
-		console.log({ error });
-		throw new Error('Something went wrong while trying to get users accound data by user ids!');
+		if (error instanceof AppError) {
+			throw error;
+		}
+
+		throw new AppError('Could not load users profile data', 500, { cause: error });
 	}
 };
 
@@ -139,7 +167,7 @@ const getUsersProfileDataBySearchWord = async ({ searchWord }) => {
 
 		return users;
 	} catch (error) {
-		throw new Error('Something went wrong while trying to get users account data by search word!');
+		throw new AppError('Could not search users', 500, { cause: error });
 	}
 };
 
@@ -175,8 +203,7 @@ const updateUserProfileData = async (userId, updatedProfileData) => {
 
 		return updatedUserData;
 	} catch (error) {
-		console.log(error);
-		throw new Error('Something went wrong while trying to update user accound data!');
+		throw new AppError('Could not update user profile', 500, { cause: error });
 	}
 };
 
@@ -190,7 +217,7 @@ const followUser = async (userId, userIdToFollow) => {
 
 		return updatedUserData;
 	} catch (error) {
-		throw new Error('Something went wrong while trying to follow user!');
+		throw new AppError('Could not follow user', 500, { cause: error });
 	}
 };
 
@@ -204,7 +231,7 @@ const unfollowUser = async (userId, userIdToUnfollow) => {
 
 		return updatedUserData;
 	} catch (error) {
-		throw new Error('Something went wrong while trying to follow user!');
+		throw new AppError('Could not unfollow user', 500, { cause: error });
 	}
 };
 

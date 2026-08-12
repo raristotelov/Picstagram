@@ -12,6 +12,9 @@ const UserPostSchema = new mongoose.Schema({
 		required: true,
 		unique: true,
 	},
+	caption: {
+		type: String,
+	},
 	userId: {
 		type: 'ObjectId',
 		ref: 'User',
