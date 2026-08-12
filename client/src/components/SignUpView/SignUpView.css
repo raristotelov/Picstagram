@@ -1,9 +1,17 @@
 .sign-up-wrapper {
+	/* .routes-wrapper is display: flex, so this must fill the row rather than shrink to content. */
+	width: 100%;
 	min-height: 100vh;
-	padding-top: var(--header-height);
+	padding: var(--header-height) 16px 0;
 	box-sizing: border-box;
 
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+@media (max-width: 639px) {
+	.sign-up-wrapper {
+		padding-bottom: var(--tab-bar-height);
+	}
 }

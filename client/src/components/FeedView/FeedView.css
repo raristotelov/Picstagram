@@ -1,8 +1,8 @@
 .feed-posts-wrapper {
-    padding-top: 100px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
- 	justify-content: center;
+	padding-top: 100px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	justify-content: center;
 }

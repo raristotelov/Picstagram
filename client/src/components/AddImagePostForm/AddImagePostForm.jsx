@@ -34,12 +34,7 @@ const AddImagePostForm = ({ addImagePostHandler }) => {
 				imageHeigth={320}
 			/>
 
-			<textarea
-				className='caption-input'
-				placeholder='Write a caption...'
-				value={caption}
-				onChange={(e) => setCaption(e.target.value)}
-			/>
+			<textarea className='caption-input' placeholder='Write a caption...' value={caption} onChange={(e) => setCaption(e.target.value)} />
 
 			<div className='button-row'>
 				<Button type='submit' label='Submit' />

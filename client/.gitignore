@@ -8,6 +8,11 @@
 # testing
 /coverage
 
+# cypress run artefacts — specs and config are committed, output is not
+/cypress/screenshots
+/cypress/videos
+/cypress/downloads
+
 # production
 /build
 

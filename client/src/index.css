@@ -14,8 +14,9 @@
 	--avatar-placeholder-figure: #9a9a9a;
 	--feedback-error: #c62828;
 
-	/* MainHeader is position: fixed, so page content must reserve this much space. */
+	/* MainHeader and TabBar are position: fixed, so page content must reserve this space. */
 	--header-height: 54px;
+	--tab-bar-height: 56px;
 }
 
 /* Applied only once a theme is set, so nothing changes until the switch exists. */
@@ -107,4 +108,12 @@ code {
 .auth-input-wrapper input.has-error,
 .auth-input-wrapper input.has-error:focus {
 	border-color: var(--feedback-error);
+}
+
+@media (max-width: 639px) {
+	.auth-input-wrapper,
+	.form-error {
+		width: 100%;
+		max-width: 450px;
+	}
 }

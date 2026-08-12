@@ -1,5 +1,7 @@
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import LoggedInUserContext from '../../contexts/LoggedInUserContext';
 import { signUp } from '../../services/userService';
 
 import SignUpForm from '../SignUpForm/SignUpForm';
@@ -7,12 +9,14 @@ import SignUpForm from '../SignUpForm/SignUpForm';
 import './SignUpView.css';
 
 const SignUpView = () => {
+	const { setJwtToken } = useContext(LoggedInUserContext);
 	const navigate = useNavigate();
 
 	const signUpHandler = async ({ repeatPassword, ...newUserData }) => {
-		await signUp(newUserData);
+		const newUserJwt = await signUp(newUserData);
 
-		navigate('/log-in');
+		setJwtToken(newUserJwt);
+		navigate('/user-feed');
 	};
 
 	return (

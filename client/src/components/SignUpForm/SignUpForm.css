@@ -48,3 +48,17 @@
 	text-decoration: underline;
 	opacity: 0.7;
 }
+
+@media (max-width: 639px) {
+	.sign-up-section {
+		width: 100%;
+		max-width: 600px;
+		gap: 20px;
+		padding: 28px 24px;
+	}
+
+	.sign-up-form {
+		padding: 0;
+		gap: 20px;
+	}
+}
