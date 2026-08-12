@@ -6,19 +6,21 @@ How the Figma file is organised and the layout rules behind it. Tokens live in *
 
 **Social Media App Design** — four pages:
 
-| Page | Width | Frames |
-|------|-------|--------|
-| Desktop | 1440×1024 | 32 (16 light + 16 dark) |
-| Tablet | 768×1024 | 34 (17 light + 17 dark) |
-| Mobile | 390×844 | 32 (16 light + 16 dark) |
-| Components | — | shared + per-breakpoint components |
+| Page | Canvas | CSS range | Frames |
+|------|--------|-----------|--------|
+| Desktop | 1440×1024 | 1280px and up | 32 (16 light + 16 dark) |
+| Tablet | 768×1024 | 640–1279px | 34 (17 light + 17 dark) |
+| Mobile | 390×844 | below 640px | 32 (16 light + 16 dark) |
+| Components | — | — | shared + per-breakpoint components |
+
+The CSS ranges live here rather than in the Figma page names — see [Breakpoints](#breakpoints) for why 640 is the line.
 
 ### Page structure
 
 Every breakpoint page has the same shape, so they can be compared side by side:
 
 - One **section per flow**, laid left to right: **Auth → Popular → Feed → Profile**.
-- Each flow exists twice — a **Light row** and a **Dark row** beneath it, named `Feed — Light` / `Feed — Dark`.
+- Each flow exists twice — a **Light row** and a **Dark row** beneath it. Sections carry the canvas width: `Feed — 1440px — Light` / `Feed — 1440px — Dark`, and `— 768px —` / `— 390px —` on the other pages.
 - Within a section, the base view first and its **states stacked vertically** beneath it — empty state, other-user, popups, scrolled.
 - Frames named by view and state: `Profile View – Other User`, `Feed View – Comments`. Tablet frames carry the width: `Profile View – 768`.
 
@@ -30,9 +32,16 @@ The duplication is deliberate, for side-by-side visibility. The cost is that **s
 
 ## Breakpoints
 
-- **1440** desktop · **768** tablet portrait · **390** mobile.
+**Canvases** — the widths to design and check at: **1440** desktop · **768** tablet portrait · **390** mobile.
+
+**CSS ranges** — where the code actually switches: **mobile below 640** · **tablet 640–1279** · **desktop 1280 and up**.
+
+Canvases are not breakpoints. 1440 as a breakpoint would hand a 1280 laptop the tablet layout.
+
+- 640 clears the widest phone in portrait (~430 on an iPhone Pro Max, ~412 on a Pixel) with headroom, so landscape phones, foldables and every iPad in portrait — including the 744 mini — get tablet rules rather than phone rules.
 - Landscape tablet needs no frames — at ~1024 the 900px content column still fits with 62px margins, so the desktop design applies.
 - Think in widths, not devices: a tablet in landscape is the same as a resized desktop window.
+- A component's internal spacing keys off **its own width, not the viewport**, wherever the two can disagree — a 600px card must not inherit phone spacing just because the window is narrow. Use a container query for that, not a media query.
 
 ## Layout per breakpoint
 

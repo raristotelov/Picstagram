@@ -1,5 +1,3 @@
-const mongoose = require('mongoose');
-
 const UserPostModel = require('../models/userPostModel');
 const UserModel = require('../models/userModel');
 const AppError = require('../utils/AppError');
@@ -16,11 +14,16 @@ const getAllUserPosts = async (userId) => {
 
 const addUserPost = async (postData, userId) => {
 	try {
-		const userPost = new UserPostModel({ imageIdentifier: postData.imageIdentifier, imageUrl: postData.imageUrl, caption: postData.caption, userId });
+		const userPost = new UserPostModel({
+			imageIdentifier: postData.imageIdentifier,
+			imageUrl: postData.imageUrl,
+			caption: postData.caption,
+			userId,
+		});
 
 		await userPost.save();
 
-		const result = await UserModel.findByIdAndUpdate(userId, {
+		await UserModel.findByIdAndUpdate(userId, {
 			$addToSet: {
 				posts: userPost._id,
 			},

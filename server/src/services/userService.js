@@ -29,6 +29,11 @@ const getNeccessaryUserData = (user) => {
 	};
 };
 
+const signAuthToken = ({ _id, username }) =>
+	JWT.sign({ userId: _id, username }, process.env.JWT_SECRET, {
+		expiresIn: constants.JWT_EXPIRY,
+	});
+
 const signUp = async ({ email, username, password }) => {
 	try {
 		if (typeof password !== 'string' || password.length < constants.MIN_PASSWORD_LENGTH) {
@@ -49,11 +54,7 @@ const signUp = async ({ email, username, password }) => {
 
 		await user.save();
 
-		return {
-			_id: user._id,
-			email: user.email,
-			username: user.username,
-		};
+		return signAuthToken(user);
 	} catch (error) {
 		if (error instanceof AppError) {
 			throw error;
@@ -103,16 +104,7 @@ const login = async ({ email, password }) => {
 			throw new AppError('Wrong email or password', 401);
 		}
 
-		const claim = {
-			userId: dbUser._id,
-			username: dbUser.username,
-		};
-
-		const loggedInUserJwt = JWT.sign(claim, process.env.JWT_SECRET, {
-			expiresIn: constants.JWT_EXPIRY,
-		});
-
-		return loggedInUserJwt;
+		return signAuthToken(dbUser);
 	} catch (error) {
 		if (error instanceof AppError) {
 			throw error;
