@@ -20,6 +20,12 @@ const UserSchema = new mongoose.Schema({
 	bio: {
 		type: String,
 	},
+	// A string rather than a boolean so 'system' can be added without a migration.
+	theme: {
+		type: String,
+		enum: ['light', 'dark'],
+		default: 'light',
+	},
 	profilePicture: {
 		type: 'ObjectId',
 		ref: 'UserImage',

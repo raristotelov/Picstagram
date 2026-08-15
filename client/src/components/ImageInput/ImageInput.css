@@ -1,6 +1,6 @@
 .image-input-wrapper {
 	margin-bottom: 20px;
-	border: 1px solid #b5b5b5;
+	border: 1px solid var(--text-muted);
 
 	display: flex;
 	justify-content: center;
@@ -32,7 +32,7 @@
 .image-input-wrapper label span {
 	font-family: 'Mada';
 	font-size: 22px;
-	color: #b5b5b5;
+	color: var(--text-muted);
 	font-weight: bold;
 }
 
@@ -42,7 +42,7 @@
 
 .preview-wrapper {
 	margin-bottom: 20px;
-	border: 1px solid #b5b5b5;
+	border: 1px solid var(--text-muted);
 }
 
 .preview-wrapper img {
@@ -64,7 +64,7 @@
 .image-change-button {
 	display: none;
 	position: absolute;
-	background-color: #ffffff;
+	background-color: var(--background-surface);
 	transform: translateY(-105%);
 	opacity: 80%;
 	outline: none;
@@ -74,7 +74,7 @@
 	align-items: center;
 	font-family: 'Mada';
 	font-size: 20px;
-	color: #b5b5b5;
+	color: var(--text-muted);
 	font-weight: bold;
 }
 

@@ -1,34 +1,44 @@
+/* Content column is 900 at desktop and 720 at tablet; in both the three post tiles
+   are (column - 2 gutters) / 3 with a 12px gutter, so one sizing rule serves both. */
+/* The 24px gutter comes from the 768 frame (768 - 2x24 = the 720 column) and is held
+   as a calc so the column shrinks with the viewport instead of reaching the edges
+   between 600 and 768. */
 .profile-view-wrapper {
-	padding-top: 100px;
+	width: calc(100% - 48px);
+	max-width: 900px;
+	padding: calc(var(--header-height) + 46px) 0 40px;
+	box-sizing: border-box;
+
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	max-width: 1920px;
-	width: 100%;
 
 	font-family: 'Mada';
 }
 
 .profile-view-wrapper .profile-posts-wrapper {
-	width: 900px;
+	width: 100%;
+	margin-top: 24px;
+
 	display: flex;
-	flex-direction: row;
-	justify-content: flex-start;
 	flex-wrap: wrap;
+	justify-content: flex-start;
+	gap: 12px;
 }
 
 .add-post-button {
-	height: 322px;
-	width: 290px;
-	margin: 5px;
+	width: calc((100% - 24px) / 3);
+	aspect-ratio: 1;
+	box-sizing: border-box;
 
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	gap: 15px;
 
-	border: 1px solid #b5b5b5;
-	background-color: #ffffff;
+	border: 1px solid var(--text-muted);
+	background-color: var(--background-surface);
 }
 
 .add-post-button:hover {
@@ -43,15 +53,51 @@
 	opacity: 0.5;
 }
 
+/* 80 and 48 are deliberate deviations from the frames' 90 and 40 — the plus read too
+   large on tablet and too small on mobile. Designs to be updated to match. */
 .add-post-button svg {
-	width: 90px;
-	height: 90px;
-	margin-bottom: 15px;
+	width: 80px;
+	height: 80px;
 }
 
 .add-post-button span {
 	font-family: 'Mada';
-	font-size: 22px;
-	color: #b5b5b5;
+	font-size: 20px;
+	color: var(--text-primary);
 	font-weight: bold;
+}
+
+@media (min-width: 600px) and (max-width: 1279px) {
+	.profile-view-wrapper {
+		max-width: 720px;
+	}
+}
+
+/* At 390 the grid is full-bleed with 2px gutters, and the add tile carries only
+   the plus — the frame has no label on it. */
+@media (max-width: 599px) {
+	.profile-view-wrapper {
+		width: 100%;
+		max-width: none;
+		padding: calc(var(--header-height) + 16px) 0 calc(var(--tab-bar-height) + 24px);
+	}
+
+	.profile-view-wrapper .profile-posts-wrapper {
+		margin-top: 12px;
+		gap: 2px;
+	}
+
+	.add-post-button {
+		width: calc((100% - 4px) / 3);
+		gap: 0;
+	}
+
+	.add-post-button svg {
+		width: 56px;
+		height: 56px;
+	}
+
+	.add-post-button span {
+		display: none;
+	}
 }

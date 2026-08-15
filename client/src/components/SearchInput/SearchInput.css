@@ -1,10 +1,20 @@
 .search-input-wrapper {
 	position: relative;
 	width: 280px;
+	max-width: 100%;
 	padding: 0px 16px;
+	box-sizing: border-box;
 
-	border: 1px solid #c0c0c0;
+	border: 1px solid var(--border-divider);
 	border-radius: 20px;
+}
+
+/* 220 is the field's width on the 768 frame. max-width above lets it shrink further
+   below 768, where the tablet composition needs more room than the viewport has. */
+@media (min-width: 600px) and (max-width: 1279px) {
+	.search-input-wrapper {
+		width: 220px;
+	}
 }
 
 .search-input {
@@ -14,11 +24,11 @@
 	border: none;
 	font-size: 14px;
 	font-family: 'Mada';
-	color: #4b4b4b;
+	color: var(--text-primary);
 }
 
 .search-input::placeholder {
-	color: #4b4b4b;
+	color: var(--text-primary);
 }
 
 .search-input:focus {
@@ -32,8 +42,8 @@
 	left: 2px;
 	top: 40px;
 
-	background-color: #ffffff;
-	border: 1px solid #b5b5b5;
+	background-color: var(--background-surface);
+	border: 1px solid var(--text-muted);
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 
@@ -44,12 +54,12 @@
 .search-option {
 	padding: 6px;
 
-	color: #b5b5b5;
+	color: var(--text-muted);
 	font-size: 20px;
 	text-decoration: none;
 }
 
 .search-option:hover {
-	background-color: #b5b5b5;
-	color: #ffffff;
+	background-color: var(--text-muted);
+	color: var(--static-white);
 }

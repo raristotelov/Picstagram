@@ -21,19 +21,19 @@
 	}
 
 	::-webkit-scrollbar-thumb {
-		background: #dbdbdb;
+		background: var(--border-card);
 		border-radius: 4px;
 	}
 
 	::-webkit-scrollbar-thumb:hover {
-		background: #c0c0c0;
+		background: var(--border-divider);
 	}
 }
 
 .popup-body {
 	position: absolute;
-	background: #ffffff;
-	border: 3px solid #b5b5b5;
+	background: var(--background-surface);
+	border: 3px solid var(--text-muted);
 	padding: 10px;
 }
 
@@ -44,7 +44,7 @@
 
 .close-btn-wrapper button {
 	border: none;
-	background-color: #ffffff;
+	background-color: var(--background-surface);
 }
 
 .close-btn-wrapper button:hover {

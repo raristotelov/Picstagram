@@ -110,7 +110,7 @@ code {
 	border-color: var(--feedback-error);
 }
 
-@media (max-width: 639px) {
+@media (max-width: 599px) {
 	.auth-input-wrapper,
 	.form-error {
 		width: 100%;

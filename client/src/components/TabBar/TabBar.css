@@ -45,11 +45,9 @@
 	box-sizing: border-box;
 
 	border: 0.5px solid var(--text-muted);
-	border-radius: 50%;
-	background-color: var(--avatar-placeholder-disc);
 }
 
-@media (max-width: 639px) {
+@media (max-width: 599px) {
 	.tab-bar {
 		position: fixed;
 		bottom: 0;

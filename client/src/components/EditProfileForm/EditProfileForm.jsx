@@ -28,7 +28,7 @@ const EditProfileForm = ({ userData, editProfileData, onCancelClick }) => {
 			bio: userData.bio ? userData.bio : '',
 			password: '',
 		},
-		editProfileDataHandler
+		editProfileDataHandler,
 	);
 
 	return (

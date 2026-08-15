@@ -9,7 +9,7 @@
 .add-image-post-form h1 {
 	font-size: 28px;
 	font-family: 'Mada';
-	color: #b5b5b5;
+	color: var(--text-muted);
 }
 
 .caption-input {
@@ -21,10 +21,10 @@
 	box-sizing: border-box;
 	resize: none;
 
-	border: 1px solid #b5b5b5;
+	border: 1px solid var(--text-muted);
 	font-family: 'Mada';
 	font-size: 16px;
-	color: #4b4b4b;
+	color: var(--text-primary);
 }
 
 .caption-input:focus {

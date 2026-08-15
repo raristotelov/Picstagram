@@ -39,7 +39,7 @@ const SearchInput = (props) => {
 				closeSearchDropdown();
 			}
 		},
-		[openSearchDropdown, closeSearchDropdown, searchedText]
+		[openSearchDropdown, closeSearchDropdown, searchedText],
 	);
 
 	useEffect(() => {

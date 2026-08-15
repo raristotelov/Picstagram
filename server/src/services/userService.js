@@ -7,9 +7,17 @@ const constants = require('../config/constants');
 const AppError = require('../utils/AppError');
 const commentService = require('./commentService');
 
-const necessaryUserFields = ['_id', 'email', 'username', 'bio', 'profilePic', 'posts', 'followers', 'following', 'followedUsersPosts'];
+const necessaryUserFields = ['_id', 'email', 'username', 'bio', 'theme', 'profilePicture', 'posts', 'followers', 'following', 'followedUsersPosts'];
 
-// This function is used to get user fields when user profile is opened
+const signAuthToken = ({ _id, username }) =>
+	JWT.sign({ userId: _id, username }, process.env.JWT_SECRET, {
+		expiresIn: constants.JWT_EXPIRY,
+	});
+
+// This function is used to get user fields when user profile is opened.
+// The token must come from signAuthToken so every endpoint issues the same shape —
+// signing the user object here produced a token carrying `_id` but no `userId`,
+// which the client could not restore a session from.
 const getNeccessaryUserData = (user) => {
 	const userObject = {};
 
@@ -19,20 +27,11 @@ const getNeccessaryUserData = (user) => {
 		}
 	}
 
-	const jwt = JWT.sign(userObject, process.env.JWT_SECRET, {
-		expiresIn: constants.JWT_EXPIRY,
-	});
-
 	return {
 		user: userObject,
-		jwt,
+		jwt: signAuthToken(user),
 	};
 };
-
-const signAuthToken = ({ _id, username }) =>
-	JWT.sign({ userId: _id, username }, process.env.JWT_SECRET, {
-		expiresIn: constants.JWT_EXPIRY,
-	});
 
 const signUp = async ({ email, username, password }) => {
 	try {
@@ -171,7 +170,7 @@ const getFollowedUsersPostsByUserIds = async ({ userIds }) => {
 const getUsersProfileDataByUserIds = async ({ userIds }) => {
 	try {
 		const usersResult = await UserModel.find({ _id: { $in: userIds } })
-			.select({ _id: 1, username: 1, email: 1, posts: 1, bio: 1, profilePicture: 1, following: 1, followers: 1 })
+			.select({ _id: 1, username: 1, email: 1, posts: 1, bio: 1, theme: 1, profilePicture: 1, following: 1, followers: 1 })
 			.populate({ path: 'posts' })
 			.populate({ path: 'profilePicture' });
 
@@ -243,7 +242,11 @@ const updateUserProfileData = async (userId, updatedProfileData) => {
 
 const followUser = async (userId, userIdToFollow) => {
 	try {
-		const currentlyLoggedUser = await UserModel.findOneAndUpdate({ _id: userId }, { $push: { following: userIdToFollow } }, { new: true });
+		const currentlyLoggedUser = await UserModel.findOneAndUpdate(
+			{ _id: userId },
+			{ $push: { following: userIdToFollow } },
+			{ new: true },
+		).populate('profilePicture');
 
 		await UserModel.updateOne({ _id: userIdToFollow }, { $push: { followers: userId } }, { new: true });
 
@@ -257,7 +260,11 @@ const followUser = async (userId, userIdToFollow) => {
 
 const unfollowUser = async (userId, userIdToUnfollow) => {
 	try {
-		const currentlyLoggedUser = await UserModel.findOneAndUpdate({ _id: userId }, { $pull: { following: userIdToUnfollow } }, { new: true });
+		const currentlyLoggedUser = await UserModel.findOneAndUpdate(
+			{ _id: userId },
+			{ $pull: { following: userIdToUnfollow } },
+			{ new: true },
+		).populate('profilePicture');
 
 		await UserModel.updateOne({ _id: userIdToUnfollow }, { $pull: { followers: userId } }, { new: true });
 
