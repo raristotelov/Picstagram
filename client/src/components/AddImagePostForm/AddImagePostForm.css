@@ -1,30 +1,62 @@
+/* Geometry from the 476x601 frame: image input at 111, caption at 427, buttons at
+   521, 40px to the bottom edge. */
 .add-image-post-form {
-	height: 500px;
-	width: 450px;
+	width: 476px;
+	padding: 0 92px 40px;
+	box-sizing: border-box;
+
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+
+	font-family: 'Mada';
 }
 
-.add-image-post-form h1 {
-	font-size: 28px;
-	font-family: 'Mada';
-	color: var(--text-muted);
+.add-image-post-image-wrapper {
+	margin-top: 21px;
+}
+
+/* ImageInput ships a 20px bottom margin and content-box sizing; the frame spaces the
+   fields itself and puts the 1px stroke inside the 292x280 box. */
+.add-image-post-image-wrapper .image-input-wrapper,
+.add-image-post-image-wrapper .preview-wrapper {
+	width: 292px;
+	height: 280px;
+	margin-bottom: 0;
+	box-sizing: border-box;
+	border-radius: 12px;
+}
+
+.add-image-post-image-wrapper .preview-wrapper img,
+.add-image-post-image-wrapper .image-change-button {
+	width: 100%;
+	height: 100%;
+}
+
+.add-image-post-image-wrapper.has-error .image-input-wrapper {
+	border-color: var(--feedback-error);
 }
 
 .caption-input {
 	width: 290px;
-	height: 60px;
-	margin-top: 16px;
-	margin-bottom: 16px;
-	padding: 8px;
+	height: 54px;
+	margin-top: 36px;
+	padding: 12px;
 	box-sizing: border-box;
+	display: block;
 	resize: none;
 
 	border: 1px solid var(--text-muted);
+	border-radius: 12px;
+	background-color: var(--background-surface);
 	font-family: 'Mada';
 	font-size: 16px;
 	color: var(--text-primary);
+}
+
+.caption-input::placeholder {
+	color: var(--text-muted);
+	opacity: 1;
 }
 
 .caption-input:focus {
@@ -32,7 +64,47 @@
 }
 
 .button-row {
-	width: 290px;
+	margin-top: 40px;
+
 	display: flex;
-	justify-content: space-between;
+	gap: 50px;
+}
+
+/* The 390 frame: 16px gutters, a taller 320 image box and 72 caption, and the actions
+   pinned 32px above the bottom edge. */
+@media (max-width: 599px) {
+	.add-image-post-form {
+		width: 100%;
+		height: calc(100% - 54px);
+		padding: 0 16px 32px;
+	}
+
+	.add-image-post-image-wrapper {
+		width: 100%;
+		margin-top: 32px;
+	}
+
+	.add-image-post-image-wrapper .image-input-wrapper,
+	.add-image-post-image-wrapper .preview-wrapper {
+		width: 100%;
+		height: 320px;
+	}
+
+	.caption-input {
+		width: 100%;
+		height: 72px;
+		margin-top: 20px;
+	}
+
+	.button-row {
+		width: 100%;
+		margin-top: auto;
+
+		gap: 12px;
+	}
+
+	.button-row button {
+		flex: 1 1 0;
+		min-width: 0;
+	}
 }

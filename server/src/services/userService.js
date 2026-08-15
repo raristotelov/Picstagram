@@ -33,6 +33,39 @@ const getNeccessaryUserData = (user) => {
 	};
 };
 
+// Mongoose reports schema violations and duplicate keys as generic errors. Both have to
+// reach the client as field errors so a form can point at the offending input, and both
+// sign-up and profile updates write the same unique fields.
+const asFieldError = (error) => {
+	if (error.name === 'ValidationError') {
+		const fields = {};
+
+		Object.keys(error.errors).forEach((path) => {
+			fields[path] = error.errors[path].message;
+		});
+
+		return new AppError(Object.values(fields).join(', '), 400, { cause: error, fields });
+	}
+
+	if (error.code === 11000) {
+		const duplicatedField = Object.keys(error.keyPattern || {})[0];
+
+		const duplicateMessages = {
+			email: 'This email is already registered',
+			username: 'This username is taken',
+		};
+
+		const message = duplicateMessages[duplicatedField] || 'Email or username already in use';
+
+		return new AppError(message, 409, {
+			cause: error,
+			fields: duplicatedField ? { [duplicatedField]: message } : undefined,
+		});
+	}
+
+	return null;
+};
+
 const signUp = async ({ email, username, password }) => {
 	try {
 		if (typeof password !== 'string' || password.length < constants.MIN_PASSWORD_LENGTH) {
@@ -59,30 +92,10 @@ const signUp = async ({ email, username, password }) => {
 			throw error;
 		}
 
-		if (error.name === 'ValidationError') {
-			const fields = {};
+		const fieldError = asFieldError(error);
 
-			Object.keys(error.errors).forEach((path) => {
-				fields[path] = error.errors[path].message;
-			});
-
-			throw new AppError(Object.values(fields).join(', '), 400, { cause: error, fields });
-		}
-
-		if (error.code === 11000) {
-			const duplicatedField = Object.keys(error.keyPattern || {})[0];
-
-			const duplicateMessages = {
-				email: 'This email is already registered',
-				username: 'This username is taken',
-			};
-
-			const message = duplicateMessages[duplicatedField] || 'Email or username already in use';
-
-			throw new AppError(message, 409, {
-				cause: error,
-				fields: duplicatedField ? { [duplicatedField]: message } : undefined,
-			});
+		if (fieldError) {
+			throw fieldError;
 		}
 
 		throw new AppError('Could not sign up', 500, { cause: error });
@@ -230,12 +243,28 @@ const updateUserProfileData = async (userId, updatedProfileData) => {
 			updatedProfileData.profilePicture = profilePicture._id;
 		}
 
-		const user = await UserModel.findOneAndUpdate({ _id: userId }, updatedProfileData, { new: true }).populate('profilePicture');
+		// runValidators is off by default on findOneAndUpdate, so without it an update
+		// could write an email the schema would have rejected at sign-up.
+		const user = await UserModel.findOneAndUpdate({ _id: userId }, updatedProfileData, {
+			new: true,
+			runValidators: true,
+			context: 'query',
+		}).populate('profilePicture');
 
 		const updatedUserData = getNeccessaryUserData(user);
 
 		return updatedUserData;
 	} catch (error) {
+		if (error instanceof AppError) {
+			throw error;
+		}
+
+		const fieldError = asFieldError(error);
+
+		if (fieldError) {
+			throw fieldError;
+		}
+
 		throw new AppError('Could not update user profile', 500, { cause: error });
 	}
 };

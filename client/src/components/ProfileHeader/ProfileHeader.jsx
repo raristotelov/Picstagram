@@ -9,7 +9,7 @@ const ProfileHeader = (props) => {
 	const totalPostsCount = userData?.posts?.length ? userData.posts.length : 0;
 	const followersCount = userData?.followers?.length ? userData.followers.length : 0;
 	const followingCount = userData?.following?.length ? userData.following.length : 0;
-	const bio = userData.bio ? userData.bio : 'No bio';
+	const bio = userData.bio ? userData.bio : '';
 
 	const profilePictureUrl = userData?.profilePicture?.imageUrl;
 
@@ -45,7 +45,7 @@ const ProfileHeader = (props) => {
 				</span>
 			</div>
 
-			<p className='bio'>{bio}</p>
+			{bio ? <p className='bio'>{bio}</p> : null}
 
 			<div className='profile-action'>
 				{isLoggedInUserProfile ? (

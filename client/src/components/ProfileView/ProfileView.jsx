@@ -154,13 +154,13 @@ const ProfileView = (props) => {
 			</section>
 
 			{isAddPicturePopupOpen ? (
-				<Popup onClosePopupClick={closeAddPictureForm}>
+				<Popup title='Upload Picture' onClosePopupClick={closeAddPictureForm}>
 					<AddImagePostForm addImagePostHandler={addImagePostHandler} onCancelClick={closeAddPictureForm} />
 				</Popup>
 			) : null}
 
 			{isEditProfileFormOpen ? (
-				<Popup onClosePopupClick={closeEditProfileForm}>
+				<Popup title='Edit Profile' onClosePopupClick={closeEditProfileForm}>
 					<EditProfileForm userData={userData} editProfileData={editProfileDataHandler} onCancelClick={closeEditProfileForm} />
 				</Popup>
 			) : null}
