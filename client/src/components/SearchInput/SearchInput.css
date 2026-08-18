@@ -9,8 +9,6 @@
 	border-radius: 20px;
 }
 
-/* 220 is the field's width on the 768 frame. max-width above lets it shrink further
-   below 768, where the tablet composition needs more room than the viewport has. */
 @media (min-width: 600px) and (max-width: 1279px) {
 	.search-input-wrapper {
 		width: 220px;

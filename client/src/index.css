@@ -70,8 +70,6 @@ code {
 	color: var(--feedback-error);
 }
 
-/* One rule for the single `Input` component the frames share across auth and the
-   profile forms — the width is the only thing that differs, so each caller sets it. */
 .auth-input-wrapper {
 	display: flex;
 	align-items: flex-start;

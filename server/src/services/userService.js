@@ -6,6 +6,7 @@ const UserPostModel = require('../models/userPostModel');
 const constants = require('../config/constants');
 const AppError = require('../utils/AppError');
 const commentService = require('./commentService');
+const imageStorageService = require('./imageStorageService');
 
 const necessaryUserFields = ['_id', 'email', 'username', 'bio', 'theme', 'profilePicture', 'posts', 'followers', 'following', 'followedUsersPosts'];
 
@@ -14,10 +15,6 @@ const signAuthToken = ({ _id, username }) =>
 		expiresIn: constants.JWT_EXPIRY,
 	});
 
-// This function is used to get user fields when user profile is opened.
-// The token must come from signAuthToken so every endpoint issues the same shape —
-// signing the user object here produced a token carrying `_id` but no `userId`,
-// which the client could not restore a session from.
 const getNeccessaryUserData = (user) => {
 	const userObject = {};
 
@@ -33,9 +30,6 @@ const getNeccessaryUserData = (user) => {
 	};
 };
 
-// Mongoose reports schema violations and duplicate keys as generic errors. Both have to
-// reach the client as field errors so a form can point at the offending input, and both
-// sign-up and profile updates write the same unique fields.
 const asFieldError = (error) => {
 	if (error.name === 'ValidationError') {
 		const fields = {};
@@ -219,6 +213,12 @@ const getUsersProfileDataBySearchWord = async ({ searchWord }) => {
 
 const updateUserProfileData = async (userId, updatedProfileData) => {
 	try {
+		if (Object.prototype.hasOwnProperty.call(updatedProfileData, 'password')) {
+			throw new AppError('Password cannot be changed here', 400, {
+				fields: { password: 'Password cannot be changed from the profile form' },
+			});
+		}
+
 		let profilePicture = null;
 
 		if (updatedProfileData.profilePicture) {
@@ -227,7 +227,11 @@ const updateUserProfileData = async (userId, updatedProfileData) => {
 			const userWithProfilePicture = await UserModel.findOne({ _id: userId }).populate({ path: 'profilePicture' });
 
 			if (userWithProfilePicture.profilePicture) {
-				await UserPostModel.deleteOne({ _id: userWithProfilePicture.profilePicture._id });
+				const replacedPicture = userWithProfilePicture.profilePicture;
+
+				await imageStorageService.deleteImage(replacedPicture.imageIdentifier);
+
+				await UserPostModel.deleteOne({ _id: replacedPicture._id });
 			}
 
 			profilePicture = new UserPostModel({
@@ -243,8 +247,6 @@ const updateUserProfileData = async (userId, updatedProfileData) => {
 			updatedProfileData.profilePicture = profilePicture._id;
 		}
 
-		// runValidators is off by default on findOneAndUpdate, so without it an update
-		// could write an email the schema would have rejected at sign-up.
 		const user = await UserModel.findOneAndUpdate({ _id: userId }, updatedProfileData, {
 			new: true,
 			runValidators: true,

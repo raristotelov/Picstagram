@@ -1,5 +1,3 @@
-/* Geometry from the 476x601 frame: image input at 111, caption at 427, buttons at
-   521, 40px to the bottom edge. */
 .add-image-post-form {
 	width: 476px;
 	padding: 0 92px 40px;
@@ -16,8 +14,6 @@
 	margin-top: 21px;
 }
 
-/* ImageInput ships a 20px bottom margin and content-box sizing; the frame spaces the
-   fields itself and puts the 1px stroke inside the 292x280 box. */
 .add-image-post-image-wrapper .image-input-wrapper,
 .add-image-post-image-wrapper .preview-wrapper {
 	width: 292px;
@@ -70,8 +66,6 @@
 	gap: 50px;
 }
 
-/* The 390 frame: 16px gutters, a taller 320 image box and 72 caption, and the actions
-   pinned 32px above the bottom edge. */
 @media (max-width: 599px) {
 	.add-image-post-form {
 		width: 100%;

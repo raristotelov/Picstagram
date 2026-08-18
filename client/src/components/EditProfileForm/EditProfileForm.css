@@ -1,5 +1,3 @@
-/* Geometry from the 526x716 frame: title ends at 111, picture input at 132, first
-   input at 282 on a 90px pitch, buttons at 636, 40px to the bottom edge. */
 .edit-user-profile-form {
 	width: 526px;
 	padding: 0 60px 40px;
@@ -16,8 +14,6 @@
 	margin-top: 21px;
 }
 
-/* ImageInput ships a 20px bottom margin and content-box sizing; the frame spaces the
-   fields itself and puts the 1px stroke inside the 122 circle. */
 .profile-form-profile-picture-wrapper .image-input-wrapper,
 .profile-form-profile-picture-wrapper .preview-wrapper {
 	width: 122px;
@@ -35,8 +31,6 @@
 	margin-top: 28px;
 }
 
-/* Bio is free text, so it gets two input heights and wraps rather than scrolling
-   sideways. The shared rule centres a 44px field, which a textarea has to undo. */
 .edit-user-profile-form .profile-form-input-wrapper textarea {
 	height: 88px;
 	padding: 11px 12px;
@@ -51,8 +45,6 @@
 	gap: 50px;
 }
 
-/* The 390 frame: 16px gutters, inputs on a 64px pitch, and the actions pinned 32px
-   above the bottom edge rather than following the fields. */
 @media (max-width: 599px) {
 	.edit-user-profile-form {
 		width: 100%;

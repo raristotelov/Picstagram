@@ -29,8 +29,6 @@ const request = async (method, token, url, data) => {
 	const result = await response.json();
 
 	if (!response.ok) {
-		// The status has to travel with the body so callers can tell a rejected token
-		// apart from a server or network failure.
 		const error = result !== null && typeof result === 'object' ? result : { message: result };
 
 		error.status = response.status;

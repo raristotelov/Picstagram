@@ -1,6 +1,3 @@
-/* The 40px gutter lives on the wrapper as padding rather than as a margin on the
-   header, so a squeezed flex row cannot collapse it and leave the logo and the
-   account button touching the edges. */
 .header-wrapper {
 	width: 100%;
 	height: 54px;
@@ -27,8 +24,6 @@
 	background-color: var(--background-surface);
 }
 
-/* When space runs short the search field is what gives way — the logo and the
-   navigation both have to stay legible, so only this container may shrink. */
 .logo-search-container {
 	min-width: 0;
 
@@ -40,8 +35,6 @@
 	flex-shrink: 0;
 }
 
-/* Margins are not shrunk by flex, so mirroring the logo's 20px on the right keeps
-   that clearance against the navigation once the field starts shrinking. */
 .search-component-wrapper {
 	min-width: 0;
 	margin-left: 20px;
@@ -61,14 +54,11 @@
 	gap: 34px;
 }
 
-/* The 768 frame tightens the gap between the two nav items from 34 to 22. */
 @media (min-width: 600px) and (max-width: 1279px) {
 	.navigation-links {
 		gap: 22px;
 	}
 
-	/* 24 rather than the frame's 40, so the header lines up with the page's 720
-	   content column instead of stopping 16px short of it on each side. */
 	.header-wrapper {
 		padding: 0 24px;
 	}
@@ -78,9 +68,8 @@
 	text-decoration: none;
 }
 
-/* The frames size each item to its own content — 30 for Feed, 42 for Popular — so
-   the item hugs rather than carrying a fixed width plus side padding. */
 .navigation-item-icon {
+	position: relative;
 	height: 48px;
 
 	padding: 2px 0;
@@ -95,6 +84,16 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+}
+
+.navigation-item-icon::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 50%;
+	width: 44px;
+	transform: translateX(-50%);
 }
 
 .navigation-item-icon svg {
@@ -140,8 +139,6 @@
 	opacity: 1;
 }
 
-/* Full header height so the menu, anchored to its bottom, sits flush under the
-   header as designed rather than hanging off the shorter avatar button. */
 .account-menu-anchor {
 	position: relative;
 	height: 100%;
@@ -186,8 +183,6 @@
 	font-size: 15px;
 }
 
-/* Below 600 the MobileTopBar replaces this header entirely, and the TabBar
-   carries navigation. */
 @media (max-width: 599px) {
 	.header-wrapper {
 		display: none;

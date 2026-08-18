@@ -31,8 +31,6 @@
 	}
 }
 
-/* Width comes from the form inside — the frames are 526 for Edit Profile and 476 for
-   Upload Picture, but the shell is identical. */
 .popup-body {
 	position: relative;
 	box-sizing: border-box;
@@ -63,8 +61,6 @@
 	height: 24px;
 }
 
-/* 56 rather than the frame's 77 — that much space above the title read as a gap.
-   Frames updated to match. */
 .popup-title {
 	margin: 0;
 	padding-top: 56px;
@@ -76,8 +72,6 @@
 	text-align: center;
 }
 
-/* On mobile the popup is the whole screen: the title moves into a 54px bar with the
-   close button beside it, matching the app's own top bar. */
 @media (max-width: 599px) {
 	.popup-container {
 		align-items: flex-start;

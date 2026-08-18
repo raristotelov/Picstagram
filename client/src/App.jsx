@@ -14,9 +14,8 @@ import Router from './Router';
 
 import './App.css';
 
-// `jwtDecode` neither verifies the signature nor checks expiry, so a stale or
-// malformed token has to be rejected here before it is used. Either case is
-// treated the same: the token cannot restore a session.
+const getOperatingSystemTheme = () => (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
 const readUserIdFromToken = (token) => {
 	try {
 		const { userId, exp } = jwtDecode(token);
@@ -35,14 +34,12 @@ function App() {
 	const [jwtToken, setJwtToken] = useLocalStorage('jwt-token', null);
 	const [loggedInUser, setLoggedInUser] = useState(null);
 	const [isRestoringSession, setIsRestoringSession] = useState(Boolean(jwtToken));
-	// The user record is the source of truth, mirrored here so the choice survives
-	// logging out — there is no user to read it from on the auth pages.
-	const [storedTheme, setStoredTheme] = useLocalStorage('theme', 'light');
+	const [storedTheme, setStoredTheme] = useLocalStorage('theme', null);
 
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		const theme = loggedInUser?.theme || storedTheme;
+		const theme = loggedInUser?.theme || storedTheme || getOperatingSystemTheme();
 
 		document.documentElement.setAttribute('data-theme', theme);
 
@@ -50,6 +47,19 @@ function App() {
 			setStoredTheme(loggedInUser.theme);
 		}
 	}, [loggedInUser, storedTheme, setStoredTheme]);
+
+	useEffect(() => {
+		if (loggedInUser?.theme || storedTheme) {
+			return;
+		}
+
+		const query = window.matchMedia('(prefers-color-scheme: dark)');
+		const applyOperatingSystemTheme = () => document.documentElement.setAttribute('data-theme', getOperatingSystemTheme());
+
+		query.addEventListener('change', applyOperatingSystemTheme);
+
+		return () => query.removeEventListener('change', applyOperatingSystemTheme);
+	}, [loggedInUser, storedTheme]);
 
 	useEffect(() => {
 		if (!jwtToken) {
@@ -63,9 +73,6 @@ function App() {
 			return;
 		}
 
-		// A token that cannot be turned back into a session is treated as a broken
-		// session rather than a guest visit: drop it and send the user to log in,
-		// so the app never renders a half-authenticated state.
 		const abandonSession = () => {
 			setJwtToken(null);
 			navigate('/log-in');
@@ -90,9 +97,6 @@ function App() {
 				}
 			})
 			.catch((error) => {
-				// Only a rejected token ends the session. A network failure — including
-				// this request being aborted because the page is reloading — must leave
-				// the token alone, or a fast refresh logs the user out.
 				if (error?.status === 401 || error?.status === 403) {
 					abandonSession();
 				}
@@ -123,8 +127,6 @@ function App() {
 		isRestoringSession,
 	};
 
-	// Rendering while the session is being restored would briefly show the guest
-	// header and guest tab bar to someone who is in fact logged in.
 	if (isRestoringSession) {
 		return <LoadingSpinner isFullPage />;
 	}

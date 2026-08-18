@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import LoggedInUserContext from '../../contexts/LoggedInUserContext';
@@ -20,7 +20,7 @@ const getTrailingAction = (pathname, loggedInUser) => {
 		return 'search';
 	}
 
-	if (pathname === '/my-profile' || (loggedInUser && pathname === `/user/${loggedInUser._id}`)) {
+	if (loggedInUser && pathname === `/user/${loggedInUser._id}`) {
 		return 'menu';
 	}
 
@@ -32,6 +32,14 @@ const MobileTopBar = ({ logoutHandler }) => {
 	const { pathname } = useLocation();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isSearching, setIsSearching] = useState(false);
+
+	const searchFieldRef = useRef(null);
+
+	useEffect(() => {
+		if (isSearching) {
+			searchFieldRef.current?.focus();
+		}
+	}, [isSearching]);
 	const { searchWord, setSearchWord, results, isLoading, clearSearch } = useUserSearch();
 
 	const trailingAction = getTrailingAction(pathname, loggedInUser);
@@ -51,8 +59,7 @@ const MobileTopBar = ({ logoutHandler }) => {
 						placeholder='Search'
 						value={searchWord}
 						onChange={(event) => setSearchWord(event.target.value)}
-						// eslint-disable-next-line jsx-a11y/no-autofocus
-						autoFocus
+						ref={searchFieldRef}
 					/>
 
 					<button type='button' className='mobile-search-cancel' onClick={closeSearch}>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { useForm } from '../../hooks/useForm';
+import { MAX_BIO_LENGTH } from '../../constants/validation';
 
 import Button from '../Button/Button';
 import ImageInput from '../ImageInput/ImageInput';
@@ -11,8 +12,6 @@ import './EditProfileForm.css';
 const EditProfileForm = ({ userData, editProfileData, onCancelClick }) => {
 	const [profilePicture, setProfilePicture] = useState(null);
 
-	// useForm hands back only the fields that actually differ from the initial values,
-	// so an untouched form submits nothing and is closed rather than saved.
 	const editProfileDataHandler = (updatedValues) => {
 		if (!Object.keys(updatedValues).length && !profilePicture) {
 			onCancelClick();
@@ -26,7 +25,7 @@ const EditProfileForm = ({ userData, editProfileData, onCancelClick }) => {
 			updatedUserValues = { ...updatedValues, profilePicture };
 		}
 
-		editProfileData(updatedUserValues);
+		return editProfileData(updatedUserValues);
 	};
 
 	const validate = (formValues) => {
@@ -48,7 +47,6 @@ const EditProfileForm = ({ userData, editProfileData, onCancelClick }) => {
 			email: userData.email,
 			username: userData.username,
 			bio: userData.bio ? userData.bio : '',
-			password: '',
 		},
 		editProfileDataHandler,
 		{ validate },
@@ -97,11 +95,17 @@ const EditProfileForm = ({ userData, editProfileData, onCancelClick }) => {
 			</div>
 
 			<div className='profile-form-input-wrapper'>
-				<input type='password' id='password' name='password' placeholder='Password' value={values.password} onChange={changeHandler} />
-			</div>
+				<textarea
+					id='bio'
+					name='bio'
+					placeholder='Bio'
+					value={values.bio}
+					onChange={changeHandler}
+					maxLength={MAX_BIO_LENGTH}
+					className={errors.bio?.length ? 'has-error' : ''}
+				/>
 
-			<div className='profile-form-input-wrapper'>
-				<textarea id='bio' name='bio' placeholder='Bio' value={values.bio} onChange={changeHandler} />
+				{errors.bio?.length ? <span className='field-error'>{errors.bio[0]}</span> : null}
 			</div>
 
 			<div className='profile-form-button-row'>

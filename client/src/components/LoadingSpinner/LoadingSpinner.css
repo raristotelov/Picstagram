@@ -25,9 +25,6 @@
 	padding-bottom: 15px;
 }
 
-/* When the spinner is the whole page — restoring a session, nothing else rendered —
-   it centres in the viewport instead of sitting against the top edge. align-content
-   is what moves the row track; align-items alone only centres within the track. */
 .spinner-container-full-page {
 	min-height: 100vh;
 	padding: 0;

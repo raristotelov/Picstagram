@@ -15,8 +15,6 @@ const ProfileHeader = (props) => {
 
 	const isFollowed = loggedInUserData?.following?.includes(userData._id);
 
-	// Flat children so grid areas can rearrange them: on mobile the stats sit beside
-	// the avatar and the action button becomes a full-width row at the bottom.
 	return (
 		<header className='profile-header'>
 			<div className='profile-picture-wrapper'>

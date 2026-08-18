@@ -1,8 +1,3 @@
-/* Content column is 900 at desktop and 720 at tablet; in both the three post tiles
-   are (column - 2 gutters) / 3 with a 12px gutter, so one sizing rule serves both. */
-/* The 24px gutter comes from the 768 frame (768 - 2x24 = the 720 column) and is held
-   as a calc so the column shrinks with the viewport instead of reaching the edges
-   between 600 and 768. */
 .profile-view-wrapper {
 	width: calc(100% - 48px);
 	max-width: 900px;
@@ -53,8 +48,6 @@
 	opacity: 0.5;
 }
 
-/* 80 and 48 are deliberate deviations from the frames' 90 and 40 — the plus read too
-   large on tablet and too small on mobile. Designs to be updated to match. */
 .add-post-button svg {
 	width: 80px;
 	height: 80px;
@@ -73,8 +66,6 @@
 	}
 }
 
-/* At 390 the grid is full-bleed with 2px gutters, and the add tile carries only
-   the plus — the frame has no label on it. */
 @media (max-width: 599px) {
 	.profile-view-wrapper {
 		width: 100%;
